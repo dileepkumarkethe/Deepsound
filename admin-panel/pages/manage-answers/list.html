@@ -1,0 +1,20 @@
+<tr id="list-{{QUESTION id}}">
+    <td>{{QUESTION id}}</td>
+    <td><a href="{{QUESTION url}}"><img src="{{QUESTION user_avatar}}" class="td-avatar" alt="{{QUESTION user_full_name}} avatar"> {{QUESTION user_full_name}}</a></td>
+    <td>{{QUESTION question}}</td>
+    <td>
+        <?php if(GetQuestionReply($data['QUESTION_DATA']->id) > 0) {?>
+        <a href="<?php echo LoadAdminLinkSettings('manage-reply?question_id='.$data['QUESTION_DATA']->id); ?>"><?php echo GetQuestionReply($data['QUESTION_DATA']->id);?></a>
+        <?php }else{ ?>
+        0
+        <?php } ?>
+    <td><?php echo GetQuestionShares($data['QUESTION_DATA']->id);?></td>
+    <!--<td><?php //echo GetQuestionReply($data['QUESTION_DATA']->id);?></td>-->
+    <td>{{Anonymously}}</td>
+    <td>{{STATUS}}</td>
+    <td><?php echo Time_Elapsed_String($data['QUESTION_DATA']->time);?></td>
+    <td>
+        <a class="btn bg-cyan waves-effect waves-light" href="<?php echo LoadAdminLinkSettings('edit-question?id='.$data['QUESTION_DATA']->id); ?>" target="_blank">EDIT</a>
+        <button class="btn btn-danger waves-effect waves-light delete-content" data-id="{{QUESTION id}}">DELETE</button>
+    </td>
+</tr>

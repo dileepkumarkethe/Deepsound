@@ -1,0 +1,107 @@
+<?php 
+
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
+    header('Location: ' . UrlLink('404'));
+    exit();
+}
+
+$id       = Secure($_GET['id']);
+$question  = $db->where('id',$id)->getOne(T_QUESTIONS);
+
+if (empty($question)) {
+    header('Location: ' . UrlLink('404'));
+    exit();
+}
+
+?>
+
+
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Questions > Edit Question</h2>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Edit question</h2>
+                </div>
+                <div class="body">
+                    <div class="create-article-alert">
+                       
+                    </div>
+                    
+                    <form class="form submit-new-question-settings" method="POST">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Question</label>
+                                <div class="form-line">
+                                    <textarea name="question" class="form-control"><?php echo strip_tags(preg_replace('~<a(.*?)</a>~Usi', '', PostMarkup($question->question)));?></textarea>
+                                </div>
+                                <br>
+                                <label>Question display mode</label>
+                                <div class="form-group">
+                                    <input type="radio" name="is_anonymously" id="is_anonymously-enabled" value="1" <?php if( $question->is_anonymously == 1 ){ echo ' checked=""'; }?>>
+                                    <label for="is_anonymously-enabled">Anonymously</label>
+                                    <input type="radio" name="is_anonymously" id="is_anonymously-disabled" value="0" <?php if( $question->is_anonymously == 0 ){ echo ' checked=""'; }?>>
+                                    <label for="is_anonymously-disabled" class="m-l-20">Public</label>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save &amp; Publish</button>
+                                    <button type="submit" name="draft" class="btn btn-default m-t-15 waves-effect">Save Draft</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+                        <input type="file" class="hidden" id="article-image" name="image">
+                        <input type="hidden" name="id" value="<?php echo $id; ?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+
+<script>
+    jQuery(document).ready(function($) {
+
+        var form = $(".submit-new-question-settings");
+
+        form.ajaxForm({
+            url: "{{LINK aj/ap/update-question}}",
+            type:"POST",
+            dataType:"json",
+            data:{},
+            beforeSend: function() {
+                
+            },
+            success: function(data) {
+                var message = $(".create-article-alert");
+                if (data.status == 200) {
+                    scrollToTop();
+                    message.html('<div class="alert alert-success"><i class="fa fa-exclamation-circle"></i> The question has been successful saved!</div>');
+                }
+
+                else if (data.status == 400) {
+                    scrollToTop();
+                    message.html('<div class="alert alert-warning"><i class="fa fa-exclamation-circle"></i> Please fill the required info!</div>');
+                }
+
+                else if (data.status == 401) {
+                    scrollToTop();
+                    message.html('<div class="alert alert-warning"><i class="fa fa-exclamation-circle"></i> Question content is too short!</div>');
+                }
+
+                else if (data.status == 500) {
+                    scrollToTop();
+                    message.html('<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> Error found, please try again later!</div>');
+                }
+            }
+        });
+    }); 
+</script>

@@ -1,0 +1,31 @@
+<div class="track_list playlist-p-list album-p-list" data-id="{{id}}">
+	<div class="track">
+		<div class="upr_head">
+			<div class="user_info">
+				<span class="user_ava">
+					<a href="{{USER url}}" data-load="{{USER username}}"><img src="{{USER avatar}}" alt="" /></a>
+				</span>
+				<span class="user_name">
+					<a href="{{USER url}}" data-load="{{USER username}}">{{USER name}}</a>
+				</span>
+			</div>
+		</div>
+		<a class="block" href="{{url}}" data-load="album/{{album_id}}">
+			<div class="track_info">
+				<span class="title">{{title}}</span>
+				<span class="plist_info">
+					<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21,3V15.5A3.5,3.5 0 0,1 17.5,19A3.5,3.5 0 0,1 14,15.5A3.5,3.5 0 0,1 17.5,12C18.04,12 18.55,12.12 19,12.34V6.47L9,8.6V17.5A3.5,3.5 0 0,1 5.5,21A3.5,3.5 0 0,1 2,17.5A3.5,3.5 0 0,1 5.5,14C6.04,14 6.55,14.12 7,14.34V6L21,3Z"></path></svg> {{songs}}</p>
+					<!-- <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z"></path></svg> 1326</p> -->
+				</span>
+			</div>
+		</a>
+		<div class="cover_art" onclick="playPlayListSongs({{id}}, 'album')" style="cursor: pointer;">
+			<div class="art_innr">
+				<img src="{{thumbnail}}" />
+				<div class="play_btn">
+					<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="currentColor" d="M10,16.5V7.5L16,12M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,26 @@
+<div class="col-lg-4 playlist-list" data-id="{{t_id}}">
+	<div class="mp_list">
+		<a href="{{t_url}}" data-load="playlist/{{t_uid}}">
+			<div class="avatar" style="background-image: url({{t_thumbnail}})"></div>
+		</a>
+		<div class="opts_plist">
+			<span class="dropdown">
+				<svg data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,12A2,2 0 0,1 18,10A2,2 0 0,1 20,12A2,2 0 0,1 18,14A2,2 0 0,1 16,12M10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12M4,12A2,2 0 0,1 6,10A2,2 0 0,1 8,12A2,2 0 0,1 6,14A2,2 0 0,1 4,12Z"></path></svg>
+				<div class="dropdown-menu dropdown-menu-right mat-dropdown">
+					<ul class="list-unstyled mb-0">
+						<li><a href="javascript:void(0)" onclick="getEditForm({{t_id}})">{{LANG Edit Playlist}}</a></li>
+						<li><a href="javascript:void(0)" onclick="$('#delete-playlist').attr('data-id', {{t_id}}); $('#delete-playlist').modal('show')">{{LANG Delete Playlist}}</a></li>
+						<li><a href="javascript:void(0)" onclick="getPlayListShareForm({{t_id}})">{{LANG Share}}</a></li>
+					</ul>
+				</div>
+			</span>
+		</div>
+		<a class="sec_link" href="{{t_url}}" data-load="playlist/{{t_uid}}">
+			<div class="mp_middle_part">
+				<div class="pl_name">{{t_title}}</div>
+				<div class="pl_amount"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21,3V15.5A3.5,3.5 0 0,1 17.5,19A3.5,3.5 0 0,1 14,15.5A3.5,3.5 0 0,1 17.5,12C18.04,12 18.55,12.12 19,12.34V6.47L9,8.6V17.5A3.5,3.5 0 0,1 5.5,21A3.5,3.5 0 0,1 2,17.5A3.5,3.5 0 0,1 5.5,14C6.04,14 6.55,14.12 7,14.34V6L21,3Z" /></svg> {{t_songs}} {{LANG songs}}</div>
+				<div class="pl_privacy"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17.9,17.39C17.64,16.59 16.89,16 16,16H15V13A1,1 0 0,0 14,12H8V10H10A1,1 0 0,0 11,9V7H13A2,2 0 0,0 15,5V4.59C17.93,5.77 20,8.64 20,12C20,14.08 19.2,15.97 17.9,17.39M11,19.93C7.05,19.44 4,16.08 4,12C4,11.38 4.08,10.78 4.21,10.21L9,15V16A2,2 0 0,0 11,18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg> {{t_privacy}}</div>
+			</div>
+		</a>
+	</div>
+</div>

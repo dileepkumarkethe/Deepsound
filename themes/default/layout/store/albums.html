@@ -1,0 +1,25 @@
+<div class="track_list" data-id="{{id}}">
+    <div class="track">
+        <div class="cover_art">
+            <a href="{{LINK album/}}{{album_id}}" data-load="album/{{album_id}}">
+                <img src="{{thumbnail}}" />
+            </a>
+            <?php if(IS_LOGGED === true){ ?>
+                <?php if ($data['user_id'] !== $music->user->id && isUserBuyAlbum($data['id']) === false) { ?>
+                    <div class="play_btn">
+                        <button class="btn btn-primary btn-mat" onclick="purchaseAlbum('{{album_id}}', $(this))">{{LANG Buy}}</button>
+                    </div>
+                <?php } ?>
+            <?php } ?>
+        </div>
+        <div class="track_info">
+            <a href="{{LINK album/}}{{album_id}}" data-load="album/{{album_id}}"><span class="title">{{title}}</span></a>
+            <a href="{{LINK user/}}{{artist}}" data-load="{{artist}}"><span class="artist">{{artist}}</span></a>
+            <?php if( $music->config->artist_sell == 'on' ) { ?>
+            <span class="price_info">
+                <b>{{CONFIG currency_symbol}}{{price}}</b>
+            </span>
+            <?php } ?>
+        </div>
+    </div>
+</div>

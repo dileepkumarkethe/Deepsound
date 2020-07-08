@@ -1,0 +1,69 @@
+<div class="modal fade" id="edit-playlist-form" tabindex="-1" role="dialog" aria-labelledby="edit-playlist-form" aria-hidden="true">
+	<div class="modal-dialog mat_box create_playlist" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">{{LANG Edit Playlist}}</h5>
+			</div>
+			<form method="post" action="" id="edit-playlist-form">
+				<div class="alert alert-danger alert-empty" id="output-editplaylist-errors"></div>
+				<div class="create_playlist_innr">
+					<div class="play_avatar">
+						<span class="btn-file">
+							<span id="editplaylist-create-image">
+								<img src="{{t_thumbnail}}" alt="">
+							</span>
+							<input type="file" name="avatar" accept="image/x-png, image/jpeg" id="editplaylist-avatar">
+						</span>
+					</div>
+					<div class="play_info">
+						<div class="form-group mat_input">
+							<input type="text" class="form-control" name="name" placeholder="{{LANG Playlist name}}" value="{{t_title}}">
+						</div>
+						<div class="custom-control custom-radio">
+							<input type="radio" id="public-edit" name="privacy" class="custom-control-input" value="0" <?php echo ($music->playlist->privacy == 0) ? 'checked' : '';?>>
+							<label class="custom-control-label" for="public-edit">{{LANG Public}}</label>
+						</div>
+						<div class="custom-control custom-radio">
+							<input type="radio" id="private-edit" name="privacy" class="custom-control-input" value="1" <?php echo ($music->playlist->privacy == 1) ? 'checked' : '';?>>
+							<label class="custom-control-label" for="private-edit">{{LANG Private}}</label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<input type="hidden" class="form-control" name="id" value="{{t_id}}">
+					<button type="button" class="btn btn-default" data-dismiss="modal">{{LANG Cancel}}</button>
+					<button type="submit" class="btn btn-primary btn-mat" id="btn-editplaylist-submit">{{LANG Save}}</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+$(document).ready(function() { 
+	$("#editplaylist-avatar").change(function() {
+	  	readURL(this, "editplaylist-create-image");
+	});
+    var options = { 
+    	url: "{{CONFIG ajax_url}}/playlist/update?hash_id=" + getHashID(),
+        beforeSubmit:  function () {
+        	$('#output-editplaylist-errors').empty();
+        	$("#btn-editplaylist-submit").text("{{LANG Please wait..}}");
+        }, 
+        success: function (data) {
+        	$("#btn-editplaylist-submit").text("{{LANG Create}}");
+        	if (data.status == 200) {
+        		$('#edit-playlist-form').modal('hide');
+        		closeModal();
+        		goToAjaxLink('my_playlists');
+        	} else if (data.status == 400) {
+        		var errros = data.errors.join("<br>");
+        		$('#output-editplaylist-errors').html(errros);
+        	}
+        }
+    }; 
+
+    $('#edit-playlist-form').ajaxForm(options); 
+}); 
+
+
+</script>

@@ -1,0 +1,25 @@
+<footer class="full_footer">
+	<p class="copyright">
+	<?php
+	$lang_copy = lang("Copyright © |DATE| |NAME|.");
+	$lang_copy = str_replace('|NAME|', $music->config->name, $lang_copy);
+	echo $lang_copy = str_replace('|DATE|', date('Y'), $lang_copy);
+	?>
+	</p>
+	<ul class="list-unstyled mb-0 imp_links">
+		<li><a href="{{LINK terms/about}}">{{LANG About Us}}</a></li>
+		<li><a href="{{LINK terms/terms}}">{{LANG Terms}}</a></li>
+		<li><a href="{{LINK contact}}">{{LANG Contact}}</a></li>
+		<li><a href="{{LINK terms/privacy}}">{{LANG Privacy Policy}}</a></li>
+	</ul>
+	<div class="lang_select dropup">
+		<button type="button" class="btn dropdown-toggle" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo ucfirst($_SESSION['lang']); ?></button>
+		<div class="dropdown-menu dropdown-menu-right mat-dropdown">
+			<ul class="list-unstyled mb-0">
+				<?php foreach($music->langs as $lang) { ?>
+					<li><a href="?lang=<?php echo $lang; ?>"><?php echo ucfirst($lang); ?></a></li>
+				<?php } ?>
+			</ul>
+		</div>
+	</div>
+</footer>

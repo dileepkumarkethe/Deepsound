@@ -1,0 +1,32 @@
+<div class="ma_page_content">
+    <div class="ma_pc_inner">
+        <div class="page_padding">
+            <!-- Settings -->
+            <div class="sett_page">
+                <?php echo loadPage("settings/sidebar"); ?>
+                <div class="st_content">
+                    <div class="st_form">
+                        <h3>{{LANG Withdrawals}}</h3>
+                        <table id="withdrawal-requests" class="table table-striped">
+                            <thead>
+                            <th>ID</th>
+                            <th>{{LANG Requested on}}</th>
+                            <th>{{LANG amount}}</th>
+                            <th>{{LANG status}}</th>
+                            </thead>
+                            <tbody>
+                            {{WITHDRAWAL_HISTORY_LIST}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- End Settings -->
+        </div>
+    </div>
+</div>
+<script>
+    jQuery(document).ready(function($) {
+       // $("#withdrawal-requests").DataTable();
+    });
+</script>

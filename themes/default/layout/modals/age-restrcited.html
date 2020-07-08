@@ -1,0 +1,15 @@
+<div class="modal fade" id="age-restricted" role="dialog" aria-labelledby="age-restricted" aria-hidden="true" data-id="0">
+	<div class="modal-dialog mat_box" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">{{LANG Age restricted track}}</h5>
+			</div>
+			<div class="modal-body">
+				{{LANG This track is age restricted for viewers under 18}}<?php if (!IS_LOGGED) { ?>, {{LANG Create an account or login to confirm your age.}}<?php } ?>
+			</div>	
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">{{LANG Close}}</button>
+			</div>
+		</div>
+	</div>
+</div>

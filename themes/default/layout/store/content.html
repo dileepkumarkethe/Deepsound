@@ -1,0 +1,47 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="page_padding">
+			<div class="ma_tabs">
+				<ul class="list-unstyled mb-0">
+					<li class="<?php echo ($music->pageType == 'songs') ? 'active' : ''; ?>">
+						<a href="{{LINK store/songs}}" data-load="store/songs">{{LANG Songs}}</a>
+					</li>
+					<li class="<?php echo ($music->pageType == 'album') ? 'active' : ''; ?>">
+						<a href="{{LINK store/album}}" data-load="store/album">{{LANG Albums}}</a>
+					</li>
+					<?php if( $music->config->artist_sell == 'on' ) { ?>
+					<li class="<?php echo ($music->pageType == 'top') ? 'active' : ''; ?>">
+						<a href="{{LINK store/top}}" data-load="store/top">{{LANG Top Seller}}</a>
+					</li>
+					<?php } ?>
+				</ul>
+			</div>
+			<div class="row">
+				<div class="col-md-9">
+					<div class="store_songs" id="store_result">
+
+						<?php if( $data['records'] > 0 ){?>
+							{{html_content}}
+
+						<?php } else { ?>
+							<div class="no-track-found bg_light"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21,3V15.5A3.5,3.5 0 0,1 17.5,19A3.5,3.5 0 0,1 14,15.5A3.5,3.5 0 0,1 17.5,12C18.04,12 18.55,12.12 19,12.34V6.47L9,8.6V17.5A3.5,3.5 0 0,1 5.5,21A3.5,3.5 0 0,1 2,17.5A3.5,3.5 0 0,1 5.5,14C6.04,14 6.55,14.12 7,14.34V6L21,3Z" /></svg>{{LANG No more songs}}</div>
+						<?php } ?>
+
+					</div>
+
+					<?php if( $data['records'] > 0 ){?>
+						<div class="text-center see_all">
+							<a href="javascript:void(0); loadMore('store_songs', '');" id="load-more-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg> {{LANG Load More}}</a>
+						</div>
+					<?php } ?>
+
+
+				</div>
+				<input type="hidden" id="filter_type" value="songs">
+				<div class="col-md-3">
+					{{filters}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

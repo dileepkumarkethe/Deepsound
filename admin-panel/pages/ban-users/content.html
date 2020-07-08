@@ -1,0 +1,119 @@
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Tools > Ban Users</h2>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Manage & Edit Banned Users</h2> 
+                </div>
+                <div class="body">
+                  <div class="ban-ip-alert"></div>
+                    <form class="setting-banip-form" method="POST">
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="ip" name="ip" class="form-control">
+                                <label class="form-label">IP Address</label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo createMainSession();?>">
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Ban IP</button>
+                    </form>
+                    <br>
+                    <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                <th>ID</th>
+                                <th>Banned</th>
+                                <th>IP Address</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="banned-ip-list">
+                              <?php
+                                $banned_ips       = $db->orderBy('id','DESC')->get(T_BANNED_IPS); 
+                                if (count($banned_ips) > 0) {
+                                    foreach ($banned_ips as $banned_ip) {     
+                                        echo  LoadAdminPage("ban-users/list",array(
+                                            'BANNEDIP_ID'     => $banned_ip->id,
+                                            'BANNEDIP_TIME'   => Time_Elapsed_String($banned_ip->time),
+                                            'BANNEDIP_ADDR'   => $banned_ip->ip_address,
+                                        ));
+                                    }
+                                }
+                              ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+$(function () {
+  $('table').DataTable();
+});
+
+jQuery(document).ready(function($) {
+
+  var form = $('form.setting-banip-form');
+
+  form.ajaxForm({
+      url: '{{CONFIG ajax_url}}/ap/banip',
+      type:"POST",
+      dataType:"json",
+      beforeSend: function() {
+        if (!form.find('#ip').val()) {
+          $('.ban-ip-alert').html('<div class="alert alert-danger">Please Check Your Details</div>');
+        }
+
+        form.find('button').attr('disabled', 'true');
+      },
+      success: function(data) {
+        if (data.status == 200) {
+          if ($("#banned-ip-list").find('td.dataTables_empty').length > 0) {
+            $('#banned-ip-list').html(data.html);
+          }
+          else{
+            $('#banned-ip-list').append(data.html); 
+          }
+
+          form.find('#ip').val('');
+          $('.ban-ip-alert').empty();
+        }
+
+        else if (data.status == 400) {
+          $('.ban-ip-alert').html('<div class="alert alert-danger"> Invalid IP Address, Please Check Your Details</div>');
+        }
+
+        form.find('button').removeAttr('disabled');
+      }
+  });
+});
+
+function UnbanIp(id) {
+  if (!id) { return false;}
+
+  swal({
+    title:"Confirmation",
+    text:"Are you sure you want to unban this IP?",
+    type:"warning",
+    confirmButtonText:"Yes, Delete it!",
+    showCancelButton:true,
+  },
+  function(){
+    $.post('{{CONFIG ajax_url}}/ap/unbanip', {id:id}, function() {
+      /* pass */ 
+    });
+
+    $("#ipid-"+id).slideUp(function(){
+      $(this).remove();
+    });
+  });
+}
+</script>

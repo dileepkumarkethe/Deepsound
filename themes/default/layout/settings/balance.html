@@ -1,0 +1,88 @@
+<div class="ma_page_content">
+    <div class="ma_pc_inner">
+        <div class="page_padding">
+            <!-- Settings -->
+            <div class="sett_page">
+                <?php echo loadPage("settings/sidebar"); ?>
+                <div class="st_content">
+                    <div class="st_form">
+                        <h3>{{LANG Balance}}</h3>
+                        <form method="POST" id="monetization-settings">
+                            <div class="monetization-settings-alert"></div>
+                            <div class="row">
+                                <div class="col-md-6 p-0">
+                                    <div class="form-group mat_input">
+                                        <label class="col-md-12" for="balance"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> {{LANG Available balance}}</label>
+                                        <div class="col-md-12">
+                                            <input type="text" name="balance" id="balance" disabled value="{{USER balance}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 p-0">
+                                    <div class="form-group mat_input">
+                                        <label class="col-md-12" for="balance">&zwj;</label>
+                                        <a href="{{LINK settings/<?php echo $music->userData->username ?>/withdrawals}}" data-load="settings/<?php echo $music->userData->username ?>/withdrawals" class="btn btn-primary btn-mat" id="btn-withdrawals" style="margin-left: 15px;margin-right: 15px;">{{LANG Withdrawals}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 p-0">
+                                    <div class="form-group mat_input">
+                                        <label class="col-md-12" for="email"> {{LANG PayPal E-mail}}</label>
+                                        <div class="col-md-12">
+                                            <input type="text" name="email" id="email" value="{{USER email}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 p-0">
+                                    <div class="form-group mat_input">
+                                        <label class="col-md-12" for="amount"> {{LANG Amount}}: {{LANG Min }} 50 {{CONFIG currency}}</label>
+                                        <div class="col-md-12">
+                                            <input type="text" name="amount" id="amount" autofocus placeholder="0.00">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="last-sett-btn modal-footer">
+                                <button type="submit" class="btn btn-primary btn-mat" id="btn-general-submit">
+                                   {{LANG Submit withdrawal request}}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- End Settings -->
+        </div>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function($) {
+        var form = $('form#monetization-settings');
+        form.ajaxForm({
+            url: "{{CONFIG ajax_url}}/user/request-withdrawal?hash_id=" + getHashID(),
+            dataType:'json',
+            beforeSend: function() {
+                form.find('button').text("{{LANG Please wait...}}");
+            },
+            success: function(data) {
+                if (data.status == 200) {
+                    $('.monetization-settings-alert').html('<div class="alert alert-success bg-success">' + data.message + '</div>');
+                    $('.alert-success').fadeIn('fast', function() {
+                        $(this).delay(2500).slideUp(500, function() {
+                            $(this).remove();
+                        });
+                    });
+                    $('#amount').val('');
+                }
+                else if (data.status == 400) {
+                    $('.monetization-settings-alert').html('<div class="alert alert-danger bg-danger">' + data.message + '</div>');
+                    $('.alert-danger').fadeIn(300);
+                }
+                form.find('button').html('{{LANG submit_withdrawal_request}}');
+            }
+        });
+    });
+
+</script>

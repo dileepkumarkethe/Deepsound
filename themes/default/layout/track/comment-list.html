@@ -1,0 +1,64 @@
+<li class="comment_item comment-{{comment_id}}" comment-seconds="{{comment_seconds}}" comment-percentage="{{comment_percentage}}" comment-id="{{comment_id}}" comment-song-id="{{comment_song_id}}">
+	<div class="comm_innr">
+		<a class="comment_avatar" href="{{USER url}}" data-load="{{USER username}}">
+			<span style="background-image: url({{USER avatar}});" aria-role="img"></span>
+		</a>
+		<div class="comment_content">
+			<span class="comment_username">
+				<a href="{{USER url}}" data-load="{{USER username}}">{{USER name}}</a> <span class="comment_timestamp" onclick="goTo($(this));">{{comment_seconds_formatted}}</span>
+			</span>
+			<div class="comment_body">
+				<p>{{comment_text}}</p>
+			</div>
+		</div>
+		<div class="comment_meta">
+			<span class="comment_published">
+				<span class="ajax-time" title="{{tcomment_posted_time}}">{{comment_posted_time}}</span>
+			</span>
+			<?php if(IS_LOGGED){?>
+			<div class="comment_controls">
+				<span class="likes" id="comment_like_<?php echo $data['comment_id'];?>"><?php echo countCommentLikes($data['comment_id']);?></span>
+				<?php
+				 	$comment = [
+						'comment_user_id' => $data['USER_DATA']->id,
+						'track_id' => $data['comment_song_track_id'],
+						'user_id' => (IS_LOGGED) ? $music->user->id : 0,
+						'comment_id' => $data['comment_id']
+					];
+				 	if(LikeExists($comment) === true ){
+				?>
+					<a href="javascript:void(0);" class="btn comment_like" data-comment-id="{{comment_id}}" rel="nofollow" title="{{LANG UnLike Comment}}" aria-role="button" onclick="UnlikeComment('{{comment_id}}')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="#e62117" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"></path></svg></a>
+				<?php } else {?>
+					<a href="javascript:void(0);" class="btn comment_like" data-comment-id="{{comment_id}}" rel="nofollow" title="{{LANG Like Comment}}" aria-role="button" onclick="likeComment('{{comment_id}}')"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"></path></svg></a>
+				<?php } ?>
+				<?php if ($music->comment->owner == true) { ?>
+				<a href="javascript:void(0);" class="btn" rel="nofollow" title="{{LANG Delete Comment}}" aria-role="button" onclick="$('#delete-comment').attr('data-id', '{{comment_id}}')" data-toggle="modal" data-target="#delete-comment"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg></a>
+				<?php } else { ?>
+
+					<?php
+						$comment_report_style = '';
+						$comment_unreport_style = '';
+						$comment_report = [
+							'user_id' => (IS_LOGGED) ? $music->user->id : 0,
+							'comment_id' => $data['comment_id']
+						];
+						if( CommentReportExists($comment_report) === false ){
+							//$comment_report_style = 'visibility: visible;';
+							$comment_unreport_style = 'visibility: hidden;display: none;';
+						} else {
+							$comment_report_style = 'visibility: hidden;display: none;';
+							//$comment_unreport_style = 'visibility: visible;';
+						}
+
+
+					?>
+
+					<a href="javascript:void(0)" style="<?php echo $comment_report_style;?>" onclick="$('#comment_id').val('{{comment_id}}');" class="btn comment_report" data-comment-id="{{comment_id}}" rel="nofollow" title="{{LANG Report Comment}}" aria-role="button" data-toggle="modal" data-target="#report_comment"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg></a>
+					<a href="javascript:void(0)" style="<?php echo $comment_unreport_style;?>" onclick="UnReportComment('{{comment_id}}','<?php echo $music->user->id;?>');" class="btn comment_unreport" data-comment-id="{{comment_id}}" title="{{LANG UnReport Comment}}" aria-role="button"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fd7e14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg></a>
+
+				<?php } ?>
+			</div>
+			<?php } ?>
+		</div>
+	</div>
+</li>

@@ -1,0 +1,37 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="page_padding">
+			<!-- Top Albums -->
+			<div class="sq_music_tracks">
+				<h2 class="home_widget_title">
+					<span style="background:#9c27b0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M16,11.78L20.24,4.45L21.97,5.45L16.74,14.5L10.23,10.75L5.46,19H22V21H2V3H4V17.54L9.5,8L16,11.78Z"></path></svg></span> {{LANG Top Songs}}
+				</h2>
+				<div class="short_list_cont row top_dic_son_listz">
+					<div class="col-md-4">
+						<div class="top_m_filters">
+							<?php foreach ($music->categories as $key => $category) {?>
+								<div class="filter_list">
+									<div class="filters <?php echo ($music->category_id == $key) ? 'active' : ''?>" style="background: <?php echo getCategoryInfo($key)->color?>">
+										<a href="{{LINK top-genres/<?php echo $key?>}}" data-load="top-genres/<?php echo $key?>">
+											<div class="filters_innr">
+												<div class="f_sec_name">{{LANG Top 50}}</div>
+												<div class="f_name"><?php echo $category?></div>
+											</div>
+										</a>
+									</div>
+								</div>
+							<?php } ?>
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="short_list_card">
+							<ul class="s_list_songs">
+								{{TOP_SONGS}}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

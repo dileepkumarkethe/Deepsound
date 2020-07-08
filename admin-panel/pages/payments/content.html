@@ -1,0 +1,161 @@
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Earnings > Payments</h2>
+    </div>
+    <!-- Widgets -->
+    <div class="row clearfix">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+            <div class="info-box bg-black hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">attach_money</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL EARNINGS</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo CountAllPayment(); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-black hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">attach_money</i>
+                </div>
+                <div class="content">
+                    <div class="text">EARNINGS THIS MONTH</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo CountThisMonthPayment(); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-purple hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">money</i>
+                </div>
+                <div class="content">
+                    <div class="text">TRACK SALES</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo TrackPurchaseData(); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-green hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">stars</i>
+                </div>
+                <div class="content">
+                    <div class="text">PRO SALES</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo AmountAllPaymentData('1'); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #END# Widgets -->
+    <div class="row clearfix">
+        <!-- Bar Chart -->
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>STATICS</h2>
+                </div>
+                <div class="body">
+                    <div id="admin-chart-container" style="min-width: 100%; height: 400px; margin: 0 auto;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Bar Chart -->
+    </div>
+</div>
+<?php
+$percentage = (30 / 58) * 100;
+//echo $percentage . "%";
+$user_statics = array();
+$page_statics = array();
+$groups_statics = array();
+$posts_statics = array();
+$months = array('1','2','3','4','5','6','7','8','9','10','11','12');
+// user_statics
+foreach ($months as $value) {
+   $user_statics[] = GetTrackPaymentsStatics($value);
+}
+$user_statics = implode(', ', $user_statics);
+
+// page_statics
+foreach ($months as $value) {
+   $page_statics[] = GetRegisteredPaymentsStatics($value, '1');
+}
+$page_statics = implode(', ', $page_statics);
+
+/*
+// groups_statics
+foreach ($months as $value) {
+   $groups_statics[] = GetRegisteredPaymentsStatics($value, '3');
+}
+$groups_statics = implode(', ', $groups_statics);
+
+foreach ($months as $value) {
+   $posts_statics[] = GetRegisteredPaymentsStatics($value, '4');
+}
+$posts_statics = implode(', ', $posts_statics);
+*/
+?>
+<script>
+   $(function () {
+    Highcharts.setOptions({
+      colors: ['#6abd46', '#f2b92b']
+    });
+    $('#admin-chart-container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Monthly Average'
+        },
+        xAxis: {
+            categories: [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May',
+                'Jun',
+                'Jul',
+                'Aug',
+                'Sep',
+                'Oct',
+                'Nov',
+                'Dec'
+            ],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: '<?php echo date("Y");?>'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Track Sales',
+            data: [<?php echo $user_statics;?>]
+
+        }, {
+            name: 'Pro Sales',
+            data: [<?php echo $page_statics;?>]
+
+        }]
+    });
+});
+</script>

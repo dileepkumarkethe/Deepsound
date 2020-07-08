@@ -1,0 +1,13 @@
+<tr id="list-{{USER id}}">
+  <td>{{USER id}}</td>
+  <td><a href="{{USER url}}"><img src="{{USER avatar}}" class="td-avatar" alt="user avatar"> {{USER username}}</a></td>
+  <td>{{USER email}}</td>
+    <td><?php echo ($data['USER_DATA']->artist == 1) ? 'Artist' : 'Normal user';?></td>
+  <td>{{USER ip_address}}</td>
+  <td>{{STATUS}}</td>
+  <td>
+      <button onclick="getUserId({{USER id}});" type="button" class="btn btn-danger waves-effect waves-light" style="background-color: #1f91f3 !important" data-toggle="modal" data-target="#FollowersForm">Add Followers</button>
+      <a class="btn bg-cyan waves-effect waves-light" href="{{SETTINGS_LINK}}" target="_blank">EDIT</a>
+  	<button class="btn btn-danger waves-effect waves-light delete-content" data-id="{{USER id}}">DELETE</button>
+  </td>
+</tr>

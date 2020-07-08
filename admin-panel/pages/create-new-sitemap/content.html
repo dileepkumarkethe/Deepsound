@@ -1,0 +1,107 @@
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Tools > Create Sitemap</h2>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-8 col-md-8 ">
+            <div class="card">
+                <div class="header">
+                    <h2>Generate New Sitemap</h2>
+                </div>
+                <div class="body">
+                    <div class="alert alert-info">
+                    	The sitemap link is: <a href="{{CONFIG site_url}}/sitemap-main.xml" style="color: #fff" target="_blank">{{CONFIG site_url}}/sitemap-main.xml</a>
+                    </div>
+                    <form class="submit-sitemap-settings" method="POST">
+                    	<div class="alert bg-teal">
+                    		Last created sitemap: <span class="last-created">{{CONFIG last_created_sitemap}}</span>
+                    	</div>
+                    	<div class="progress hidden">
+                            <div class="progress-bar bg-cyan progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                                0%
+                            </div>
+                        </div>
+                        <input type="hidden" class="completed" value="0" name="completed">
+                        <input type="hidden" class="videos_file_number" value="1" name="videos_file_number">
+                        <input type="hidden" class="post_file_number" value="1" name="post_file_number">
+                        <input type="hidden" class="album_file_number" value="1" name="album_file_number">
+                        <input type="hidden" class="worked" value="0" name="worked">
+                        <input type="hidden" class="percentage" value="0" name="percentage">
+                        <input type="hidden" class="post_offset" value="0" name="post_offset">
+                        <input type="hidden" class="videos_offset" value="0" name="videos_offset">
+                        <input type="hidden" class="album_offset" value="0" name="album_offset">
+                        <input type="hidden" name="hash_id" value="<?php echo createMainSession();?>">
+                        <!-- <input type="hidden" class="start_from" value="0" name="start_from">
+                        <input type="hidden" class="artical_start_from" value="0" name="artical_start_from">
+                        <input type="hidden" class="file_number" value="1" name="file_number">
+                        <input type="hidden" class="added_videos" value="0" name="added_videos"> -->
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Generate New Sitemap</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+</div>
+
+<script>
+$('.btn-primary').on('click', function(event) {
+
+    $('.progress').removeClass('hidden');
+    $('.progress-bar').width('0%').text('0%');
+    $('.completed').val('0');
+    $('.videos_file_number').val('1');
+    $('.post_file_number').val('1');
+    $('.album_file_number').val('1');
+    $('.worked').val('0');
+    $('.percentage').val('0');
+    $('.post_offset').val('0');
+    $('.videos_offset').val('0');
+    $('.album_offset').val('0');
+    $('.progress-bar').removeClass('bg-light-green').addClass('active');
+    $('.progress-bar').addClass('bg-cyan');
+	// $('.percentage').val('0');
+ //    $('.start_from').val('0');
+	// $('.artical_start_from').val('0');
+	// $('.file_number').val('1');
+	// $('.added_videos').val('1');
+	
+});
+$(function() {
+    var form_site_settings = $('form.submit-sitemap-settings');
+
+    form_site_settings.ajaxForm({
+        url: '{{CONFIG ajax_url}}/ap/submit-sitemap-settings',
+        beforeSend: function() {
+            form_site_settings.find('button').text("{{LANG please_wait}}");
+        },
+        success: function(data) {
+            if (data.status == 201) {
+                $('.progress-bar').width(data.percentage_full).text(data.percentage_full);
+                $('.completed').val(data.completed);
+                $('.videos_file_number').val(data.videos_file_number);
+                $('.post_file_number').val(data.post_file_number);
+                $('.album_file_number').val(data.post_file_number);
+                $('.worked').val(data.worked);
+                $('.percentage').val(data.percentage);
+                $('.post_offset').val(data.post_offset);
+                $('.videos_offset').val(data.videos_offset);
+                $('.album_offset').val(data.videos_offset);
+            	// $('.artical_start_from').val(data.artical_start_from);
+            	// $('.file_number').val(data.file_number);
+            	// $('.added_videos').val(data.added_videos);
+            	if (data.percentage < 100) {
+            		form_site_settings.submit();
+            	} else {
+            		$('.btn-primary').text('Generate New Sitemap');
+            		$('.progress-bar').removeClass('bg-cyan').removeClass('active');
+            		$('.progress-bar').addClass('bg-light-green');
+            		$('.last-created').text(data.last_created);
+            	}
+            }
+        }
+    });
+});
+</script>

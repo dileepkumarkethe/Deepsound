@@ -1,0 +1,144 @@
+<div class="ma_sidebar">
+	<div class="sidebar">
+		<div class="logo_container">
+			<a href="{{CONFIG site_url}}" <?php if( IS_LOGGED === true ) {?>data-load="feed"<?php }?>>
+				<?php if( $music->mode_link == 'day' ){?>
+				<img src="{{CONFIG theme_url}}/img/logo.png" alt="">
+				<?php }else{ ?>
+				<img src="{{CONFIG theme_url}}/img/logo-white.png" alt="">
+				<?php } ?>
+			</a>
+		</div>
+		<div class="sidebar_innr" data-simplebar>
+			<ul class="sections">
+				<h3>{{LANG Browse Music}}</h3>
+				<li class="<?php if( $music->site_pagename == 'discover' ) { echo 'active'; }?>">
+					<a href="{{LINK discover}}" data-load="discover">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M21,3V15.5A3.5,3.5 0 0,1 17.5,19A3.5,3.5 0 0,1 14,15.5A3.5,3.5 0 0,1 17.5,12C18.04,12 18.55,12.12 19,12.34V6.47L9,8.6V17.5A3.5,3.5 0 0,1 5.5,21A3.5,3.5 0 0,1 2,17.5A3.5,3.5 0 0,1 5.5,14C6.04,14 6.55,14.12 7,14.34V6L21,3Z"></path>
+						</svg>
+						{{LANG Discover}}
+					</a>
+				</li>
+				<li class="<?php if( $music->site_pagename == 'new_music' ) { echo 'active'; }?>">
+					<a href="{{LINK new_music}}" data-load="new_music">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M12,3V12.26C11.5,12.09 11,12 10.5,12C8,12 6,14 6,16.5C6,19 8,21 10.5,21C13,21 15,19 15,16.5V6H19V3H12Z"></path>
+						</svg>
+						{{LANG New Music}}
+					</a>
+				</li>
+				<li class="<?php if( $music->site_pagename == 'top_music' ) { echo 'active'; }?>">
+					<a href="{{LINK top_music}}" data-load="top_music">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M16,11.78L20.24,4.45L21.97,5.45L16.74,14.5L10.23,10.75L5.46,19H22V21H2V3H4V17.54L9.5,8L16,11.78Z"></path>
+						</svg>
+						{{LANG Top Music}}
+					</a>
+				</li>
+				<li class="<?php if( $music->site_pagename == 'spotlight' ) { echo 'active'; }?>">
+					<a href="{{LINK spotlight}}" data-load="spotlight">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+						</svg>
+						{{LANG Spotlight}}
+					</a>
+				</li>
+				<li class="<?php if( $music->site_pagename == 'genres' ) { echo 'active'; }?>">
+					<a href="{{LINK genres}}" data-load="genres">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z"></path>
+						</svg>
+						{{LANG Genres}}
+					</a>
+				</li>
+				<li class="<?php if( $music->site_pagename == 'playlists' ) { echo 'active'; }?>">
+					<a href="{{LINK playlists}}" data-load="playlists">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M19,9H2V11H19V9M19,5H2V7H19V5M2,15H15V13H2V15M17,13V19L22,16L17,13Z"></path>
+						</svg>
+						{{LANG Playlists}}
+					</a>
+				</li>
+			</ul>
+			<?php if( $music->config->artist_sell == 'on' ) { ?>
+			<ul class="sections">
+				<h3>{{LANG Store}}</h3>
+				<li class="<?php if( $music->site_pagename == 'store' ) { echo 'active'; }?>">
+					<a href="{{LINK store/songs}}" data-load="store/songs">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M12,18H6V14H12M21,14V12L20,7H4L3,12V14H4V20H14V14H18V20H20V14M20,4H4V6H20V4Z"></path>
+						</svg>
+						{{LANG Browse}}
+					</a>
+				</li>
+
+				<li class="<?php if( $music->site_pagename == 'purchased' ) { echo 'active'; }?>">
+					<a href="{{LINK purchased}}" data-load="purchased">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M12,3A3,3 0 0,0 9,6H15A3,3 0 0,0 12,3M19,6A2,2 0 0,1 21,8V20A2,2 0 0,1 19,22H5C3.89,22 3,21.1 3,20V8C3,6.89 3.89,6 5,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6H19M9,19L16.5,14L9,10V19Z"></path>
+						</svg>
+						{{LANG Purchased}}
+					</a>
+				</li>
+			</ul>
+			<?php } ?>
+			<ul class="sections">
+				<h3>{{LANG Your Music}}</h3>
+				<li  class="<?php if( $music->site_pagename == 'recently_played' ) { echo 'active'; }?>">
+					<a href="{{LANG recently_played}}" data-load="recently_played">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3"></path>
+						</svg>
+						{{LANG Recently Played}}
+					</a>
+				</li>
+				<li  class="<?php if( $music->site_pagename == 'my_playlists' ) { echo 'active'; }?>">
+					<a href="{{LANG my_playlists}}" data-load="my_playlists">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"></path>
+						</svg>
+						{{LANG My Playlists}}
+					</a>
+				</li>
+				<li class="<?php if( $music->site_pagename == 'favourites' ) { echo 'active'; }?>">
+					<a href="{{LANG favourites}}" data-load="favourites">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z"></path>
+						</svg>
+						{{LANG Favourites}}
+					</a>
+				</li>
+			</ul>
+			<div class="ma_footer">
+				<?php echo GetAd('footer');?>
+
+				<div class="ma_footer_cright">
+					<?php
+						$lang_copy = lang("© |DATE| |NAME|");
+						$lang_copy = str_replace('|NAME|', $music->config->name, $lang_copy);
+						echo $lang_copy = str_replace('|DATE|', date('Y'), $lang_copy);
+					?>
+					<div class="lang_select dropup">
+						<button type="button" class="btn dropdown-toggle" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo ucfirst($_SESSION['lang']); ?></button>
+						<div class="dropdown-menu dropdown-menu-right mat-dropdown">
+							<ul class="list-unstyled mb-0">
+								<?php foreach($music->langs as $lang) { ?>
+									<li><a href="?lang=<?php echo $lang; ?>"><?php echo ucfirst($lang); ?></a></li>
+								<?php } ?>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="ma_footer_links">
+					<a href="{{LINK terms/about}}" data-load="terms/about">{{LANG About Us}}</a> • <a href="{{LINK terms/terms}}" data-load="terms/terms">{{LANG Terms}}</a> • <a href="{{LINK contact}}" data-load="contact">{{LANG Contact}}</a> • <a href="{{LINK terms/privacy}}" data-load="terms/privacy">{{LANG Privacy Policy}}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(document).on('click', '.sidebar .sidebar_innr a', function() {
+	$('body').removeClass('side_open');
+});
+</script>

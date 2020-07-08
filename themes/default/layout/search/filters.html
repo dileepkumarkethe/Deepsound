@@ -1,0 +1,59 @@
+<div class="store_filters">
+    <div class="store_widget">
+        <div class="s_widget_head">
+            <span style="background:#7367f0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M3,6H21V18H3V6M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M7,8A2,2 0 0,1 5,10V14A2,2 0 0,1 7,16H17A2,2 0 0,1 19,14V10A2,2 0 0,1 17,8H7Z"></path></svg></span> Price
+        </div>
+        <div class="store_categories">
+
+				<?php foreach($music->song_prices as $key => $value){?>
+					<span class="check_box">
+						<input type="checkbox" name="zero" id="<?php echo $key;?>" class="song_price" data-price="<?php echo $value;?>" value="1" >
+						<label for="<?php echo $key;?>">{{CONFIG currency_symbol}}<?php echo $value;?></label>
+					</span>
+				<?php }?>
+        </div>
+    </div>
+    <div class="store_widget">
+        <div class="s_widget_head">
+            <span style="background:#4caf50"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z"></path></svg></span> Genres
+        </div>
+        <div class="store_categories">
+			<?php foreach($music->categories as $key => $category){?>
+				<span class="check_box">
+					<input type="checkbox" name="<?php echo $category;?>" id="<?php echo $category;?>" value="<?php echo $key;?>" class="song_category" data-category="<?php echo $key;?>">
+					<label for="<?php echo $category;?>"><?php echo $category;?></label>
+				</span>
+			<?php } ?>
+        </div>
+    </div>
+</div>
+<input type="hidden" name="filter_type" value="<?php echo $music->search_page;?>" id="filter_type">
+<input type="hidden" name="filter_search_keyword" value="<?php echo $music->search_keyword;?>" id="filter_search_keyword">
+<script>
+	function filter_search_results(){
+	    let prices = [];
+	    let geners = [];
+        let filter_type = $('#filter_type').val();
+	    let filter_search_keyword = $('#filter_search_keyword').val();
+        $('.song_price').each(function(i, obj) {
+            if(this.checked){
+                prices.push($(obj).attr('data-price'));
+			}
+        });
+        $('.song_category').each(function(i, obj) {
+            if(this.checked){
+                geners.push($(obj).attr('data-category'));
+            }
+        });
+
+        $.get(ajaxUrl() + "/search-filter", {prices: prices, geners: geners, filter_type: filter_type, filter_search_keyword: filter_search_keyword}, function (data) {
+        	if(data.status == 200){
+        	    $('#search_results').html(data.html);
+			}
+        });
+
+	}
+	$(document).on('click','.song_price,.song_category',function(e){
+        filter_search_results()
+	});
+</script>

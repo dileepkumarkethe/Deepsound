@@ -1,0 +1,46 @@
+<tr id="list-{{AD_ID}}">
+     <td>
+          <a href="{{AD_URL}}">
+               {{AD_WEBSITE}}        
+          </a>
+     </td>
+     <td>
+		<a href="{{AD_URL}}">
+               {{AD_TITLE}}       
+          </a>
+	</td>
+	<td>
+		<a href="{{SETTINGS_LINK}}">
+               {{USER_NAME}}        
+          </a>
+	</td>
+     <td>
+          {{CURRENCY}}{{WALLET}}  
+     </td>
+     <td>
+          {{CURRENCY}}{{SPENT}}  
+     </td>
+	<td>
+		<time>
+               {{DATE}}        
+          </time>
+	</td>
+	<td>
+        {{APPEARS}}
+	</td>
+	<td>
+		<?php if ($music->user_ad->views > 0 && $music->user_ad->clicks > 0){ ?>
+               {{CLICKS}} Clicks & {{VIEWS}} Views
+        <?php } else if ($music->user_ad->views > 0 && $music->user_ad->clicks == 0){ ?>
+               {{VIEWS}} Views
+        <?php } else if ($music->user_ad->clicks > 0 && $music->user_ad->views == 0){ ?>
+               {{CLICKS}} Clicks
+        <?php } ?>
+	</td>
+	<td>
+		<button class="btn btn-danger delete-content" data-id="{{AD_ID}}">
+                 DELETE      
+          </button>
+          <button onclick="PT_ManageVRequests({{AD_ID}},this);" type="button" class="btn btn-warning waves-effect waves-light">VIEW</button>
+	</td>
+</tr>

@@ -1,0 +1,9 @@
+<tr id="<?php echo $data->id;?>">
+   <td><?php echo $data->id;?></td>
+   <td style="background-color: <?php echo $data->color;?>;color: #ffffff;vertical-align: inherit;text-align: center;"><img src="<?php echo getMedia($data->background_thumb);?>" style="display: block;margin: 0 auto;width: 100px;"></td>
+   <td><?php echo $data->cateogry_name;?></td>
+   <td>
+      <button type="button" class="btn btn-default waves-effect btn-lang m-r-20" data-id="<?php echo $data->id;?>" data-toggle="modal" data-target="#defaultModal">EDIT</button>
+      <button onclick="Wo_DeleteGender('<?php echo $data->id;?>');" type="button" class="btn btn-danger waves-effect waves-light">DELETE</button>
+   </td>
+</tr>

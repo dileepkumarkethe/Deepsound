@@ -1,0 +1,15 @@
+<div class="pub_playlists">
+	<div class="pplist_slider" id="user-feed-data">
+		{{HTML}}
+    </div>
+</div>
+<?php 
+$third = 'all';
+if(!empty($music->third_url)) {
+	$third = secure($music->third_url);
+}
+if ($music->record_count > 0) { ?>
+<div class="text-center see_all">
+	<a href="javascript:void(0); loadMore('songs', '<?php echo $third?>');" id="load-more-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg> {{LANG Load More}}</a>
+</div>
+<?php } ?>

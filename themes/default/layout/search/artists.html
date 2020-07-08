@@ -1,0 +1,17 @@
+<?php if( isset($data['ARTISTS_DATA']) ){?>
+<section class="search_result_count">{{ARTISTS_COUNT}} {{LANG results for:}} <b>{{SEARCH_KEYWORD}}</b></section>
+<div class="artist_section search_artists" id="artists_search_result">
+    <?php
+        foreach($data['ARTISTS_DATA'] as $key => $artists){
+            echo loadPage("search/artists-list", ['ARTIST_DATA' => userData( $artists->id ) ]);
+        }
+    ?>
+</div>
+
+<div class="text-center see_all">
+    <a href="javascript:void(0); loadMore('artists_search', '{{SEARCH_KEYWORD}}');" id="load-more-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg> {{LANG Load More}}</a>
+</div>
+
+<?php } else { ?>
+<div class="no-track-found bg_light"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> {{LANG What are looking for ?}}</div>
+<?php } ?>

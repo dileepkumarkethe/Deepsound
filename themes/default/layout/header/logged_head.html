@@ -1,0 +1,147 @@
+<header>
+	<div class="head_menu" id="open_slide">
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" /></svg>
+	</div>
+	<div class="head_logo loggd_hd_logo">
+		<a href="{{LINK }}" <?php if( IS_LOGGED === true ) {?>data-load="feed"<?php }?>>
+			<?php if( $music->mode_link == 'day' ){?>
+			<img src="{{CONFIG theme_url}}/img/logo.png" alt="">
+			<?php }else{ ?>
+			<img src="{{CONFIG theme_url}}/img/logo-white.png" alt="">
+			<?php } ?>
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" /></svg></a>
+	</div>
+	<div class="head_search">
+		{{site_search_bar}}
+	</div>
+	<div class="head_user">
+		<div class="head_search_mobi" id="open_search">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /></svg>
+		</div>
+		<a href="{{LINK feed}}" class="btn login hide_hd_btn" <?php if( IS_LOGGED === true ) {?>data-load="feed"<?php }?>>{{LANG Feed}}</a>
+		<a href="{{LINK upload-song}}" class="btn btn-primary btn-mat hide_hd_btn" data-load="upload-song"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M16,9V7H12V12.5C11.58,12.19 11.07,12 10.5,12A2.5,2.5 0 0,0 8,14.5A2.5,2.5 0 0,0 10.5,17A2.5,2.5 0 0,0 13,14.5V9H16M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2Z"></path></svg> {{LANG Upload}}</a>
+		<span class="opts_head_acc dropdown">
+			<svg data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,9V7H12V12.5C11.58,12.19 11.07,12 10.5,12A2.5,2.5 0 0,0 8,14.5A2.5,2.5 0 0,0 10.5,17A2.5,2.5 0 0,0 13,14.5V9H16M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2Z"></path></svg>
+			<div class="dropdown-menu dropdown-menu-right mat-dropdown">
+				<ul class="list-unstyled mb-0">
+					<li><a href="{{LINK feed}}" <?php if( IS_LOGGED === true ) {?>data-load="feed"<?php }?>>{{LANG Feed}}</a></li>
+					<li><a href="{{LINK upload-song}}" data-load="upload-song">{{LANG Upload}}</a></li>
+				</ul>
+			</div>
+		</span>
+
+		<span class="chaticon">
+			<a href="{{LINK messages}}" data-load="messages">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,3C17.5,3 22,6.58 22,11C22,15.42 17.5,19 12,19C10.76,19 9.57,18.82 8.47,18.5C5.55,21 2,21 2,21C4.33,18.67 4.7,17.1 4.75,16.5C3.05,15.07 2,13.13 2,11C2,6.58 6.5,3 12,3M17,12V10H15V12H17M13,12V10H11V12H13M9,12V10H7V12H9Z" /></svg>
+				<span id="new-messages"></span>
+			</a>
+		</span>
+
+		<span class="notis dropdown">
+			<span class="unread_count">
+			<?php 
+			$count = getNotifications('count', false); 
+			if ($count > 0) {
+				echo $count;
+			}
+			?>
+			</span>
+			<svg onclick="getNotifications()" xmlns="http://www.w3.org/2000/svg" data-display="static" data-toggle="dropdown" aria-haspopup="true" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29C10,4.19 10,4.1 10,4A2,2 0 0,1 12,2A2,2 0 0,1 14,4C14,4.1 14,4.19 14,4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21" /></svg>
+			<div class="dropdown-menu dropdown-menu-right mat-dropdown">
+				<ul class="list-unstyled mb-0" id="notification-list">
+					<li class="noti_load">
+						<svg width="50px" height="50px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect><circle cx="50" cy="50" r="40" stroke="#676d76" fill="none" stroke-width="6" stroke-linecap="round"><animate attributeName="stroke-dashoffset" dur="1.5s" repeatCount="indefinite" from="0" to="502"></animate><animate attributeName="stroke-dasharray" dur="1.5s" repeatCount="indefinite" values="150.6 100.4;1 250;150.6 100.4"></animate></circle></svg>
+					</li>
+				</ul>
+			</div>
+		</span>
+		<span class="opts_account dropdown">
+			<img src="{{ME avatar}}" alt="my profile picture" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<div class="dropdown-menu dropdown-menu-right mat-dropdown">
+				<ul class="list-unstyled mb-0">
+					<?php if ($music->user->is_pro == 0 && $music->config->go_pro == 'on') { ?>
+					<li><a href="{{LINK go-pro}}" data-load="go-pro">{{LANG Upgrade To PRO}}</a></li>
+					<?php } ?> 
+					<li><a href="{{ME url}}" data-load="{{ME username}}">{{ME name}}</a></li>
+					<li class="divider"></li>
+					<?php if ($music->user->artist == 0) { ?>
+					<li><a href="{{LINK become}}" data-load="become">{{LANG Become an artist}}</a></li>
+					<li class="divider"></li>
+					<?php } ?> 
+					<li><a href="{{ME url}}/songs" data-load="{{ME username}}/songs">{{LANG My Songs}}</a></li>
+					<li><a href="{{ME url}}/albums" data-load="{{ME username}}/albums">{{LANG My Albums}}</a></li>
+					<li><a href="{{LINK dashboard}}" data-load="dashboard">{{LANG Dashboard}}</a></li>
+					<li><a href="{{LINK settings/{{ME username}}/general}}" data-load="settings/{{ME username}}/general">{{LANG Settings}}</a></li>
+					<!--<li class="divider"></li>
+					<li><a href="{{LINK recently_played}}" data-load="recently_played">{{LANG Recently Played}}</a></li>
+					<li><a href="{{LINK my_playlists}}"  data-load="my_playlists">{{LANG My Playlists}}</a></li>
+					<li><a href="{{LINK favourites}}" data-load="favourites">{{LANG Favourites}}</a></li>-->
+					<?php if (IsAdmin()) { ?>
+					<li class="divider"></li>
+					<li><a href="{{LINK admin-cp/}}">{{LANG Admin Panel}}</a></li>
+					<?php } ?>
+					<li class="divider"></li>
+					<li><a href="{{LINK logout}}" data-logout="true">{{LANG Logout}}</a></li>
+					<li class="divider"></li>
+					<li class="toggle-mode top-header">
+						<label class="switch">
+							<span class="txt"><?php echo $music->mode_text; ?></span>
+							<input type="checkbox" id="night_mode_toggle" data-mode='<?php echo $music->mode_link; ?>'>
+							<span class="slider round"></span>
+						</label>
+					</li>
+				</ul>
+			</div>
+		</span>
+	</div>
+</header>
+
+<script>
+$(document).on('click', 'a[data-logout]', function(event) {
+	event.preventDefault();
+	$.get('{{CONFIG ajax_url}}/logout', function(data) {
+		if (data.status == 200) {
+			$('#main-header').html(data.header);
+			if (Amplitude.getActiveSongMetadata().price > 0) {
+				location.href = window.location.href;
+			} else {
+				//ajaxRedirect();
+                location.href = window.location.href;
+			}
+		}
+	});
+});
+function getNotifications() {
+	$('.unread_count').text("");
+	$("#notification-list").html('<li class="noti_load"><svg width="50px" height="50px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect><circle cx="50" cy="50" r="40" stroke="#676d76" fill="none" stroke-width="6" stroke-linecap="round"><animate attributeName="stroke-dashoffset" dur="1.5s" repeatCount="indefinite" from="0" to="502"></animate><animate attributeName="stroke-dasharray" dur="1.5s" repeatCount="indefinite" values="150.6 100.4;1 250;150.6 100.4"></animate></circle></svg></li>');
+	$.get('{{CONFIG ajax_url}}/notifications/get', function(data) {
+		if (data.status == 200) {
+			$("#notification-list").html(data.html);
+		} else {
+			$("#notification-list").html("<li class='no_notification'>{{LANG No notifications found}}</li>");
+		}
+	});
+}
+
+jQuery(document).ready(function($) {
+	setTimeout(updateNotifications, 5000);
+});
+
+function updateNotifications() {
+	$.get('{{CONFIG ajax_url}}/notifications/count_unseen', function(data) {
+		if (data.status == 200) {
+			if (data.count > 0) {
+				$(".unread_count").html(data.count);
+			} else {
+				$(".unread_count").html("");
+			}
+            if (data.msgs > 0) {
+                $("#new-messages").html(data.msgs);
+            } else {
+                $("#new-messages").html("");
+            }
+		} 
+		setTimeout(updateNotifications, 5000);
+	});
+}
+</script>

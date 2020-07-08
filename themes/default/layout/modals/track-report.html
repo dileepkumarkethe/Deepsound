@@ -1,0 +1,69 @@
+<div class="modal fade" id="track_unreported" tabindex="-1" role="dialog" aria-labelledby="track_unreported" aria-hidden="true" data-id="0">
+    <div class="modal-dialog mat_box" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+				<div class="no-track-found" style="padding: 30px 10px;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M10,17L5,12L6.41,10.58L10,14.17L17.59,6.58L19,8M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg> {{LANG The track report was successfully deleted.}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="report_track" tabindex="-1" role="dialog" aria-labelledby="report_track" aria-hidden="true">
+    <div class="modal-dialog mat_box create_playlist" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{LANG Report track.}}</h5>
+            </div>
+            <form method="post" action="" id="track-report-form">
+                <div class="alert alert-danger alert-empty" id="output-report-track-errors"></div>
+                <div class="create_playlist_innr">
+                    <div class="play_info">
+                        <div class="form-group mat_input" style="text-align: initial;">
+                            <textarea name="track_description" id="track_description" rows="5" style="width: 100%;"></textarea>
+                            <small>{{LANG Please describe whey you want to report this track.}}</small>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="report_track_id" name="id">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{LANG Cancel}}</button>
+                    <button type="submit" class="btn btn-primary btn-mat" id="btn-report-track-submit">{{LANG Submit}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        var options = {
+            url: "{{CONFIG ajax_url}}/report-track?hash_id=" + getHashID(),
+            beforeSubmit:  function () {
+                $('#output-report-track-errors').removeClass('alert-success').addClass('alert-danger');
+                $('#output-report-track-errors').empty();
+                $("#btn-report-track-submit").text("{{LANG Please wait..}}");
+            },
+            success: function (data) {
+                $("#btn-report-track-submit").text("{{LANG Submit}}");
+                if (data.status == 200) {
+                    $('#output-report-track-errors').addClass('alert-success').removeClass('alert-danger');
+                    $('#output-report-track-errors').text("{{LANG Thanks for your submission, we will review your request shortly.}}");
+                    setTimeout(function () {
+                        $('#track-report-form')[0].reset();
+                        $('#report_track').modal('hide');
+                        closeModal();
+                        var track_id = $('#report_track_id').val();
+                        $('.track_report[data-track-id="'+track_id+'"]').hide();
+                        $('.track_unreport[data-track-id="'+track_id+'"]').css({'visibility':'inherit'});
+                        $('.track_unreport[data-track-id="'+track_id+'"]').show();
+
+                        $('#output-report-track-errors').empty();
+                    }, 3000);
+                } else if (data.status == 400) {
+                    var errros = data.errors.join("<br>");
+                    $('#output-report-track-errors').html(errros);
+                }
+            }
+        };
+
+        $('#track-report-form').ajaxForm(options);
+    });
+</script>

@@ -1,0 +1,149 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="page_padding">
+			<!-- Become Author -->
+			<div class="become_author">
+				<div class="row" id="upload-form">
+					<div class="col-md-2"></div>
+					<form action="" class="form-horizontal col-md-8 bauthor_form" method="POST" id="song-form">
+						<h3>{{LANG Become an Artist}}</h3>
+						<div class="col-md-12">
+							<div class="alert alert-info alert-empty" id="output-song-errors">
+								<?php if ($music->config->go_pro != 'on') { ?>
+									{{LANG Get verified, upload more songs, get more space, sell your songs, get a special looking profile and get famous on our platform!}}
+								<?php } else {?>
+									<?php if($music->config->artist_sell == 'on'){?>
+										{{LANG Get verified, sell your songs, get a special looking profile and get famous on our platform!}}
+									<?php } else {?>
+										{{LANG Get verified, get a special looking profile and get famous on our platform!}}
+									<?php } ?>
+								<?php } ?>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="alert alert-danger alert-empty" id="output-song-errors"></div>
+						</div>
+						<?php if ($music->hasRequest == true) { ?>
+							<div class="col-md-12">{{LANG Your request has been already sent, we will get back to you shourtly.}}</div>
+						<?php } else { ?>
+						<div class="form-group mat_input">
+							<label class="col-md-12" for="name"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" /></svg> {{LANG Name}}</label>  
+							<div class="col-md-12">
+								<input id="name" name="name" type="text" placeholder="" class="form-control input-md">
+								<span class="help-block">{{LANG Your full name as showing on your ID}}</span>
+							</div>
+						</div><br>
+						
+						<div class="row m-0">
+							<label class="col-md-12"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M13,9V3.5L18.5,9M6,2C4.89,2 4,2.89 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6Z" /></svg> {{LANG Upload documents}}</label>
+							<span class="help-block col-md-12">{{LANG Please upload a photo with your passport / ID & your distinct photo.}}</span>
+							<div class="clear"></div>
+							<div class="form-group mat_input col-md-6">
+								<div class="img_container" id="user_photo">
+									<div class="img_container_1">
+										<p class="img_container_2"></p>
+										<div class="text-center">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#cecece"><path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"></path></svg>
+										</div>
+										<p class="img_container_text">{{LANG Your Personal Photo}}</p>
+										<p></p>
+									</div>
+								</div>
+							</div>
+							<div class="form-group mat_input col-md-6">
+								<div class="img_container" id="user_passport">
+									<div class="img_container_1">
+										<p class="img_container_2"></p>
+										<div class="text-center">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#cecece" d="M2,3H22C23.05,3 24,3.95 24,5V19C24,20.05 23.05,21 22,21H2C0.95,21 0,20.05 0,19V5C0,3.95 0.95,3 2,3M14,6V7H22V6H14M14,8V9H21.5L22,9V8H14M14,10V11H21V10H14M8,13.91C6,13.91 2,15 2,17V18H14V17C14,15 10,13.91 8,13.91M8,6A3,3 0 0,0 5,9A3,3 0 0,0 8,12A3,3 0 0,0 11,9A3,3 0 0,0 8,6Z" /></svg>
+										</div>
+										<p class="img_container_text">{{LANG Passport / ID card}}</p>
+										<p></p>
+									</div>
+								</div>
+							</div>
+						</div>
+	
+						<div class="form-group mat_input">
+							<label class="col-md-12" for="details"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M4,5H20V7H4V5M4,9H20V11H4V9M4,13H20V15H4V13M4,17H14V19H4V17Z" /></svg> {{LANG Additional details about your self (Optinal)}}</label>  
+							<div class="col-md-12">
+								<textarea name="details" id="details" cols="30" rows="4" class="form-control"></textarea>
+							</div>
+						</div>
+						
+						<div class="row m-0">
+							<div class="form-group mat_input col-md-6">
+								<label class="col-md-12 p-0" for="genre"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z"></path></svg> {{LANG Genre}}</label>  
+								<select name="category_id" id="category_id" class="form-control">
+									<?php foreach($music->categories as $key => $category) {?>
+										<option value="<?php echo $key?>"><?php echo $category?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<div class="form-group mat_input col-md-6">
+								<label class="col-md-12 p0" for="website"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M16,6H13V7.9H16C18.26,7.9 20.1,9.73 20.1,12A4.1,4.1 0 0,1 16,16.1H13V18H16A6,6 0 0,0 22,12C22,8.68 19.31,6 16,6M3.9,12C3.9,9.73 5.74,7.9 8,7.9H11V6H8A6,6 0 0,0 2,12A6,6 0 0,0 8,18H11V16.1H8C5.74,16.1 3.9,14.26 3.9,12M8,13H16V11H8V13Z" /></svg> {{LANG Website (Optional)}}</label>  
+								<div class="col-md-12 p0">
+									<input id="website" name="website" type="text" placeholder="" class="form-control input-md">
+								</div>
+							</div>
+						</div>
+						<div class="row m-0">
+							<div class="form-group mat_input col-md-12">
+								<small>{{LANG We will review your request within 24 hours, you'll be informed shourtly.}}</small>
+							</div>
+						</div>
+						
+						<div class="last-sett-btn modal-footer">
+							<button type="submit" class="btn btn-primary btn-mat" id="btn-song-submit">{{LANG Send}}</button>
+						</div>
+						
+						<input type="file" name="passport" class="hidden" id="ip-photo" accept="image/x-png,image/jpg,image/jpeg">
+						<input type="file" name="photo" class="hidden" id="user-photo" accept="image/x-png,image/jpg,image/jpeg">
+						<?php } ?>
+					</form>
+					<div class="col-md-2"></div>
+				</div>
+			</div>
+			<!-- End Upload Music -->
+		</div>
+		
+	</div>
+</div>
+<script>
+
+$(document).on("click", '#user_photo', function () {
+	$('#user-photo').trigger('click');
+});
+$(document).on("click", '#user_passport', function () {
+	$('#ip-photo').trigger('click');
+});
+$(document).ready(function() { 
+	$("#ip-photo").change(function() {
+	  	readURL(this, "user_passport");
+	});
+	$("#user-photo").change(function() {
+	   readURL(this, "user_photo");
+	});
+    var options = { 
+    	url: "{{CONFIG ajax_url}}/submit-artist-request?hash_id=" + getHashID(),
+        beforeSubmit:  function () {
+        	$('#output-song-errors').removeClass("alert-success").addClass('alert-danger');
+        	$('#output-song-errors').empty();
+        	$("#btn-song-submit").text("{{LANG Please wait..}}");
+        	$("#btn-song-submit").attr("disabled", "true");
+        }, 
+        success: function (data) {
+        	if (data.status == 200) {
+        		$('#output-song-errors').removeClass("alert-danger").addClass('alert-success');
+        		$('#output-song-errors').html("{{LANG Thank you. Your request has been sent, we will get back to you shourtly.}}");
+        	} else if (data.status == 400) {
+        		$('#output-song-errors').html(data.message);
+        	}
+        	$("#btn-song-submit").removeAttr("disabled");
+        	$("#btn-song-submit").text("{{LANG Send}}");
+        	$('html, body').animate({scrollTop:0},500);
+        }
+    }; 
+    $('#song-form').ajaxForm(options); 
+}); 
+</script>

@@ -1,0 +1,11 @@
+<div class="artist_list">
+    <div class="cover_art">
+
+        <a href="{{LINK /}}{{ARTIST username}}" <?php if( IS_LOGGED === true ) {?>data-load="{{ARTIST username}}"<?php }?>>
+            <img src="{{ARTIST avatar}}">
+        </a>
+    </div>
+    <div class="track_info">
+        <a href="{{LINK /}}{{ARTIST username}}" <?php if( IS_LOGGED === true ) {?>data-load="{{ARTIST username}}"<?php }?>><span class="artist">{{ARTIST name}}</span></a>
+    </div>
+</div>

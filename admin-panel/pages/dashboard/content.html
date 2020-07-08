@@ -1,0 +1,160 @@
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>DASHBOARD<small>	The data is updated every 30 mins.</small></h2>
+    </div>
+    <!-- Widgets -->
+    <div class="row clearfix">
+        <div class="col-lg-3 col-md-3">
+            <div class="info-box bg-pink hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">music_note</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL SONGS</div>
+                    <div class="number count-to" data-from="0" data-to="{{CONFIG total_songs}}" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-light-green hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">album</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL ALBUMS</div>
+                    <div class="number count-to" data-from="0" data-to="{{CONFIG total_albums}}" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-orange hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">play_circle_outline</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL PLAYS</div>
+                    <div class="number count-to" data-from="0" data-to="{{CONFIG total_plays}}" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-cyan hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">attach_money</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL REVENUE</div>
+                    <div class="number count-to" data-from="0" data-to="{{CONFIG total_sales}}" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-purple hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">people</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL USERS</div>
+                    <div class="number count-to" data-from="0" data-to="{{CONFIG total_users}}" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-blue hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">record_voice_over</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL ARTISTS</div>
+                    <div class="number count-to" data-from="0" data-to="{{CONFIG total_artists}}" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-red hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">library_music</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL PLAYLISTS</div>
+                    <div class="number count-to" data-from="0" data-to="{{CONFIG total_playlists}}" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-indigo hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">person_outline</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL UNACTIVE USERS</div>
+                    <div class="number count-to" data-from="0" data-to="{{CONFIG total_unactive_users}}" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #END# Widgets -->
+    <div class="row clearfix">
+        <!-- Bar Chart -->
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>USERS STATICS</h2>
+                </div>
+                <div class="body">
+                    <div id="bar_users_chart" class="graph"></div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Bar Chart -->
+        <!-- Bar Chart -->
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>SONGS STATICS</h2>
+                </div>
+                <div class="body">
+                    <div id="bar_questions_chart" class="graph"></div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Bar Chart -->
+    </div>
+</div>
+
+<script>    
+$(function () {
+    Morris.Bar({
+        // ID of the element in which to draw the chart.
+        element: 'bar_questions_chart',
+
+        // Chart data records -- each entry in this array corresponds to a point
+        // on the chart.
+        data: {{CONFIG songs_statics}},
+
+            xkey: 'month',
+            ykeys: ['new_songs'],
+            labels: ['Added Songs'],
+            pointSize: 1,
+            hideHover: 'auto',
+            resize: true,
+            barColors: ['#E91E63']
+    });
+    Morris.Bar({
+        // ID of the element in which to draw the chart.
+        element: 'bar_users_chart',
+
+        // Chart data records -- each entry in this array corresponds to a point
+        // on the chart.
+        data: {{CONFIG user_statics}},
+
+            xkey: 'month',
+            ykeys: ['new_users'],
+            labels: ['New Users'],
+            pointSize: 1,
+            hideHover: 'auto',
+            resize: true,
+            barColors: ['#8BC34A']
+    });
+});
+</script>

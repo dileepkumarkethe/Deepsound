@@ -1,0 +1,15 @@
+<div class="alert alert-white announcements-list" data-announcement="{{ANN_ID}}" data-status="active">
+  <span class="pull-right" data-toggle="tooltip" title="Delete Announcement" onclick="DeleteAnnouncement('{{ANN_ID}}');">
+    <i class="material-icons">delete</i>
+  </span>
+  <span class="pull-right" data-toggle="tooltip" title="Toogle" onclick="ToggleAnnouncement('{{ANN_ID}}', 1);">
+    <i class="material-icons">close</i>
+  </span>
+  <p>
+    {{ANN_TEXT}}
+  </p>
+  <small>
+    <i class="fa fa-clock-o"></i> 
+    {{ANN_TIME}} {{LANG views}} {{ANN_VIEWS}}
+    </small>
+</div>

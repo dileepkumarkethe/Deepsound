@@ -1,0 +1,18 @@
+<div class="modal fade" id="playlists" role="dialog" aria-labelledby="playlists" aria-hidden="true" data-id="{{t_id}}">
+	<div class="modal-dialog mat_box" role="document">
+		<div class="modal-content add_to_plist">
+			<div class="modal-header">
+				<h5 class="modal-title">{{LANG Select playlists}} <a href='javscript:void(0)' data-load="my_playlists" data-dismiss="modal">{{LANG New}}</a></h5>
+			</div>
+			<div class="modal-body">
+				<ul class="add-select-playlists">
+					{{list}}
+				</ul>
+			</div>	
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">{{LANG Cancel}}</button>
+				<button type="button" class="btn btn-primary btn-mat" onclick="addToLists();">{{LANG Add}}</button>
+			</div>
+		</div>
+	</div>
+</div>

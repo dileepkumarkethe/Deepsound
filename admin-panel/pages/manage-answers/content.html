@@ -1,0 +1,164 @@
+<?php
+$question_id = (!empty($_GET['question_id'])) ? $_GET['question_id'] : null;
+$page = (!empty($_GET['page-id'])) ? $_GET['page-id'] : 1;
+$filter_keyword = (!empty($_GET['query'])) ? Secure($_GET['query']) : '';
+$db->pageLimit  = 50;
+
+if (!empty($filter_keyword)) {
+    $sql   = "(question LIKE '%$filter_keyword%' OR id = '$filter_keyword' ) ";
+    $questions = $db->where($sql)->orderBy('id', 'DESC')->objectbuilder()->paginate(T_QUESTIONS, $page);
+}
+else if (!empty($question_id)) {
+    $questions = $db->where('ask_question_id',$question_id)->orderBy('id', 'DESC')->objectbuilder()->paginate(T_QUESTIONS, $page);
+}
+
+else {
+    $questions = $db->objectbuilder()->orderBy('id', 'DESC')->paginate(T_QUESTIONS, $page);
+}
+
+if (($page > $db->totalPages) && !empty($_GET['page-id'])) {
+    header("Location: " . LoadAdminLinkSettings('manage-questions'));
+    exit();
+}
+?>
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Questions > Manage Answers</h2>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Manage & Edit Answers</h2>
+                </div>
+                <div class="body">
+                    <div class="row">
+                        <div class="col-md-6" style="margin-bottom:0;">
+                            <form method="get" action="<?php echo LoadAdminLinkSettings('manage-answers'); ?>">
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input type="text" name="query" id="query" class="form-control">
+                                                <label class="form-label search-form">Search for ID, QUESTION.</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button class="btn btn-info">Search</button>
+                                    </div>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Question</th>
+                                <th>Reply's</th>
+                                <th>Shares</th>
+                                <th>Anonymously</th>
+                                <th>Status</th>
+                                <th>Publish date</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                                foreach ($questions as $key => $question) {
+                                    $question = QuestionData($question);
+                                    $status = ($question->active == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-danger">Pending</span>';
+                                    $is_anonymously = ($question->is_anonymously == 1) ? '<span class="label label-success">YES</span>' : '<span class="label label-default">NO</span>';
+                                    $question_type = '';
+                                    if( $question->ask_user_id > 0 && $question->ask_question_id > 0 && $question->shared_user_id == 0 && $question->shared_question_id == 0 && $question->replay_user_id == 0 && $question->replay_question_id == 0 ){
+                                        echo LoadAdminPage('manage-answers/list', array('QUESTION_DATA' => $question, 'STATUS' => $status, 'Anonymously' => $is_anonymously ));
+                                    }
+                                }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pull-left">
+                        <?php echo "Showing $page out of " . $db->totalPages; ?>
+                    </div>
+                    <div class="pull-right">
+                        <nav>
+                            <ul class="pagination">
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('manage-answer?page-id=1'); ?>" class="waves-effect" title='First Page'>
+                                        <i class="material-icons">first_page</i>
+                                    </a>
+                                </li>
+                                <?php if ($page > 1) {  ?>
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('manage-answer?page-id=' . ($page - 1)); ?>" class="waves-effect" title='Previous Page'>
+                                        <i class="material-icons">chevron_left</i>
+                                    </a>
+                                </li>
+                                <?php  } ?>
+                                <?php
+                                $nums = 0;
+                                $nums_pages = ($page > 4) ? ($page - 4) : $page;
+                                for ($i=$nums_pages; $i <= $db->totalPages; $i++) {
+                                if ($nums < 20) {
+                                ?>
+                                <li class="<?php echo ($page == $i) ? 'active' : ''; ?>"><a href="<?php echo LoadAdminLinkSettings('manage-answer?page-id=' . ($i)); ?>" class="waves-effect"><?php echo $i ?></a></li>
+                                <?php
+                                	}
+                                	$nums++;
+                                }
+                                ?>
+                                <?php if ($db->totalPages > $page) { ?>
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('manage-answer?page-id=' . ($page + 1)); ?>" class="waves-effect" title="Next Page">
+                                        <i class="material-icons">chevron_right</i>
+                                    </a>
+                                </li>
+                                <?php } ?>
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('manage-answer?page-id=' . ($db->totalPages)); ?>" class="waves-effect" title='Last Page'>
+                                        <i class="material-icons">last_page</i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+    <div id="delete-modal" class="modal fade" role="dialog" data-id="">
+        <div class="modal-dialog">
+            <div class="modal-content modal-col-red">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">DELETE QUESTION</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to continue? this action can't be undo</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect delete-button" data-dismiss="modal" data-type="questions">DELETE</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('.delete-content').on('click', function(event) {
+                event.preventDefault();
+                $('#delete-modal').attr('data-id', $(this).attr('data-id')).modal('show');
+            });
+        });
+    </script>

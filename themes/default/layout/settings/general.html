@@ -1,0 +1,138 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="page_padding">
+			<!-- Settings -->
+				<div class="sett_page">
+					<?php echo loadPage("settings/sidebar"); ?>
+					<div class="st_content">
+						<div class="st_form">
+							<h3>{{LANG General Settings}}</h3>
+							<form method="post" action="" id="general-form">
+								<div class="alert alert-danger alert-empty" id="output-general-errors"></div>
+								<div class="row">
+									<div class="col-md-6 p-0">
+										<div class="form-group mat_input">
+											<label class="col-md-12" for="username"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M21.7,13.35L20.7,14.35L18.65,12.3L19.65,11.3C19.86,11.09 20.21,11.09 20.42,11.3L21.7,12.58C21.91,12.79 21.91,13.14 21.7,13.35M12,18.94L18.06,12.88L20.11,14.93L14.06,21H12V18.94M12,14C7.58,14 4,15.79 4,18V20H10V18.11L14,14.11C13.34,14.03 12.67,14 12,14M12,4A4,4 0 0,0 8,8A4,4 0 0,0 12,12A4,4 0 0,0 16,8A4,4 0 0,0 12,4Z"></path></svg> {{LANG Username}}</label>
+											<div class="col-md-12">
+												<input type="text" name="username" id="username" autofocus value="{{USER username}}">
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6 p-0">
+										<div class="form-group mat_input">
+											<label class="col-md-12" for="email"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z"></path></svg> {{LANG Email}}</label>
+											<div class="col-md-12">
+												<input type="email" name="email" id="email" value="{{USER email}}">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group mat_input">
+									<label class="col-md-12 p-0" for="country"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M17.9,17.39C17.64,16.59 16.89,16 16,16H15V13A1,1 0 0,0 14,12H8V10H10A1,1 0 0,0 11,9V7H13A2,2 0 0,0 15,5V4.59C17.93,5.77 20,8.64 20,12C20,14.08 19.2,15.97 17.9,17.39M11,19.93C7.05,19.44 4,16.08 4,12C4,11.38 4.08,10.78 4.21,10.21L9,15V16A2,2 0 0,0 11,18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg> {{LANG Country}}</label>
+									<select id="country" class="form-control" name="country">
+										{{COUNTRIES_LAYOUT}}
+									</select>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group mat_input">
+											<label class="col-md-12 p-0" for="age"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M9,11.75A1.25,1.25 0 0,0 7.75,13A1.25,1.25 0 0,0 9,14.25A1.25,1.25 0 0,0 10.25,13A1.25,1.25 0 0,0 9,11.75M15,11.75A1.25,1.25 0 0,0 13.75,13A1.25,1.25 0 0,0 15,14.25A1.25,1.25 0 0,0 16.25,13A1.25,1.25 0 0,0 15,11.75M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,11.71 4,11.42 4.05,11.14C6.41,10.09 8.28,8.16 9.26,5.77C11.07,8.33 14.05,10 17.42,10C18.2,10 18.95,9.91 19.67,9.74C19.88,10.45 20,11.21 20,12C20,16.41 16.41,20 12,20Z"></path></svg> {{LANG Age}}</label>
+											<select id="age" name="age" class="form-control">
+							                    <option value="0">Not selected</option>
+							                    <?php
+							                    for ($i=1; $i < 100; $i++) { 
+							                        ?>
+							                        <option value="<?php echo $i;?>" <?php echo ($music->userData->age == $i) ? 'selected': '';?>><?php echo $i;?></option>
+							                        <?php
+							                    }
+							                    ?>
+							                </select>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group mat_input">
+											<label class="col-md-12 p-0" for="gender"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M7.5,2A2,2 0 0,1 9.5,4A2,2 0 0,1 7.5,6A2,2 0 0,1 5.5,4A2,2 0 0,1 7.5,2M6,7H9A2,2 0 0,1 11,9V14.5H9.5V22H5.5V14.5H4V9A2,2 0 0,1 6,7M16.5,2A2,2 0 0,1 18.5,4A2,2 0 0,1 16.5,6A2,2 0 0,1 14.5,4A2,2 0 0,1 16.5,2M15,22V16H12L14.59,8.41C14.84,7.59 15.6,7 16.5,7C17.4,7 18.16,7.59 18.41,8.41L21,16H18V22H15Z"></path></svg> {{LANG Gender}}</label>
+											<select id="gender" class="form-control" name="gender">
+												<option value="male" <?php echo ($music->userData->gender == 'male') ? 'selected': '';?>>{{LANG Male}}</option>
+                    							<option value="female" <?php echo ($music->userData->gender == 'female') ? 'selected': '';?>>{{LANG Female}}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<?php if (isAdmin()) {?>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group mat_input">
+												<label class="col-md-12 p-0" for="ispro"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M21.7,13.35L20.7,14.35L18.65,12.3L19.65,11.3C19.86,11.09 20.21,11.09 20.42,11.3L21.7,12.58C21.91,12.79 21.91,13.14 21.7,13.35M12,18.94L18.06,12.88L20.11,14.93L14.06,21H12V18.94M12,14C7.58,14 4,15.79 4,18V20H10V18.11L14,14.11C13.34,14.03 12.67,14 12,14M12,4A4,4 0 0,0 8,8A4,4 0 0,0 12,12A4,4 0 0,0 16,8A4,4 0 0,0 12,4Z"></path></svg> {{LANG Pro user}}</label>
+												<select id="ispro" class="form-control" name="ispro">
+													<option value="yes" <?php echo ($music->userData->is_pro == 1) ? 'selected': '';?>>{{LANG Yes}}</option>
+													<option value="no" <?php echo ($music->userData->is_pro == 0) ? 'selected': '';?>>{{LANG No}}</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group mat_input">
+												<label class="col-md-12 p-0" for="verified"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M21.7,13.35L20.7,14.35L18.65,12.3L19.65,11.3C19.86,11.09 20.21,11.09 20.42,11.3L21.7,12.58C21.91,12.79 21.91,13.14 21.7,13.35M12,18.94L18.06,12.88L20.11,14.93L14.06,21H12V18.94M12,14C7.58,14 4,15.79 4,18V20H10V18.11L14,14.11C13.34,14.03 12.67,14 12,14M12,4A4,4 0 0,0 8,8A4,4 0 0,0 12,12A4,4 0 0,0 16,8A4,4 0 0,0 12,4Z"></path></svg> {{LANG Verified}}</label>
+												<select id="verified" class="form-control" name="verified">
+													<option value="yes" <?php echo ($music->userData->verified == 1) ? 'selected': '';?>>{{LANG Yes}}</option>
+													<option value="no" <?php echo ($music->userData->verified == 0) ? 'selected': '';?>>{{LANG No}}</option>
+												</select>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group mat_input">
+												<label class="col-md-12 p-0" for="ispro"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M21.7,13.35L20.7,14.35L18.65,12.3L19.65,11.3C19.86,11.09 20.21,11.09 20.42,11.3L21.7,12.58C21.91,12.79 21.91,13.14 21.7,13.35M12,18.94L18.06,12.88L20.11,14.93L14.06,21H12V18.94M12,14C7.58,14 4,15.79 4,18V20H10V18.11L14,14.11C13.34,14.03 12.67,14 12,14M12,4A4,4 0 0,0 8,8A4,4 0 0,0 12,12A4,4 0 0,0 16,8A4,4 0 0,0 12,4Z"></path></svg> {{LANG User Type}}</label>
+												<select id="user_type" class="form-control" name="user_type">
+													<option value="yes" <?php echo ($music->userData->artist == 1) ? 'selected': '';?>>{{LANG Artist}}</option>
+													<option value="no" <?php echo ($music->userData->artist == 0) ? 'selected': '';?>>{{LANG Normal User}}</option>
+												</select>
+											</div>
+										</div>
+
+									</div>
+
+								<?php } ?>
+
+								<div class="last-sett-btn modal-footer">
+									<input type="hidden" id="user-id" name="user_id" value="{{USER id}}">
+									<button type="submit" class="btn btn-primary btn-mat" id="btn-general-submit">{{LANG Save}}</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			<!-- End Settings -->
+		</div>
+	</div>
+</div>
+
+<script>
+$(document).ready(function() { 
+    var options = { 
+    	url: "{{CONFIG ajax_url}}/user/general?hash_id=" + getHashID(),
+        beforeSubmit:  function () {
+        	$('#output-general-errors').removeClass("alert-success").addClass('alert-danger');
+        	$('#output-general-errors').empty();
+        	$("#btn-general-submit").text("{{LANG Please wait..}}");
+        }, 
+        success: function (data) {
+        	$("#btn-general-submit").text("{{LANG Save}}");
+        	if (data.status == 200) {
+        		$('#output-general-errors').removeClass("alert-danger").addClass('alert-success');
+        		$('#output-general-errors').html(data.message);
+        		setTimeout(function () {
+        			$('#output-general-errors').html("");
+        		}, 2000);
+        	} else if (data.status == 400) {
+        		var errros = data.errors.join("<br>");
+        		$('#output-general-errors').html(errros);
+        	} 
+        }
+    }; 
+    $('#general-form').ajaxForm(options); 
+}); 
+</script>

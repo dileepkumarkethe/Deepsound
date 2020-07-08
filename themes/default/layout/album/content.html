@@ -1,0 +1,115 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="page_padding">
+			<!-- Album Blurred Cover -->
+				<div class="album_bg_cover">
+					<div class="pro_white"></div>
+				</div>
+			<!-- End Album Blurred Cover -->
+
+			<!-- Album Songs -->
+			<div class="row mb-60">
+				<div class="col-md-4">
+					<div class="album_songs">
+						<div class="album_poster_info">
+							<div class="al_art">
+								<div class="al_art_img" style="background-image: url({{thumbnail}});"></div>
+							</div>
+							<div>
+								<h2 class="al_name"><a href="{{url}}" data-load="album/{{album_id}}">{{title}}</a></h2>
+								<span class="al_artist"><a href="{{USER url}}" data-load="{{USER username}}">{{USER name}}</a></span>
+								<div class="play_btn">
+									<div>
+										<button class="btn btn-success" onclick="playPlayListSongs({{id}}, 'album')">{{LANG Play}}</button>
+									</div>
+									<?php if (IS_LOGGED) { ?>
+										<?php if ($music->getAlbum->user_id == $music->user->id) { ?>
+											<a class="btn btn-warning" href="{{LINK album-statistics/{{album_id}}/today}}" data-load="album-statistics/{{album_id}}/today">{{LANG Statistics}}</a>
+											<a class="btn btn-info" href="{{LINK edit-album/{{album_id}}}}" data-load="edit-album/{{album_id}}">{{LANG Edit}}</a>
+											<a class="btn btn-danger" href="javascript:void(0)" onclick="$('#delete-album').attr('data-id', '{{id}}'); $('#delete-album').modal('show')">{{LANG Delete}}</a>
+										<?php }else{ ?>
+
+											<?php if(isUserBuyAlbum($data['id']) === true){?>
+												<p>{{LANG You have bought this album.}}</p>
+											<?php }else if (!empty($music->getAlbum->price)) { ?>
+												<?php if( $music->config->artist_sell == 'on' ){ ?>
+												<button class="btn btn-primary btn-mat" onclick="purchaseAlbum('{{album_id}}', $(this))">{{LANG Buy}}</button>
+												<?php } ?>
+											<?php } ?>
+
+										<?php } ?>
+									<?php } ?>
+								</div>
+							</div>
+						</div>
+						<p class="text-center al_add_info">{{count}} {{LANG songs}} &nbsp;<?php if( $music->config->artist_sell == 'on' ) { ?> - &nbsp; <span>{{purchases_count}} {{LANG purchases}}</span><?php } ?></p>
+					</div>
+				</div>
+				<div class="short_list_cont col-md-8">
+					<div class="short_list_card wide_page_songs album_play_song_lists">
+						<ul class="s_list_songs">
+							{{SONG_LIST}}
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- End Album Songs  -->
+
+			<?php if( $data['RELATED'] !== '' ){ ?>
+			<!-- Related Albums -->
+			<div class="sq_music_tracks">
+				<h2 class="home_widget_title">
+					{{LANG You may also like}}
+					<div class="slide_btns">
+						<div class="related_music_btn"></div>
+					</div>
+				</h2>
+				<div class="owl-carousel sq_track_slider owl-theme rm_slider">
+					{{RELATED}}
+				</div>
+			</div>
+			<!-- End Related Albums -->
+			<?php } ?>
+		</div>
+
+		<style>
+		.album_bg_cover:before {
+			background-image: url({{thumbnail}});
+		}
+		</style>
+		
+	</div>
+</div>
+<?php echo loadPage('modals/delete-album'); ?>
+<script>
+$(document).ready(function(){
+	$(".rm_slider").owlCarousel({
+		margin:20,
+		nav: true,
+		dots: false,
+		navContainer: '.related_music_btn',
+		slideBy: 2,
+		items:7,
+		responsive:{
+			0:{
+				items:1
+			},
+			260:{
+				items:2
+			},
+			380:{
+				items:3
+			},
+			768:{
+				items:5
+			},
+			992:{
+				items:6
+			},
+			1300:{
+				items:7
+			}
+		}
+	});
+});
+</script>

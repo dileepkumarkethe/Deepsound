@@ -1,0 +1,231 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="page_padding">
+			<!-- Upload Music -->
+			<div class="upload_music">
+				<form action="" method="POST" id="upload-audio" class="v-hidden">
+					<input type="file" name="audio" accept="audio/*" class="upload-audio-file hidden">
+				</form>
+				<div class="row" id="upload-form">
+					<div class="col-md-1"></div>
+					<form action="" class="form-horizontal col-md-10 upload_form" method="POST" id="song-form">
+						<div class="col-md-12">
+							<div class="alert alert-danger alert-empty" id="output-song-errors"></div>
+						</div>
+						<div class="form-group mat_input">
+							<label class="col-md-12" for="title"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12,3V12.26C11.5,12.09 11,12 10.5,12C8,12 6,14 6,16.5C6,19 8,21 10.5,21C13,21 15,19 15,16.5V6H19V3H12Z" /></svg> {{LANG Title}}</label>  
+							<div class="col-md-12">
+								<input id="title" name="title" type="text" placeholder="" class="form-control input-md" value="{{t_title}}">
+								<span class="help-block">{{LANG Your song title, 2 - 55 characters}}</span>
+							</div>
+						</div>
+	
+						<div class="form-group mat_input song_thumb">
+							<div class="col-md-12">
+								<div class="upload-song-image" onclick="document.getElementById('thumbnail').click(); return false">
+									<div class="upload-image-content">
+										<img src="{{t_thumbnail}}" alt="" style="width: 100%">
+									</div>
+								</div>
+								<div class="progress hidden" id="img_upload_progress" style="margin-top: 6px;">
+									<div id="img_upload_progress_bar" class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+								</div>
+							</div>
+						</div>
+	
+						<div class="form-group mat_input">
+							<label class="col-md-12" for="description"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M4,5H20V7H4V5M4,9H20V11H4V9M4,13H20V15H4V13M4,17H14V19H4V17Z" /></svg> {{LANG Description}}</label>  
+							<div class="col-md-12">
+								<textarea name="description" id="description" cols="30" rows="5" class="form-control">{{t_edit_description}}</textarea>
+							</div>
+						</div>
+
+						<div class="form-group mat_input">
+							<label class="col-md-12" for="lyrics"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M19,3A2,2 0 0,1 21,5V13.34C20.36,13.11 19.68,13 19,13C15.68,13 13,15.69 13,19C13,19.68 13.11,20.36 13.34,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H9.18C9.5,2.16 10.14,1.5 11,1.2C12.53,0.64 14.25,1.44 14.82,3H19M12,3A1,1 0 0,0 11,4A1,1 0 0,0 12,5A1,1 0 0,0 13,4A1,1 0 0,0 12,3M11,17V15H7V17H11M13,13V11H7V13H13M17,9V7H7V9H17M17,16L22,19L17,22V16Z" /></svg> {{LANG Lyrics}}</label>
+							<div class="col-md-12">
+								<textarea name="lyrics" id="lyrics" cols="30" rows="5" class="form-control">{{t_edit_lyrics}}</textarea>
+							</div>
+						</div>
+	
+						<div class="form-group mat_input">
+							<label class="col-md-12" for="tags"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M5.5,9A1.5,1.5 0 0,0 7,7.5A1.5,1.5 0 0,0 5.5,6A1.5,1.5 0 0,0 4,7.5A1.5,1.5 0 0,0 5.5,9M17.41,11.58C17.77,11.94 18,12.44 18,13C18,13.55 17.78,14.05 17.41,14.41L12.41,19.41C12.05,19.77 11.55,20 11,20C10.45,20 9.95,19.78 9.58,19.41L2.59,12.42C2.22,12.05 2,11.55 2,11V6C2,4.89 2.89,4 4,4H9C9.55,4 10.05,4.22 10.41,4.58L17.41,11.58M13.54,5.71L14.54,4.71L21.41,11.58C21.78,11.94 22,12.45 22,13C22,13.55 21.78,14.05 21.42,14.41L16.04,19.79L15.04,18.79L20.75,13L13.54,5.71Z" /></svg> {{LANG Tags}}</label>  
+							<div class="col-md-12">
+								<input name="tags" id="tags" type="text" placeholder="" class="form-control" value="{{t_tags}}">
+								<span class="help-block">{{LANG Add tags to describe more about your track}}</span>
+							</div>
+						</div>
+						
+						<div class="row m-0">
+							<div class="form-group mat_input col-md-6">
+								<label class="col-md-12 p-0" for="genre"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z"></path></svg> {{LANG Genre}}</label>  
+								<select name="category_id" id="category_id" class="form-control">
+									<?php foreach($music->categories as $key => $category) {?>
+										<option value="<?php echo $key?>" <?php echo ($key == $music->songData->category_id) ? 'selected' : '';?>><?php echo $category?></option>
+									<?php } ?>
+								</select>
+							</div>
+							<div class="form-group mat_input col-md-6">
+								<label class="col-md-12 p-0" for="privacy"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M17.9,17.39C17.64,16.59 16.89,16 16,16H15V13A1,1 0 0,0 14,12H8V10H10A1,1 0 0,0 11,9V7H13A2,2 0 0,0 15,5V4.59C17.93,5.77 20,8.64 20,12C20,14.08 19.2,15.97 17.9,17.39M11,19.93C7.05,19.44 4,16.08 4,12C4,11.38 4.08,10.78 4.21,10.21L9,15V16A2,2 0 0,0 11,18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg> {{LANG Availability}}</label>  
+								<select name="privacy" id="privacy" class="form-control">
+									<option value="0" <?php echo ($music->songData->availability == 0) ? 'selected' : '';?>>{{LANG Public}}</option>
+									<option value="1" <?php echo ($music->songData->availability == 1) ? 'selected' : '';?>>{{LANG Private}}</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="row m-0">
+							<div class="form-group mat_input col-md-6">
+								<label class="col-md-12 p-0" for="allow_downloads"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"></path></svg> {{LANG Allow downloads}}</label>
+								<select name="allow_downloads" id="allow_downloads" class="form-control">
+									<option value="1" <?php echo ($music->songData->allow_downloads == 1) ? 'selected' : '';?>>{{LANG Yes}}</option>
+									<option value="0" <?php echo ($music->songData->allow_downloads == 0) ? 'selected' : '';?>>{{LANG No}}</option>
+								</select>
+							</div>
+							<div class="form-group mat_input col-md-6">
+								<label class="col-md-12 p-0" for="display_embed"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M8,3A2,2 0 0,0 6,5V9A2,2 0 0,1 4,11H3V13H4A2,2 0 0,1 6,15V19A2,2 0 0,0 8,21H10V19H8V14A2,2 0 0,0 6,12A2,2 0 0,0 8,10V5H10V3M16,3A2,2 0 0,1 18,5V9A2,2 0 0,0 20,11H21V13H20A2,2 0 0,0 18,15V19A2,2 0 0,1 16,21H14V19H16V14A2,2 0 0,1 18,12A2,2 0 0,1 16,10V5H14V3H16Z"></path></svg> {{LANG Display embed code}}</label>
+								<select name="display_embed" id="display_embed" class="form-control">
+									<option value="1" <?php echo ($music->songData->display_embed == 1) ? 'selected' : '';?>>{{LANG Yes}}</option>
+									<option value="0" <?php echo ($music->songData->display_embed == 0) ? 'selected' : '';?>>{{LANG No}}</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group mat_input">
+							<label class="col-md-12" for="age_restriction"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" /></svg> {{LANG Age Restriction}}</label>  
+							<div class="col-md-12">
+								<select name="age_restriction" id="age_restriction" class="form-control">
+									<option value="0" <?php echo ($music->songData->age_restriction == 0) ? 'selected' : '';?>>{{LANG All ages can listen this song}}</option>
+									<option value="1" <?php echo ($music->songData->age_restriction == 1) ? 'selected' : '';?>>{{LANG Only +18}}</option>
+								</select>
+							</div>
+						</div>
+
+						<?php if ($music->user->artist == 1 && $music->config->artist_sell == 'on' ) {?>
+						<div class="song_price">
+							<label class="col-md-12 p-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,3A3,3 0 0,0 9,6H15A3,3 0 0,0 12,3M19,6A2,2 0 0,1 21,8V20A2,2 0 0,1 19,22H5C3.89,22 3,21.1 3,20V8C3,6.89 3.89,6 5,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6H19M9,19L16.5,14L9,10V19Z" /></svg> {{LANG Price}}</label>
+
+							<?php foreach($music->song_prices as $key => $value){?>
+							<div class="custom-control custom-radio col-md-6">
+								<input type="radio" id="<?php echo $key;?>" name="song-price" class="custom-control-input" value="<?php echo $value;?>" <?php if( $value == $music->songData->price ) { echo 'checked'; }?>>
+								<label class="custom-control-label" for="<?php echo $key;?>">{{CONFIG currency_symbol}}<?php echo $value;?></label>
+							</div>
+							<?php }?>
+						</div>
+						<?php } ?>
+
+
+
+						<?php if (isAdmin()) {?>
+						<div class="row  m-0">
+							<div class="form-group mat_input  col-md-6">
+								<label class="col-md-12 p-0" for="spotlight"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M21.7,13.35L20.7,14.35L18.65,12.3L19.65,11.3C19.86,11.09 20.21,11.09 20.42,11.3L21.7,12.58C21.91,12.79 21.91,13.14 21.7,13.35M12,18.94L18.06,12.88L20.11,14.93L14.06,21H12V18.94M12,14C7.58,14 4,15.79 4,18V20H10V18.11L14,14.11C13.34,14.03 12.67,14 12,14M12,4A4,4 0 0,0 8,8A4,4 0 0,0 12,12A4,4 0 0,0 16,8A4,4 0 0,0 12,4Z"></svg> {{LANG Featured}}</label>
+								<select id="spotlight" class="form-control" name="spotlight">
+									<option value="yes" <?php echo ($music->songData->spotlight == 1) ? 'selected': '';?>>{{LANG Yes}}</option>
+									<option value="no" <?php echo ($music->songData->spotlight == 0) ? 'selected': '';?>>{{LANG No}}</option>
+								</select>
+							</div>
+						</div>
+						<?php } ?>
+
+						<div class="last-sett-btn modal-footer">
+							<button type="submit" class="btn btn-primary btn-mat" id="btn-song-submit">{{LANG Save Track}}</button>
+						</div>
+						<input type="hidden" name="song-id" id="song-id" value="{{t_audio_id}}">
+						<input type="hidden" name="song-thumbnail" id="song-thumbnail" value="">
+					</form>
+					<div class="col-md-1"></div>
+				</div>
+			</div>
+			<!-- End Upload Music -->
+		</div>
+
+		<!-- <svg class="svg_two" width="1709" height="1294" viewBox="0 0 1709 1294"><path d="M589.436 347.164C482.65 233.848 354.317 65.412 176.317 22.264-144.77-55.555-473.364 92.16-798.954 130.347c-62.856-15.888-125.946-20.57-189.154-11.762-25.87-145.888-90.135-283.413-195.651-396.8-467.348-502.216-1212.42-458.9-1691.47-1.561-89.469-33.95-181.521-56.192-271.304-72.358-532.63-96.106-1030.7 182.68-1443.999 635.727-206.297-108.259-570.672 200.24-423.278 529.977 66.613 149.064 144.263 275.775 230.484 384.256 198.273 596.594 749.337 657.747 1271.752 537.782 47.122-4.516 94.284-11.707 141.367-20.96 238.35 82.95 476.388 108.927 711.217 85.012 128.412 85.96 273.183 130 412.789 135.686 202.618 8.25 404.687-61.767 585.466-188.589 78.785-55.244 150.173-111.213 221.13-184.965 26.183-28.82 52.171-57.92 78.198-86.964 18.59-2.62 37.181-5.296 55.772-7.637 95.3-13.602 186.767-32.723 278.702-77.654 96.123-46.938 191.855-113.164 275.884-200.295 103.364-9.979 227.079 4.013 303.829.334 127.825-6.132 81.546-257.466 207.297-218.5 266.781 82.558 448.05 383.27 943.448 311.947 245.433-35.334 336.064-236.325 500.975-236.325 164.91 0 307.557 142.544 437.55-21.632 215.148-271.718-119.879-559.778-554.929-435.15-146.58 41.99-383.596-121.687-497.685-242.751z" fill-rule="evenodd"></path></svg>
+		<svg class="svg_one" viewBox="0 0 1145.34 1141.97"><path d="M358.41,45.7c206-105.57,488-18,625.28,158C1116,373.43,1201.91,672.06,1101.48,875.17c-99.11,200.45-390.36,288.89-599.21,262.14C282,1109.1,110.47,914,35,715.86c-50.37-132.29-50.58-266,27-387.52C132.44,218,240.42,105.38,358.41,45.7Z" data-reactid="153"></path></svg> -->
+	</div>
+</div>
+<form action="" id="thumbnail-form" method="POST">
+   <input id="thumbnail" name="thumbnail" type="file" style="visibility: hidden;" accept="image/*">
+</form>
+<script>
+// Upload Music Page
+$(function () {
+    $('[type=radio]').uncheckableRadio();
+	$("#tags").tagit({
+		allowSpaces: true
+	});
+    var options = { 
+    	url: "{{CONFIG ajax_url}}/edit-song?hash_id=" + getHashID(),
+        beforeSubmit:  function () {
+        	$('#output-song-errors').removeClass("alert-success").addClass('alert-danger');
+        	$('#output-song-errors').empty();
+        	$("#btn-song-submit").text("{{LANG Please wait..}}");
+        	$("#btn-song-submit").attr("disabled", "true");
+        	
+        }, 
+        success: function (data) {
+        	if (data.status == 200) {
+        		$('#output-song-errors').removeClass("alert-danger").addClass('alert-success');
+        		$('#output-song-errors').html("{{LANG The new track details are updated, please wait..}}");
+        		setTimeout(function () {
+        			goToAjaxLink('track/' + $('#song-id').val());
+        		}, 1000);
+        	} else if (data.status == 400) {
+        		$("#btn-song-submit").removeAttr("disabled");
+        		$("#btn-song-submit").text("{{LANG Save Track}}");
+        		$('#output-song-errors').html(data.message);
+        	}
+        	$('html, body').animate({scrollTop:0},500);
+        }
+    }; 
+
+    $('#song-form').ajaxForm(options); 
+
+	$('#thumbnail').change(function(event) {
+		if (!validate_fileupload($('#thumbnail').val(), ["jpg","png","jpeg"])) {
+			alert("{{LANG Invalid file format, only jpg, jpeg, png are allowed}}");
+			return false;
+		}
+        let bar = $('#img_upload_progress');
+        let percent = $('#img_upload_progress_bar');
+        bar.removeClass('hidden');
+	   $.ajax({
+           xhr: function() {
+               let xhr = new window.XMLHttpRequest();
+               xhr.upload.addEventListener("progress", function(evt){
+                   if (evt.lengthComputable) {
+                       let percentComplete = evt.loaded / evt.total;
+                       percentComplete = parseInt(percentComplete * 100);
+                       //status.html( percentComplete + "%");
+                       percent.width(percentComplete + '%');
+                       percent.html(percentComplete + '%');
+                       if (percentComplete === 100) {
+                           // bar.addClass('hidden');
+                           // percent.width('0%');
+                           // percent.html('0%');
+                       }
+                   }
+               }, false);
+               return xhr;
+           },
+	        type: 'POST',
+	        url: '{{CONFIG ajax_url}}/upload-thumbnail?hash_id=' + $('.main_session').val(),
+	        data: new FormData($("#thumbnail-form")[0]),
+	        processData: false, 
+	        contentType: false, 
+	        success: function(data) {
+                bar.addClass('hidden');
+                percent.width('0%');
+                percent.html('0%');
+	        	if (data.status == 200) {
+	        		$('.upload-image-content').html('<img src="' + data.full_thumbnail + '" style="width: 100%">');
+	        		$('#song-thumbnail').val(data.thumbnail);
+	        	} else if (data.status == 400) {
+	        		alert(data.message);
+	        	} else {
+	        		alert("{{LANG Error found while uploading your image, please try again later.}}");
+	        	}
+	        }
+	    });
+	});
+});
+</script>

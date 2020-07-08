@@ -1,0 +1,24 @@
+<tr id="{{SONG id}}">
+    <td style="width: 5%!important;">{{SONG id}}</td>
+    <td style="width: 7%!important;vertical-align: inherit;text-align: center;">
+        <img src="{{SONG thumbnail}}" style="display: block;margin: 0 auto;width: 100px;">
+    </td>
+    <td style="width: 13%!important;">
+        <a href="{{LINK user}}/<?php echo $data['SONG_DATA']->publisher->username;?>" target="_blank">
+            <img src="<?php echo $data['SONG_DATA']->publisher->avatar;?>" class="td-avatar" alt="user avatar"> <?php echo $data['SONG_DATA']->publisher->name;?>
+        </a>
+    </td>
+    <td style="width: 20%!important;">
+        {{SONG title}} <small>{{SONG duration}}</small>
+    </td>
+    <td style="width: 10%!important;">
+        <b>{{SONG category_name}}</b>
+    </td>
+    <td style="width: 10%!important;">{{SONG shares}}</td>
+    <td style="width: 10%!important;">{{CONFIG currency_symbol}}{{SONG price}}</td>
+    <td style="width: 10%!important;">{{SONG time_formatted}}</td>
+    <td style="width: 15%!important;">
+        <a href="{{LINK edit-track}}/{{SONG audio_id}}" target="_blank" class="btn btn-default waves-effect btn-lang m-r-20">EDIT</a>
+        <button type="button" class="btn btn-danger waves-effect waves-light btn-delete-album" data-id="{{SONG id}}">DELETE</button>
+    </td>
+</tr>

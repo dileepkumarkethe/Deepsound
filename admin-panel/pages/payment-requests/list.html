@@ -1,0 +1,48 @@
+<tr id="list-{{ID}}">
+	<td>
+		<span>
+			{{ID}}
+		</span>
+	</td>
+	<td>
+		<span>
+			{{USERNAME}}
+		</span>
+	</td>
+	<td>
+		<address>
+        {{EMAIL}}
+		</address>
+	</td>
+	<td>
+		<strong>
+			{{AMOUNT}}: {{CURRENCY}}
+		</strong>
+	</td>
+	<td>
+		<time>
+			{{DATE}}
+		</time>
+	</td>
+	<td class="request-status">
+		<?php if ($data["STATUS"] == 0): ?>
+			<span class="alert-warning">
+				Pending
+			</span>
+		<?php elseif ($data["STATUS"] == 1):?>
+			<span class="alert-success">
+				Paid
+			</span>
+		<?php elseif ($data["STATUS"] == 2):?>
+			<span class="alert-danger">
+				Declined
+			</span>
+		<?php endif; ?>
+		
+	</td>
+	<td>
+      <button onclick="ManageWRequests({{ID}},1);" type="button" class="btn btn-success waves-effect waves-light">PAID</button>
+      <button onclick="ManageWRequests({{ID}},2);" type="button" class="btn btn-warning waves-effect waves-light">DECLINE</button>
+      <button onclick="ManageWRequests({{ID}},3);" type="button" class="btn btn-danger waves-effect waves-light">DELETE</button>
+   	</td>
+</tr>

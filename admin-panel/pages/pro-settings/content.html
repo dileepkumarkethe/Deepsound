@@ -1,0 +1,72 @@
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Pro System > Pro System Settings</h2>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="header">
+                    <h2>Pro System Settings</h2>
+                </div>
+                <div class="body">
+                    <div class="alert alert-success pro-settings-alert"></div>
+                    <form class="pro-settings" method="POST">
+                        <label for="pro">Pro System <span class="black" data-toggle="popover" data-trigger="hover" data-content="If you disbale Pro Mode, All features will be free and activated without the boost feature."><i class="fa fa-question-circle fa-fw"></i></span></label>
+                        <div class="form-group">
+                            <input type="radio" name="go_pro" id="pro-enabled" value="on" <?php echo ($music->config->go_pro == 'on') ? 'checked': '';?>>
+                            <label for="pro-enabled">Enabled</label>
+                            <input type="radio" name="go_pro" id="pro-disabled" value="off" <?php echo ($music->config->go_pro == 'off') ? 'checked': '';?>>
+                            <label for="pro-disabled" class="m-l-20">Disabled</label>
+                        </div>
+                        <br>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="pro_price" name="pro_price" class="form-control" value="{{CONFIG pro_price}}">
+                                <label class="form-label">Pro plan monthly price</label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <label for="upload">Free users max upload size</label>
+                            <select class="form-control show-tick" id="pro_upload_limit" name="pro_upload_limit" tabindex="-98">
+                                <option value="2" <?php if($music->config->pro_upload_limit == '2'){ echo "selected";} ?>>2MB</option>
+                                <option value="6" <?php if($music->config->pro_upload_limit == '6'){ echo "selected";} ?>>6MB</option>
+                                <option value="12" <?php if($music->config->pro_upload_limit == '12'){ echo "selected";} ?>>12MB</option>
+                                <option value="24" <?php if($music->config->pro_upload_limit == '24'){ echo "selected";} ?>>24MB</option>
+                                <option value="48" <?php if($music->config->pro_upload_limit == '48'){ echo "selected";} ?>>48MB</option>
+                                <option value="50" <?php if($music->config->pro_upload_limit == '50'){ echo "selected";} ?>>50MB</option>
+                                <option value="96" <?php if($music->config->pro_upload_limit == '96'){ echo "selected";} ?>>96MB</option>
+                                <option value="256" <?php if($music->config->pro_upload_limit == '256'){ echo "selected";} ?>>256MB</option>
+                                <option value="1024" <?php if($music->config->pro_upload_limit == '1024'){ echo "selected";} ?>>1GB</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo createMainSession();?>">
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+$(function() {
+    var form_pro_settings = $('form.pro-settings');
+    form_pro_settings.ajaxForm({
+        url: '{{CONFIG ajax_url}}/ap/save-settings',
+        beforeSend: function() {
+            form_pro_settings.find('.waves-effect').text('Please wait..');
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_pro_settings.find('.waves-effect').text('Save');
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                $('.pro-settings-alert').html('<i class="fa fa-check"></i> Settings updated successfully');
+                setTimeout(function () {
+                    $('.pro-settings-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+});
+</script>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Title -->
+		<title>{{t_title}}</title>
+
+		<!-- Required Meta Tags Always Come First -->
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Favicon -->
+		<link rel="shortcut icon" href="{{CONFIG theme_url}}/img/icon.png" />
+
+		<!-- Google Fonts -->
+		<link href="//fonts.googleapis.com/css?family=Roboto:300,400,500,600" rel="stylesheet">
+		
+		<script src="{{CONFIG theme_url}}/js/jquery.min.js"></script>
+		<!-- CSS -->
+		<style>
+		*, ::after, ::before {
+    box-sizing: border-box;
+}
+* {outline: none;}a {text-decoration: none;color: #f98f1d;}
+		body {background-color: #222225;margin: 0;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #e0e0e0;
+    text-align: left;}
+	.ssong_header {padding: 9px;
+    display: flex;
+    align-items: center;}
+	.ssong_header .ss_image {width: 150px;min-width: 150px;
+    height: 150px;
+    background-position: center;
+    background-size: cover;
+    border-radius: 5px;
+    margin-right: 20px;}
+	.ss_sub_body {
+	display: flex;
+	align-items: center;
+	}
+	.ss_publisher_info h2 {
+		    margin-top: 0;
+    font-weight: 300;
+    font-size: 21px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    display: block;
+    max-width: calc(100vw - 188px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+	}
+	.ss_publisher_info p {
+	margin-top: 0;
+    font-size: 13px;
+	}
+
+	
+	.ss_track_play_pause {position: relative;
+    margin-right: 15px;
+    width: 50px;
+    height: 50px;}
+	.ss_track_play_pause > div {
+    cursor: pointer;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: all 0.2s ease;
+}
+.ss_track_play_pause > div svg {width: 50px;
+    height: 50px;
+}
+.ss_track_play_pause .pause_btn {
+    opacity: 0;
+    visibility: hidden;
+}
+body.player_running .ss_track_play_pause .pause_btn {opacity:1;visibility:visible;}
+body.player_running .ss_track_play_pause .play_btn {opacity:0;visibility:hidden;}
+
+#waveform {
+    position: relative;height: 65px;}
+	#waveform img {height: 65px;}
+	img {
+    vertical-align: middle;
+    border-style: none;
+}
+		.single_song {
+			padding-bottom: 0;
+		}
+		<?php if (!empty($_GET['color'])) { $color = secure($_GET['color']); ?>
+		.single_song .ssong_header .ss_sub_body .ss_tags a {
+			color: #<?php echo $color;?>;
+		}
+		.pause_btn svg path, .play_btn svg path {
+			fill: #<?php echo $color;?>;
+		}
+		.main {
+			color: #<?php echo $color;?>;
+		}
+		<?php } ?>
+		@media (max-width: 650px) {
+		.ssong_header .ss_image {
+    width: 118px;
+    min-width: 118px;
+    height: 118px;}.ss_track_play_pause, .ss_track_play_pause > div, .ss_track_play_pause > div svg {
+    width: 42px;
+    height: 42px;
+}#waveform, #waveform img {
+    height: 55px;
+}.ss_publisher_info h2 {
+    margin-bottom: 0px;}
+		}
+		</style>
+		<!-- <script src="https://unpkg.com/wavesurfer.js"></script> -->
+		<script>
+		$(document).ready(function() {
+		  $.ajaxSetup({ 
+		    data: {
+		        hash_id: getHashID()
+		    },
+		    cache: false 
+		  });
+		});
+		</script>
+	</head>
+	
+	<body class="{{classes}}">		
+		<div class="music_app">
+			<div class="ma_container" id="page" data-page="<?php echo $music->site_pagename?>">
+				<div id="container_content">
+					<div class="single_song">
+						<div class="ssong_header">
+							<div class="float-left ss_image" style="background-image: url({{t_thumbnail}})"></div>
+							<div class="ss_sub_head">
+								<div class="ss_publisher_info">
+									<h2><a target="_blank" href="{{LINK track/{{t_audio_id}}}}" data-load='track/{{t_audio_id}}' style="color: #fff">{{t_title}}</a></h2>
+									<p class="ss_short_info_innr">
+										<span class="aut_nam"><a target="_blank" href="{{USER url}}" data-load="{{USER username}}" class="main">{{USER name}}</a></span>
+										<span class="published">{{t_time}} {{LANG in}} <a target="_blank" href="{{LINK explore-genres/<?php echo $music->songData->category_id;?>}}" data-load="explore-genres/<?php echo $music->songData->category_id;?>" class="main">{{category_name}}</a></span>
+									</p>
+								</div>
+							
+								<div class="ss_sub_body">
+										<div class="ss_track_info">
+											<div class="ss_track_play_pause">
+												<div class="play_btn" onclick="<?php if (empty($music->songData->dark_wave) && empty($music->songData->light_wave)) { ?>wavesurfer.play();<?php } else { ?>playSong('{{t_audio_id}}');<?php } ?>"><svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="#f98f1d" d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M10,16.5L16,12L10,7.5V16.5Z" /></svg></div>
+												<div class="pause_btn" onclick="<?php if (empty($music->songData->dark_wave) && empty($music->songData->light_wave)) { ?>wavesurfer.pause();<?php } else { ?>Amplitude.pause();<?php } ?>$('body').removeClass('player_running');"><svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="#f98f1d" d="M13,16V8H15V16H13M9,16V8H11V16H9M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" /></svg></div>
+											</div>
+										</div>
+								
+								<div id="waveform-load"></div>
+								<div id="waveform" style="<?php if (empty($music->songData->dark_wave) && empty($music->songData->light_wave)) { ?>width: 1100px !important; overflow: hidden;<?php } ?>" data-id="{{t_audio_id}}">
+									<?php
+
+									$dark = $music->songData->dark_wave;
+									$light = $music->songData->light_wave;
+									$bar = '#363636';
+									$opacity = '';
+
+									if( $music->config->ffmpeg_system == 'off'){
+										$dark = $music->songData->light_wave;
+										$light = $music->songData->dark_wave;
+
+										if($_COOKIE['mode'] == 'day'){
+											$bar = 'rgb(191, 191, 191)';
+											$opacity = 'opacity: 0.5;';
+											if($music->songData->ffmpeg == 0){
+												$dark = $music->songData->light_wave;
+												$light = $music->songData->dark_wave;
+											}else{
+												$dark = $music->songData->dark_wave;
+												$light = $music->songData->light_wave;
+											}
+										}else{
+											$opacity = '';
+											if($music->songData->ffmpeg == 0){
+												$dark = $music->songData->light_wave;
+												$light = $music->songData->dark_wave;
+											}else{
+												$dark = $music->songData->dark_wave;
+												$light = $music->songData->light_wave;
+											}
+										}
+									}else{
+										$dark = $music->songData->dark_wave;
+										$light = $music->songData->light_wave;
+										if($_COOKIE['mode'] == 'day'){
+											$dark = str_replace('_dark.png','_day.png',$music->songData->dark_wave);
+											if(!file_exists( $dark ) ){
+												$dark = $music->songData->light_wave;
+												$light = $music->songData->dark_wave;
+											}
+											$bar = 'rgb(191, 191, 191)';
+										}else{
+											$dark = str_replace('_day.png','_dark.png',$music->songData->dark_wave);
+											$dark = $music->songData->dark_wave;
+											$light = $music->songData->light_wave;
+										}
+									}
+
+									$rl = 'left: 0;border-left: inherit!important;border-right: 1px solid '.$bar.' !important;';
+									if ( $music->language_type == 'rtl' ){
+										$rl = 'right: 0;border-right: inherit!important;border-left: 1px solid '.$bar.' !important;';
+									}
+
+									if (!empty($music->songData->dark_wave) && !empty($music->songData->light_wave)) {
+									?>
+										<div class="images" style="width: 100%" id="dark-waves">
+											<img src="<?php echo getMedia($dark); ?>" style="width: 100%;" id="dark-wave">
+											<div style="width: 0%; z-index: 111; position: absolute; overflow: hidden; top: 0; <?php echo $rl;?> " id="light-wave">
+												<img src="<?php echo getMedia($light); ?>">
+											</div>
+										</div>
+									<?php } ?>
+								</div>
+								</div>
+							</div>
+						</div>
+						<input type="hidden" id="current-track" value="{{t_audio_id}}">
+					</div>
+				</div>
+				<!-- End Content  -->
+			</div>
+		</div>
+		
+		<!--  Scripts-->
+		<script>
+			function ajaxUrl() {
+				return '{{CONFIG ajax_url}}';
+			}
+			function siteUrl() {
+				return '{{LINK }}';
+			}
+		</script>
+		<?php echo loadPage('extrajs/content');?>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.0.3/fingerprint2.min.js"></script>
+		<script src="{{CONFIG theme_url}}/js/jquery.form.min.js"></script>
+		<script src="{{CONFIG theme_url}}/js/amplitude.min.js"></script>
+		<script src="{{CONFIG theme_url}}/js/script.js"></script>
+		<input type="hidden" class="main_session" value="<?php echo createMainSession();?>">
+	</body>
+</html>

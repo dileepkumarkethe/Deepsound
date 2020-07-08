@@ -1,0 +1,21 @@
+<tr id="{{ALBUM id}}">
+    <td>{{ALBUM id}}</td>
+    <td style="vertical-align: inherit;text-align: center;">
+        <img src="{{ALBUM thumbnail_ready}}" style="display: block;margin: 0 auto;width: 100px;">
+    </td>
+    <td>
+        <a href="{{LINK user}}/<?php echo $data['ALBUM_DATA']->publisher->username;?>" target="_blank">
+            <img src="<?php echo $data['ALBUM_DATA']->publisher->avatar;?>" class="td-avatar" alt="user avatar"> <?php echo $data['ALBUM_DATA']->publisher->name;?>
+        </a>
+    </td>
+    <td>
+        <p>{{ALBUM name}}</p>
+    </td>
+    <td><b>{{ALBUM privacy_text}}</b></td>
+    <td><a href="{{LINK playlist}}/{{ALBUM uid}}" target="_blank"><?php echo $data['ALBUM_DATA']->songs;?></a></td>
+    <td><?php echo time_Elapsed_String($data['ALBUM_DATA']->time);?></td>
+    <td>
+        <!--<a href="{{LINK edit-playlist}}/{{ALBUM album_id}}" target="_blank" class="btn btn-default waves-effect btn-lang m-r-20">EDIT</a>-->
+        <button type="button" class="btn btn-danger waves-effect waves-light btn-delete-playlist" data-id="{{ALBUM id}}">DELETE</button>
+    </td>
+</tr>

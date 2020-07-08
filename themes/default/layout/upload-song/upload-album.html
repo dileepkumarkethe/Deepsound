@@ -1,0 +1,311 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="page_padding">
+			<!-- Upload Music -->
+			<div class="upload_music" id="main-form">
+				<div class="row " id="upload-form">
+					<div class="col-md-1"></div>
+					<form action="" class="form-horizontal col-md-10 upload_form" method="POST" id="song-form">
+						<div class="col-md-12">
+							<div class="alert alert-danger alert-empty" id="output-song-errors"></div>
+						</div>
+						<div class="form-group mat_input">
+							<label class="col-md-12" for="title"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12,3V12.26C11.5,12.09 11,12 10.5,12C8,12 6,14 6,16.5C6,19 8,21 10.5,21C13,21 15,19 15,16.5V6H19V3H12Z" /></svg> {{LANG Album Title}}</label>  
+							<div class="col-md-12">
+								<input id="title" name="title" type="text" placeholder="" class="form-control input-md" required>
+								<span class="help-block">{{LANG Your album title, 2 - 55 characters}}</span>
+							</div>
+						</div>
+						<div class="form-group mat_input song_thumb">
+							<div class="col-md-12">
+								<div class="upload-song-image" onclick="document.getElementById('thumbnail').click(); return false">
+									<div class="upload-image-content" id="upload-image-content">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M5,3A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H14.09C14.03,20.67 14,20.34 14,20C14,19.32 14.12,18.64 14.35,18H5L8.5,13.5L11,16.5L14.5,12L16.73,14.97C17.7,14.34 18.84,14 20,14C20.34,14 20.67,14.03 21,14.09V5C21,3.89 20.1,3 19,3H5M19,16V19H16V21H19V24H21V21H24V19H21V16H19Z" /></svg>
+									</div>
+								</div>
+								<div class="progress hidden" id="img_upload_progress" style="margin-top: 6px;">
+									<div id="img_upload_progress_bar" class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+								</div>
+							</div>
+						</div>
+	
+						<div class="form-group mat_input">
+							<label class="col-md-12" for="description"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M4,5H20V7H4V5M4,9H20V11H4V9M4,13H20V15H4V13M4,17H14V19H4V17Z" /></svg> {{LANG Album Description}}</label>  
+							<div class="col-md-12">
+								<textarea name="description" id="description" cols="30" rows="5" class="form-control" required></textarea>
+							</div>
+						</div>
+						<div class="form-group mat_input">
+							<label class="col-md-12" for="genre"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z"></path></svg> {{LANG Genre}}</label>  
+							<div class="col-md-12">
+								<select name="category_id" id="category_id" class="form-control">
+									<?php foreach($music->categories as $key => $category) {?>
+											<option value="<?php echo $key?>"><?php echo $category?></option>
+									<?php } ?>
+								</select>
+							</div>
+						</div>
+						<?php if ($music->user->artist == 1 && $music->config->artist_sell == 'on') {?>
+						<div class="song_price">
+							<label class="col-md-12 p-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,3A3,3 0 0,0 9,6H15A3,3 0 0,0 12,3M19,6A2,2 0 0,1 21,8V20A2,2 0 0,1 19,22H5C3.89,22 3,21.1 3,20V8C3,6.89 3.89,6 5,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6H19M9,19L16.5,14L9,10V19Z" /></svg> {{LANG Price}}</label>
+							<?php foreach($music->song_prices as $key => $value){?>
+							<div class="custom-control custom-radio col-md-6">
+								<input type="radio" id="<?php echo $key;?>" name="song-price" class="custom-control-input" value="<?php echo $value;?>">
+								<label class="custom-control-label" for="<?php echo $key;?>">{{CONFIG currency_symbol}}<?php echo $value;?></label>
+							</div>
+							<?php }?>
+						</div>
+						<?php }?>
+
+						<div class="last-sett-btn modal-footer">
+							<?php if( $music->config->multiple_upload == 'on' ){?>
+								<button type="button" class="btn btn-primary btn-mat btn_add_song_albm" id="btn-bulk-song" onclick="addBulkSong();"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg> {{LANG Add Multiple Songs}}</button>
+							<?php }else{ ?>
+								<button type="button" class="btn btn-primary btn-mat btn_add_song_albm" id="btn-add-song" onclick="addNewSong();"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg> {{LANG Add Song}}</button>
+							<?php } ?>
+							<button type="button" class="btn btn-info btn-mat" id="btn-publish-song" disabled onclick="publish();" data-type="single">{{LANG Publish}}</button>
+						</div>
+						<input type="hidden" name="song-location" id="song-location" value="">
+						<input type="hidden" name="song-thumbnail" id="song-thumbnail" value="">
+					</form>
+					<div class="col-md-1"></div>
+				</div>
+			</div>
+			<div id="songs"></div>
+			<!-- End Upload Music -->
+		</div>
+
+		<svg class="svg_two" width="1709" height="1294" viewBox="0 0 1709 1294"><path d="M589.436 347.164C482.65 233.848 354.317 65.412 176.317 22.264-144.77-55.555-473.364 92.16-798.954 130.347c-62.856-15.888-125.946-20.57-189.154-11.762-25.87-145.888-90.135-283.413-195.651-396.8-467.348-502.216-1212.42-458.9-1691.47-1.561-89.469-33.95-181.521-56.192-271.304-72.358-532.63-96.106-1030.7 182.68-1443.999 635.727-206.297-108.259-570.672 200.24-423.278 529.977 66.613 149.064 144.263 275.775 230.484 384.256 198.273 596.594 749.337 657.747 1271.752 537.782 47.122-4.516 94.284-11.707 141.367-20.96 238.35 82.95 476.388 108.927 711.217 85.012 128.412 85.96 273.183 130 412.789 135.686 202.618 8.25 404.687-61.767 585.466-188.589 78.785-55.244 150.173-111.213 221.13-184.965 26.183-28.82 52.171-57.92 78.198-86.964 18.59-2.62 37.181-5.296 55.772-7.637 95.3-13.602 186.767-32.723 278.702-77.654 96.123-46.938 191.855-113.164 275.884-200.295 103.364-9.979 227.079 4.013 303.829.334 127.825-6.132 81.546-257.466 207.297-218.5 266.781 82.558 448.05 383.27 943.448 311.947 245.433-35.334 336.064-236.325 500.975-236.325 164.91 0 307.557 142.544 437.55-21.632 215.148-271.718-119.879-559.778-554.929-435.15-146.58 41.99-383.596-121.687-497.685-242.751z" fill-rule="evenodd"></path></svg>
+		<svg class="svg_one" viewBox="0 0 1145.34 1141.97"><path d="M358.41,45.7c206-105.57,488-18,625.28,158C1116,373.43,1201.91,672.06,1101.48,875.17c-99.11,200.45-390.36,288.89-599.21,262.14C282,1109.1,110.47,914,35,715.86c-50.37-132.29-50.58-266,27-387.52C132.44,218,240.42,105.38,358.41,45.7Z" data-reactid="153"></path></svg>
+	</div>
+</div>
+<form action="" id="thumbnail-form" method="POST">
+   <input id="thumbnail" name="thumbnail" type="file" style="visibility: hidden;" accept="image/*">
+</form>
+<script>
+$(function () {
+	$('[type=radio]').uncheckableRadio();
+	var options = { 
+    	url: "{{CONFIG ajax_url}}/submit-album?hash_id=" + getHashID(),
+        beforeSubmit:  function () {
+        	$('html,body').animate({
+		        scrollTop: $("#main-form").offset().top
+		    }, 'slow');
+        	$('#btn-publish-song').attr('disabled', 'true');
+			$('#btn-publish-song').text("{{LANG Please wait..}}");
+        	$('#output-song-errors').removeClass("alert-success").addClass('alert-danger');
+        	$('#output-song-errors').empty();
+        }, 
+        success: function (data) {
+        	if (data.status == 200) {
+        		$('html,body').animate({
+			        scrollTop: $("#main-form").offset().top
+			    }, 'slow');
+        		$('#output-song-errors').removeClass("alert-danger").addClass('alert-success');
+        		$('#output-song-errors').html("{{LANG Your album was successfully created, please wait..}}");
+        		setTimeout(function () {
+        			goToAjaxLink(data.url);
+        		}, 2000);
+        	} else if (data.status == 400) {
+        		$('#output-song-errors').html(data.message);
+        		$('#btn-publish-song').removeAttr('disabled');
+				$('#btn-publish-song').text("{{LANG Publish}}");
+        		$('html,body').animate({
+			        scrollTop: $("#main-form").offset().top
+			    }, 'slow');
+        	}
+        }
+    }; 
+
+    $('#song-form').ajaxForm(options); 
+	$('#thumbnail').change(function(event) {
+		if (!validate_fileupload($('#thumbnail').val(), ["jpg","png","jpeg"])) {
+			alert("{{LANG Invalid file format, only jpg, jpeg, png are allowed}}");
+			return false;
+		}
+        let bar = $('#img_upload_progress');
+        let percent = $('#img_upload_progress_bar');
+        bar.removeClass('hidden');
+	   $.ajax({
+           xhr: function() {
+               let xhr = new window.XMLHttpRequest();
+               xhr.upload.addEventListener("progress", function(evt){
+                   if (evt.lengthComputable) {
+                       let percentComplete = evt.loaded / evt.total;
+                       percentComplete = parseInt(percentComplete * 100);
+                       //status.html( percentComplete + "%");
+                       percent.width(percentComplete + '%');
+                       percent.html(percentComplete + '%');
+                       if (percentComplete === 100) {
+                           // bar.addClass('hidden');
+                           // percent.width('0%');
+                           // percent.html('0%');
+                       }
+                   }
+               }, false);
+               return xhr;
+           },
+	        type: 'POST',
+	        url: '{{CONFIG ajax_url}}/upload-thumbnail?hash_id=' + $('.main_session').val(),
+	        data: new FormData($("#thumbnail-form")[0]),
+	        processData: false, 
+	        contentType: false, 
+	        success: function(data) {
+                bar.addClass('hidden');
+                percent.width('0%');
+                percent.html('0%');
+	        	if (data.status == 200) {
+	        		$('#upload-image-content').html('<img src="' + data.full_thumbnail + '" style="width: 100%">');
+	        		$('#song-thumbnail').val(data.thumbnail);
+	        	} else if (data.status == 400) {
+	        		alert(data.message);
+	        	} else {
+	        		alert("{{LANG Error found while uploading your image, please try again later.}}");
+	        	}
+	        }
+	    });
+	});
+})
+function addBulkSong() {
+    $('#btn-bulk-song').attr('disabled', 'true');
+    $('#btn-publish-song').attr('data-type', 'bulk');
+    $.get('{{CONFIG ajax_url}}/get-album-bulk-song-form?genre=' + $('#category_id').val(), function (data) {
+        if (data.status == 200) {
+            $('#songs').append(data.html);
+            $('html,body').animate({
+                scrollTop: $("#upload-bulk-song-form-" + data.form_id).offset().top
+            }, 'slow');
+            $('#btn-publish-song').removeAttr('disabled');
+        }
+        $('#btn-bulk-song').removeAttr('disabled');
+    });
+}
+function addNewSong() {
+	$('#btn-add-song').attr('disabled', 'true');
+	$.get('{{CONFIG ajax_url}}/get-album-song-form?genre=' + $('#category_id').val(), function (data) {
+		if (data.status == 200) {
+			$('#songs').append(data.html);
+			$('html,body').animate({
+		        scrollTop: $("#upload-song-form-" + data.form_id).offset().top
+		    }, 'slow');
+			$('#btn-publish-song').removeAttr('disabled');
+		}
+		$('#btn-add-song').removeAttr('disabled');
+	});
+}
+function publish_bulk(){
+    let show_error = false;
+    $('#btn-publish-song').attr('disabled', 'true');
+    $('#btn-publish-song').text("{{LANG Please wait..}}");
+
+    if (!$('#song-thumbnail').val()) {
+        $('#output-song-errors').html("{{LANG Album thumbnail is required.}}")
+        show_error = true;
+    } else if (!$('#title').val()) {
+        $('#output-song-errors').html("{{LANG Album title is required.}}")
+        show_error = true;
+    } else if (!$('#description').val()) {
+        $('#output-song-errors').html("{{LANG Album description is required.}}")
+        show_error = true;
+    } else {
+
+
+        $(".btn-save-songs:not(.submitted)").each(function () {
+            $('#output-song-errors').html('');
+
+            let count = $(this).attr('data-count');
+            let id = $(this).attr('data-id');
+
+            if (count !== '') {
+
+                console.log(id + ": " + count);
+                if ($('#upload-form-' + id + '-' + count).hasClass('hidden')) {
+                    $('#upload-song-form-' + id + '-' + count).remove();
+                    show_error = true;
+                } else {
+                    $('#song-form-' + + id + '-' + count).submit();
+                }
+
+
+            }else{
+                $('#btn-publish-song').removeAttr('disabled');
+                $('#btn-publish-song').text("{{LANG Publish}}");
+                $('#song-form').submit();
+			}
+
+        });
+
+    }
+
+    if (show_error == true) {
+        $('#btn-publish-song').removeAttr('disabled');
+        $('#btn-publish-song').text("{{LANG Publish}}");
+        $('html,body').animate({
+            scrollTop: $("#main-form").offset().top
+        }, 'slow');
+    }
+
+}
+
+function publish() {
+    let type = $('#btn-publish-song').attr('data-type');
+    // if( type === 'bulk'){
+    //     publish_bulk();
+    //     return false;
+	// }
+	show_error = false;
+	$('#btn-publish-song').attr('disabled', 'true');
+	$('#btn-publish-song').text("{{LANG Please wait..}}");
+	var getID = $('.btn-save-songs:not(.submitted):first').attr('data-id');
+
+    if( type === 'bulk'){
+        if( $('.btn-save-songs:not(.submitted):first').attr('data-count') !== '' ){
+            getID = $('.btn-save-songs:not(.submitted):first').attr('data-id') + '-' + $('.btn-save-songs:not(.submitted):first').attr('data-count');
+		}else{
+            getID = '';
+		}
+    }
+
+    console.log('here : 1');
+	if (!$('#song-thumbnail').val()) {
+        console.log('here : 2');
+		$('#output-song-errors').html("{{LANG Album thumbnail is required.}}")
+		show_error = true;
+	} else if (!$('#title').val()) {
+        console.log('here : 3');
+		$('#output-song-errors').html("{{LANG Album title is required.}}")
+		show_error = true;
+	} else if (!$('#description').val()) {
+        console.log('here : 4');
+		$('#output-song-errors').html("{{LANG Album description is required.}}")
+		show_error = true;
+	} else {
+        console.log('here : 5');
+		$('#output-song-errors').html('');
+		if (getID) {
+            console.log('here : 6 , id : ' + getID);
+			if ($('#upload-form-' + getID).hasClass('hidden')) {
+                console.log('here : 7');
+				$('#upload-song-form-' + getID).remove();
+				show_error = true;
+			} else {
+                console.log('here : 8');
+				$('#song-form-' + getID).submit();
+			}
+		} else {
+            console.log('here : 9');
+			$('#btn-publish-song').removeAttr('disabled');
+		    $('#btn-publish-song').text("{{LANG Publish}}");
+			$('#song-form').submit();
+		}
+	}
+	if (show_error == true) {
+        console.log('here : 10');
+		$('#btn-publish-song').removeAttr('disabled');
+		$('#btn-publish-song').text("{{LANG Publish}}");
+		$('html,body').animate({
+	        scrollTop: $("#main-form").offset().top
+	    }, 'slow');
+	}
+}
+</script>

@@ -1,0 +1,170 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="artist_profile">
+			<!-- Artist Profile -->
+				<div class="artist_header">
+					<div class="artist_cover">
+						<?php if ($music->userData->owner == true) {?>
+						<div class="edit_cover">
+							<form action="" method="POST" id="user-change-cover-form">
+								<span class="btn-file" id="change-cover-icon">
+									<span class="icon">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"></path></svg>
+									</span>
+									<input type="file" name="cover" id="user-cover" accept="image/x-png, image/jpeg">
+								</span>
+						    </form>
+						</div>
+						<?php } ?>
+						<div class="profileBox_gradient"></div>
+						<img src="{{USER cover}}" alt="User Cover" id="cover">
+					</div>
+					<div class="container">
+					<div class="artist_user_info">
+						<div class="ap_user_ava">
+							<div class="avatar_container">
+								<?php if ($music->userData->owner == true) {?>
+								<div class="edit_cover">
+									<form action="" method="POST" id="user-change-avatar-form">
+										<span class="btn-file" id="change-avatar-icon">
+											<span class="icon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"></path></svg>
+											</span>
+											<input type="file" name="avatar" id="user-avatar" accept="image/x-png, image/jpeg">
+										</span>
+									</form>
+								</div>
+								<?php } ?>
+								<a href="{{USER url}}" data-load="{{USER username}}">
+									<img src="{{USER avatar}}" alt="User Avatar" id="avatar">
+								</a>
+							</div>
+							<div class="info_container">
+								<h4><a href="{{USER url}}" data-load="{{USER username}}">{{USER name}}
+									<?php if ($music->userData->verified == 1) {?>
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#3d8cfa" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+										<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+										<polyline points="22 4 12 14.01 9 11.01"></polyline>
+									</svg>
+									<?php }?>
+								</a></h4>
+								<p>@{{USER username}}</p>
+								<p class="auth_fol_info">
+									<a href="{{USER url}}/followers" data-load="{{USER username}}/followers">{{COUNT_FOLLOWERS}} {{LANG Followers}}</a>
+									<span class="middot">·</span>
+									<a href="{{USER url}}/following" data-load="{{USER username}}/following">{{COUNT_FOLLOWING}} {{LANG Following}}</a>
+								</p>
+								<div class="ap_options">
+									<?php if ($music->userData->owner == false && IS_LOGGED) {?>
+										<?php if (!isFollowing($music->userData->id)) { ?>
+										<button class="btn btn-primary" id="follow-user" data-user-id="{{USER id}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15,14C12.33,14 7,15.33 7,18V20H23V18C23,15.33 17.67,14 15,14M6,10V7H4V10H1V12H4V15H6V12H9V10M15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12Z" /></svg> {{LANG Follow}}</button>
+										<?php } else { ?>
+									    <button class="btn btn-success" id="unfollow-user" data-user-id="{{USER id}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21.1,12.5L22.5,13.91L15.97,20.5L12.5,17L13.9,15.59L15.97,17.67L21.1,12.5M10,17L13,20H3V18C3,15.79 6.58,14 11,14L12.89,14.11L10,17M11,4A4,4 0 0,1 15,8A4,4 0 0,1 11,12A4,4 0 0,1 7,8A4,4 0 0,1 11,4Z" /></svg> {{LANG Following}}</button>
+									    <?php } ?>
+									<?php } ?>
+									<?php if ($music->userData->owner == true || isAdmin()) {?>
+									<button class="btn btn_edt_prof" onclick="goToAjaxLink('settings/{{USER username}}/general');"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21.7,13.35L20.7,14.35L18.65,12.3L19.65,11.3C19.86,11.09 20.21,11.09 20.42,11.3L21.7,12.58C21.91,12.79 21.91,13.14 21.7,13.35M12,18.94L18.06,12.88L20.11,14.93L14.06,21H12V18.94M12,14C7.58,14 4,15.79 4,18V20H10V18.11L14,14.11C13.34,14.03 12.67,14 12,14M12,4A4,4 0 0,0 8,8A4,4 0 0,0 12,12A4,4 0 0,0 16,8A4,4 0 0,0 12,4Z" /></svg> {{LANG Edit Profile}}</button>
+									<?php } ?>
+									<?php
+									$isBlocked = isBlocked($music->userData->id);
+									if ($music->userData->owner == false && $music->userData->admin == 0 && IS_LOGGED == true && !$isBlocked) {?>
+									{{MESSAGE_BUTTON}}
+									<a class="btn btn_blc_unblck" onclick="blockUser('{{USER id}}', '{{USER username}}', 'block')" title="{{LANG Block}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12C4,13.85 4.63,15.55 5.68,16.91L16.91,5.68C15.55,4.63 13.85,4 12,4M12,20A8,8 0 0,0 20,12C20,10.15 19.37,8.45 18.32,7.09L7.09,18.32C8.45,19.37 10.15,20 12,20Z" /></svg></a>
+									<?php } ?>
+									<?php if ($isBlocked) {?>
+									<a class="btn btn_blc_unblck" onclick="blockUser('{{USER id}}', '{{USER username}}', 'unblock')" title="{{LANG Unblock}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15,14C12.33,14 7,15.33 7,18V20H23V18C23,15.33 17.67,14 15,14M1,10V12H9V10M15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12Z" /></svg></a>
+									<?php } ?>
+									<!-- <button class="btn btn-outline-primary">{{LANG Play All}}</button> -->
+								</div>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+				
+				<div class="container p_rel_cont">
+					<div class="artist_tabs">
+						<ul class="nav nav-tabs" id="myTab" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link <?php echo (empty($music->third_url) || $music->third_url == 'activities') ? 'active' : ''?>" href="{{LINK {{USER username}}}}/activities" data-load="{{USER username}}/activities">{{LANG Activities}}</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link <?php echo ($music->third_url == 'songs') ? 'active' : ''?>"  href="{{LINK {{USER username}}/songs}}" data-load="{{USER username}}/songs">{{LANG Latest Songs}}</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link <?php echo ($music->third_url == 'top-songs') ? 'active' : ''?>" href="{{LINK {{USER username}}/top-songs}}" data-load="{{USER username}}/top-songs">{{LANG Top Songs}}</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link <?php echo ($music->third_url == 'albums') ? 'active' : ''?>" href="{{LINK {{USER username}}/albums}}" data-load="{{USER username}}/albums">{{LANG Albums}}</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link <?php echo ($music->third_url == 'playlists') ? 'active' : ''?>" href="{{LINK {{USER username}}/playlists}}" data-load="{{USER username}}/playlists">{{LANG Playlists}}</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link <?php echo ($music->third_url == 'liked') ? 'active' : ''?>" href="{{LINK {{USER username}}/liked}}" data-load="{{USER username}}/liked">{{LANG Liked}}</a>
+							</li>
+							<?php if($music->config->artist_sell == 'on'){ ?>
+							<li class="nav-item">
+								<a class="nav-link <?php echo ($music->third_url == 'store') ? 'active' : ''?>" href="{{LINK {{USER username}}/store}}" data-load="{{USER username}}/store">{{LANG Store}}</a>
+							</li>
+							<?php } ?>
+						</ul>
+						<div class="row">
+							<div class="col-md-8">
+								<br>
+								<div class="feed_post_block">
+									{{PROFILE_CONTENT}}
+								</div>
+							</div>
+							<div class="col-md-4">
+								<br>
+								<?php echo loadPage("user/sidebar"); ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			<!-- End Artist Profile -->
+		</div>
+	</div>
+	<input type="hidden" id="user-id" name="user-id" value="{{USER id}}">
+</div>
+<script>
+var loading_icon = '<svg width="24px"  height="24px"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-dual-ring" style="background: none;"><circle cx="50" cy="50" ng-attr-r="{{config.radius}}" ng-attr-stroke-width="{{config.width}}" ng-attr-stroke="{{config.stroke}}" ng-attr-stroke-dasharray="{{config.dasharray}}" fill="none" stroke-linecap="round" r="40" stroke-width="8" stroke="#28292f" stroke-dasharray="62.83185307179586 62.83185307179586" transform="rotate(308.458 50 50)"><animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="0.7s" begin="0s" repeatCount="indefinite"></animateTransform></circle></svg>';
+var camera_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"></path></svg>';
+
+$(document).ready(function() { 
+    $('#user-change-avatar-form').ajaxForm({ 
+    	url: "{{CONFIG ajax_url}}/user/update-profile-picture?type=artist&hash_id=" + getHashID(),
+        beforeSubmit:  function () {
+        	$('#change-avatar-icon .icon').html(loading_icon);
+        }, 
+        success: function (data) {
+        	if (data.status == 200) {
+        		$('#avatar').attr('src', data.img);
+        	}
+        	$('#change-avatar-icon .icon').html(camera_icon);
+        }
+    }); 
+
+    $('#user-change-cover-form').ajaxForm({ 
+    	url: "{{CONFIG ajax_url}}/user/update-profile-cover?type=artist&hash_id=" + getHashID(),
+        beforeSubmit:  function () {
+        	$('#change-cover-icon .icon').html(loading_icon);
+        }, 
+        success: function (data) {
+        	if (data.status == 200) {
+        		$('#cover').attr('src', data.img);
+        	}
+        	$('#change-cover-icon .icon').html(camera_icon);
+        }
+    }); 
+}); 
+
+$(document).on('change', '#user-avatar', function(event) {
+	$("#user-change-avatar-form").submit();
+});
+$(document).on('change', '#user-cover', function(event) {
+	$("#user-change-cover-form").submit();
+});
+
+</script>

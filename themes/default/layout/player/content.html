@@ -1,0 +1,139 @@
+<div class="ma_player <?php if (empty($_SESSION['songs'])) { ?>closed<?php } ?>">
+	<div class="player">
+		<div class="song_details">
+			<div class="song_details_inner player-song-url" data-load="">
+				<div class="song_art">
+					<a href="#" class="player-song-url" data-load=""><img amplitude-song-info="cover_art_url" amplitude-main-song-info="true"/></a>
+				</div>
+				<div class="song_title">
+					<a href="#" class="player-song-url" data-load="">
+						<h3 amplitude-song-info="name" amplitude-main-song-info="true" class="song_name">Ganja Burns</h3>
+					</a><!-- 
+					<a href="single_album.php" class="hide_mobi_alb_nm">
+						<p amplitude-song-info="album" amplitude-main-song-info="true"></p>
+					</a> -->
+					<div class="song_time_sec">
+						<span class="current_time">
+						<span class="amplitude-current-minutes" amplitude-main-current-minutes="true"></span>:<span class="amplitude-current-seconds" amplitude-main-current-seconds="true"></span>
+						</span>
+						<span class="duration_seperate">/</span>
+						<span class="duration_time">
+						<span class="amplitude-duration-minutes" amplitude-main-duration-minutes="true"></span>:<span class="amplitude-duration-seconds" amplitude-main-duration-seconds="true"></span>
+						</span>
+					</div>
+				</div>
+				<div class="song_fav" title="Favorite" id="song-fav-button"></div>
+			</div>
+		</div>
+		<div class="song_progress">
+			<div class="song_controls">
+				<div class="amplitude-prev" id="previous">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+						<path fill="currentColor" d="M6,18V6H8V18H6M9.5,12L18,6V18L9.5,12Z" />
+					</svg>
+				</div>
+				<div class="amplitude-play-pause" amplitude-main-play-pause="true" id="play-pause"></div>
+				<div class="amplitude-next" id="next">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+						<path fill="currentColor" d="M16,18H18V6H16M6,18L14.5,12L6,6V18Z" />
+					</svg>
+				</div>
+				<div class="amplitude-stop" id="stop">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+						<path fill="currentColor" d="M18,18H6V6H18V18Z" />
+					</svg>
+				</div>
+			</div>
+			<div class="song_time">
+				<span class="current_time">
+				<span class="amplitude-current-minutes" amplitude-main-current-minutes="true"></span>:<span class="amplitude-current-seconds" amplitude-main-current-seconds="true"></span>
+				</span>
+				<div class="song_prog_mobi">
+					<div class="progress_container">
+						<input type="range" class="amplitude-song-slider" amplitude-main-song-slider="true"/>
+						<progress id="song-played-progress" class="amplitude-song-played-progress" amplitude-main-song-played-progress="true"></progress>
+						<progress id="song-buffered-progress" class="amplitude-buffered-progress" value="0"></progress>
+					</div>
+				</div>
+				<span class="duration_seperate">/</span>
+				<span class="duration_time">
+				<span class="amplitude-duration-minutes" amplitude-main-duration-minutes="true"></span>:<span class="amplitude-duration-seconds" amplitude-main-duration-seconds="true"></span>
+				</span>
+			</div>
+		</div>
+		<div class="song_progress_right">
+			<div class="song_volume">
+				<div class="volume_controls">
+					<div class="amplitude-mute amplitude-not-muted"></div>
+					<div class="plyr_vol_mobi">
+						<input type="range" class="amplitude-volume-slider"/>
+						<div class="ms-range-fix"></div>
+					</div>
+				</div>
+			</div>
+			<div class="song_rs_controls">
+				<div class="repeat_container">
+					<div class="amplitude-repeat amplitude-repeat-on" id="repeat" title="{{LANG Repeat}}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M17,17H7V14L3,18L7,22V19H19V13H17M7,7H17V10L21,6L17,2V5H5V11H7V7Z" />
+						</svg>
+					</div>
+					<div class="amplitude-shuffle amplitude-shuffle-off" id="shuffle" title="{{LANG Shuffle}}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+							<path fill="currentColor" d="M14.83,13.41L13.42,14.82L16.55,17.95L14.5,20H20V14.5L17.96,16.54L14.83,13.41M14.5,4L16.54,6.04L4,18.59L5.41,20L17.96,7.46L20,9.5V4M10.59,9.17L5.41,4L4,5.41L9.17,10.58L10.59,9.17Z" />
+						</svg>
+					</div>
+					<div class="amplitude-playback-speed amplitude-playback-speed-10"></div>
+				</div>
+			</div>
+			<div class="song_queue" onclick="Ma_ShowQueue();">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+					<path fill="currentColor" d="M18 5v8.333c-.455-.216-.957-.346-1.493-.346-1.934 0-3.507 1.573-3.507 3.507S14.573 20 16.507 20s3.507-1.573 3.507-3.507c0-.177-.027-.347-.053-.517H20V6h2V4h-3C18.447 4 18 4.448 18 5zM2 5H16V7H2z"/>
+					<path fill="currentColor" d="M2 9H16V11H2zM2 13H11V15H2zM2 17H11V19H2z"/>
+				</svg>
+			</div>
+		</div>
+		<div class="ma_player_playlist" data-simplebar>
+			<div class="queue_head">
+				<h4>{{LANG Queue}}</h4>
+				<span onclick="clearQueues();">{{LANG Clear}}</span>
+			</div>
+			<div id="queue-list">
+				<?php 
+				if (!empty($_SESSION['songs'])) { 
+				  $songs = json_decode(html_entity_decode($_SESSION['songs']));
+				  if (is_array($songs)) {
+					 foreach($songs as $key => $song) {
+						?>
+						<div class="song amplitude-song-container amplitude-play-pause" id="queue-<?php echo $song->id?>" onclick="playSong('<?php echo $song->id?>')" amplitude-song-index="<?php echo $song->qID?>"><div class="song_icon_container"><img class="now-playing" src="<?php echo $song->cover_art_url?>"/></div><span class="song_duration"><?php echo $song->duration?></span><div class="song_meta_data"><span class="song_title"><?php echo $song->name?></span><span class="song_artist"><?php echo $song->artist?></span></div></div>
+						<?php
+					 }
+				  }
+				?>
+					
+				<?php } ?>
+			</div>
+			<!-- <div class="song amplitude-song-container amplitude-play-pause" amplitude-song-index="1">
+				<div class="song_icon_container">
+					<img class="now-playing" src="https://521dimensions.com/img/open-source/amplitudejs/album-art/ask-the-dust.jpg"/>
+				</div>
+				<span class="song_duration">3:16</span>
+				<div class="song_meta_data">
+					<span class="song_title">The Gun</span>
+					<span class="song_artist">Lorn</span>
+				</div>
+			</div>
+			<div class="song amplitude-song-container amplitude-play-pause" amplitude-song-index="2">
+				<div class="song_icon_container">
+					<img class="now-playing" src="https://521dimensions.com/img/open-source/amplitudejs/album-art/anvil.jpg"/>
+				</div>
+				<span class="song_duration">3:32</span>
+				<div class="song_meta_data">
+					<span class="song_title">Anvil</span>
+					<span class="song_artist">Lorn</span>
+				</div>
+			</div> -->
+			
+		</div>
+	</div>
+</div>

@@ -1,0 +1,189 @@
+<?php 
+$page                = (!empty($_GET['page-id'])) ? $_GET['page-id'] : 1;
+$db->pageLimit       = 50;
+$total_requests      = $db->getValue(T_WITHDRAWAL_REQUESTS, 'COUNT(*)');
+$paid_requests       = $db->where('status',1)->getValue(T_WITHDRAWAL_REQUESTS, 'COUNT(*)');
+$declined_requests   = $db->where('status',2)->getValue(T_WITHDRAWAL_REQUESTS, 'COUNT(*)');
+$pending_requests    = $db->where('status',0)->getValue(T_WITHDRAWAL_REQUESTS, 'COUNT(*)');
+$withdrawal_requests = $db->orderBy('status','ASC')->paginate(T_WITHDRAWAL_REQUESTS,$page);
+
+if (($page > $db->totalPages) && !empty($_GET['page-id'])) {
+    header("Location: " . PT_LoadAdminLinkSettings('payment-requests'));
+    exit();
+}
+?>
+
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Songs &gt; Payment Requests</h2>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-3">
+            <div class="info-box bg-blue hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">storage</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL REQUESTS</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo $total_requests; ?>" data-speed="1000" data-fresh-interval="20">
+                        <?php echo $total_requests; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 ">
+            <div class="info-box bg-blue hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">check</i>
+                </div>
+                <div class="content">
+                    <div class="text">PAID REQUESTS</div>
+                    <div class="number count-to" data-from="0" data-to="0" data-speed="1000" data-fresh-interval="20">
+                        <?php echo $paid_requests; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 ">
+            <div class="info-box bg-blue hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">av_timer</i>
+                </div>
+                <div class="content">
+                    <div class="text">DECLINED REQUESTS</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo $declined_requests; ?>" data-speed="1000" data-fresh-interval="20">
+                        <?php echo $declined_requests; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 ">
+            <div class="info-box bg-blue hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">mail_outline</i>
+                </div>
+                <div class="content">
+                    <div class="text">PENDING REQUESTS</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo $pending_requests; ?>" data-speed="1000" data-fresh-interval="20"><?php echo $pending_requests; ?></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Manage Payment Requests</h2>
+                    <h5>Payments are made from your paypal account, after the payment is made, mark the request as paid.</h5>
+                </div>
+                <div class="body">
+                   <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr role="row">
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>PayPal E-mail</th>
+                                    <th>Amount</th>
+                                    <th>Requested</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                    foreach ($withdrawal_requests as $key => $pt->wal_requests) {
+                                        $user_data = userData($pt->wal_requests->user_id);
+                                        echo LoadAdminPage('payment-requests/list',array(
+                                            'ID' => $pt->wal_requests->id,
+                                            'USERNAME' => $user_data->name,
+                                            'EMAIL' => $pt->wal_requests->email,
+                                            'AMOUNT' => $pt->wal_requests->amount,
+                                            'DATE' => date("Y-F-d",$pt->wal_requests->requested),
+                                            'CURRENCY' => $pt->wal_requests->currency,
+                                            'STATUS' => $pt->wal_requests->status,
+                                        ));
+                                    }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="acp-payment-requests">
+                    <div class="pull-left">
+                        <?php echo "Showing $page out of " . $db->totalPages; ?>
+                    </div>
+                    <div class="pull-right">
+                        <nav>
+                            <ul class="pagination">
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('payment-requests?page-id=1'); ?>" class="waves-effect" title='First Page'>
+                                        <i class="material-icons">first_page</i>
+                                    </a>
+                                </li>
+                                <?php if ($page > 1) {  ?>
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('payment-requests?page-id=' . ($page - 1)); ?>" class="waves-effect" title='Previous Page'>
+                                        <i class="material-icons">chevron_left</i>
+                                    </a>
+                                </li>
+                                <?php  } ?>
+                                <?php 
+                                $nums = 0;
+                                $nums_pages = ($page > 4) ? ($page - 4) : $page;
+                                for ($i=$nums_pages; $i <= $db->totalPages; $i++) { 
+                                    if ($nums < 20) {
+                                    ?>
+                                    <li class="<?php echo ($page == $i) ? 'active' : ''; ?>"><a href="<?php echo LoadAdminLinkSettings('payment-requests?page-id=' . ($i)); ?>" class="waves-effect"><?php echo $i ?></a></li>
+                                    <?php
+                                    }
+                                    $nums++;
+                                }
+                                ?>
+                                <?php if ($db->totalPages > $page) { ?>
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('payment-requests?page-id=' . ($page + 1)); ?>" class="waves-effect" title="Next Page">
+                                        <i class="material-icons">chevron_right</i>
+                                    </a>
+                                </li>
+                                <?php } ?>
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('payment-requests?page-id=' . ($db->totalPages)); ?>" class="waves-effect" title='Last Page'>
+                                        <i class="material-icons">last_page</i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<script>
+    function ManageWRequests(id,action) {
+        if (!id || (action != 1 && action != 2 && action != 3)) {
+            return false;
+        }
+
+        else if (action == 1) {
+            $("#list-"+id).find('td.request-status').html('<span class="alert-success">Paid</span>');
+        } 
+
+        else if (action == 2) {
+            $("#list-"+id).find('td.request-status').html('<span class="alert-danger">Declined</span>');
+        }
+
+        else if (action == 3) {
+            $("#list-"+id).slideUp(function(){
+                $(this).remove();
+            })
+        }
+
+        else{
+            return false;
+        }
+
+        $.post('{{CONFIG ajax_url}}/ap/withdrawal-requests', {a:action,id:id}, function(){ /* pass */ });
+    }
+</script>

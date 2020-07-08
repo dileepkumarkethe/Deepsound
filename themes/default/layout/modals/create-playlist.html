@@ -1,0 +1,68 @@
+<div class="modal fade" id="create_playlist_box" tabindex="-1" role="dialog" aria-labelledby="create_playlist_box" aria-hidden="true">
+	<div class="modal-dialog mat_box create_playlist" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">{{LANG Create Playlist}}</h5>
+			</div>
+			<form method="post" action="" id="playlist-form">
+				<div class="alert alert-danger alert-empty" id="output-playlist-errors"></div>
+				<div class="create_playlist_innr">
+					<div class="play_avatar">
+						<span class="btn-file">
+							<span id="playlist-create-image">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"></path></svg>
+							</span>
+							<input type="file" name="avatar" accept="image/x-png, image/jpeg" id="playlist-avatar">
+						</span>
+					</div>
+					<div class="play_info">
+						<div class="form-group mat_input">
+							<input type="text" class="form-control" name="name" placeholder="{{LANG Playlist name}}">
+						</div>
+						<div class="custom-control custom-radio">
+							<input type="radio" id="public" name="privacy" class="custom-control-input" checked value="0">
+							<label class="custom-control-label" for="public">{{LANG Public}}</label>
+						</div>
+						<div class="custom-control custom-radio">
+							<input type="radio" id="private" name="privacy" class="custom-control-input" value="1">
+							<label class="custom-control-label" for="private">{{LANG Private}}</label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">{{LANG Cancel}}</button>
+					<button type="submit" class="btn btn-primary btn-mat" id="btn-playlist-submit">{{LANG Create}}</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+$(document).ready(function() { 
+	$("#playlist-avatar").change(function() {
+	  	readURL(this, "playlist-create-image");
+	});
+    var options = { 
+    	url: "{{CONFIG ajax_url}}/playlist/create?hash_id=" + getHashID(),
+        beforeSubmit:  function () {
+        	$('#output-playlist-errors').empty();
+        	$("#btn-playlist-submit").text("{{LANG Please wait..}}");
+        }, 
+        success: function (data) {
+        	$("#btn-playlist-submit").text("{{LANG Create}}");
+        	if (data.status == 200) {
+        		$('#playlist-create-image').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"></path></svg>');
+        		$('#playlist-form')[0].reset();
+        		$('#create_playlist_box').modal('hide');
+        		closeModal();
+				goToAjaxLink('my_playlists');
+        	} else if (data.status == 400) {
+        		var errros = data.errors.join("<br>");
+        		$('#output-playlist-errors').html(errros);
+        	}
+        }
+    }; 
+
+    $('#playlist-form').ajaxForm(options); 
+}); 
+</script>

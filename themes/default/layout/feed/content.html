@@ -1,0 +1,31 @@
+<?php if ( $music->announcement !== '' ) {?>
+	<div class="announcement-renderer">
+		{{ANNOUNCEMENT}}
+	</div>
+	<br>
+<?php } ?>
+
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="container">
+			<?php echo GetAd('header');?>
+			<div class="row">
+				<div class="col-md-8">
+					<div class="feed_post_block" id="user-feed-data">
+						{{html}}
+					</div>
+					<?php if($music->feedcount > 0){?>
+						<div class="text-center see_all">
+							<a href="javascript:void(0); loadMore('songs', 'all');" id="load-more-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg> {{LANG Load More}}</a>
+						</div>
+					<?php }?>
+				</div>
+				<div class="col-md-4">
+					<?php echo GetAd('side_bar');?>
+					{{artist_sidebar}}
+					{{weekly_sidebar}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

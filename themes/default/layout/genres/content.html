@@ -1,0 +1,19 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="page_padding">
+			<!-- Genres List -->
+				<div class="genre_lst">
+					<?php foreach ($music->categories as $key => $category) {?>
+					<a href="{{LINK explore-genres/<?php echo $key?>}}" data-load="explore-genres/<?php echo $key?>" class="gnr_list_item gnr_list_item<?php echo $key?>">
+						<div class="img_cnt">
+							<img src="<?php echo getMedia(getCategoryInfo($key)->background_thumb);?>" alt="category" />
+						</div>
+						<div class="name"><?php echo $category?></div>
+						<style>.genre_lst .gnr_list_item<?php echo $key?> .img_cnt:after {background: <?php echo getCategoryInfo($key)->color?>;}</style>
+					</a>
+					<?php } ?>
+				</div>
+			<!-- End Genres List -->
+		</div>
+	</div>
+</div>

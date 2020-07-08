@@ -1,0 +1,31 @@
+<?php if( isset($data['SONG_DATA']) ){?>
+<section class="search_result_count">{{SONGS_COUNT}} {{LANG results for:}} <b>{{SEARCH_KEYWORD}}</b></section>
+    <?php if( count($data['SONG_DATA']) > 0 ){?>
+        <div class="artist_songs search_songs">
+            <ul class="list-unstyled head_title">
+                <li class="hash"></li>
+                <li class="title">{{LANG title}}</li>
+                <li class="artist">{{LANG artists}}</li>
+                <li class="duration"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z" /></svg></li>
+            </ul>
+            <div class="short_list_cont artist_s_list">
+                <div class="wide_page_songs">
+                    <ul class="s_list_songs" id="songs_search_result">
+                        <?php
+                            foreach($data['SONG_DATA'] as $key => $song){
+                                echo loadPage("search/song-list", ['SONG_DATA' => songData( $song->id ) ]);
+                            }
+                        ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center see_all">
+            <a href="javascript:void(0); loadMore('songs_search', '{{SEARCH_KEYWORD}}');" id="load-more-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg> {{LANG Load More}}</a>
+        </div>
+
+    <?php } ?>
+<?php } else { ?>
+	<div class="no-track-found bg_light"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H5a2 2 0 0 0-2 2 2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm12-2h-4a2 2 0 0 0-2 2 2 2 0 0 0 2 2h2a2 2 0 0 0 2-2z"></path><polyline points="9 17 9 5 21 3 21 15"></polyline></svg> {{LANG What are looking for ?}}</div>
+<?php } ?>

@@ -1,0 +1,836 @@
+<script>
+$(document).on('click', '#follow-user', function(event) {
+	$(this).toggleClass('btn-primary btn-success');
+	$(this).text("{{LANG Following}}");
+	$(this).attr("id", "unfollow-user");
+	$.post('{{CONFIG ajax_url}}/follow-user/add', {id: $(this).attr('data-user-id')});
+});
+
+<?php if (empty($_SESSION['fingerPrint'])) { ?>
+$(function () {
+	setTimeout(function () {
+	    Fingerprint2.get(function (components) {
+	      $.post(ajaxUrl() + '/set-finger-print', {components: components});
+	    })  
+	}, 500);
+});
+<?php } ?>
+
+<?php if (IS_LOGGED == false) {?>
+$(document).on('click', '.comment_input', function(event){
+    $('#login_box').modal('show');
+});
+<?php }?>
+
+// unfollow user
+$(document).on('click', '#unfollow-user', function(event) {
+	$(this).toggleClass('btn-success btn-primary');
+	$(this).text("{{LANG Follow}}");
+	$(this).attr("id", "follow-user");
+	$.post('{{CONFIG ajax_url}}/follow-user/remove', {id: $(this).attr('data-user-id')});
+});
+
+function likeSong(id, type, element) {
+	if (!id || !type) {
+		return false;
+	}
+	if (type == 'track-page') {
+		if (element.attr('liked')) {
+			element.removeClass('track-liked').removeAttr('liked', 'true');
+			element.find('svg path').attr('fill', '#333');
+			element.find('span').html("{{LANG Like}}");
+
+            $('#track_likes_count').attr('data-count',parseInt($('#track_likes_count').attr('data-count')) - 1);
+            $('#track_likes_count').html(parseInt($('#track_likes_count').attr('data-count')));
+
+            if( $('#dislike-track').hasClass('track-disliked') ){
+                $('#dislike-track-text').html("{{LANG DisLiked}}");
+                $('#dislike-track').addClass('track-disliked');
+            }
+            // $('#like-track').removeAttr('liked');
+            // $('#dislike-track').attr('disliked', 'true');
+
+		} else {
+			element.addClass('track-liked').attr('liked', 'true');
+            $('#dislike-track').removeAttr('disliked');
+			element.find('svg path').attr('fill', '#fff');
+			element.find('span').html("{{LANG Liked}}");
+
+            $('#track_likes_count').attr('data-count',parseInt($('#track_likes_count').attr('data-count')) + 1);
+            $('#track_likes_count').html(parseInt($('#track_likes_count').attr('data-count')));
+
+            if( $('#dislike-track').hasClass('track-disliked') ){
+                $('#dislike-track').removeClass('track-disliked');
+                $('#dislike-track-text').html("{{LANG DisLike}}");
+
+                $('#track_dislikes_count').attr('data-count',parseInt($('#track_dislikes_count').attr('data-count')) - 1);
+                $('#track_dislikes_count').html(parseInt($('#track_dislikes_count').attr('data-count')));
+            }
+
+		}
+	}
+	$.get('{{CONFIG ajax_url}}/like-track', {id: id, type: type});
+}
+
+function dislikeSong(id, type, element) {
+    if (!id || !type) {
+        return false;
+    }
+    if (type == 'track-page') {
+        if (element.attr('disliked')) {
+            element.removeClass('track-disliked').removeAttr('disliked', 'true');
+            element.find('span').html("{{LANG DisLike}}");
+
+            $('#track_dislikes_count').attr('data-count',parseInt($('#track_dislikes_count').attr('data-count')) - 1);
+            $('#track_dislikes_count').html(parseInt($('#track_dislikes_count').attr('data-count')));
+
+            if( $('#like-track').hasClass('track-liked') ){
+                $('#like-track-text').html("{{LANG Liked}}");
+                $('#like-track').addClass('track-liked');
+            }
+            // $('#like-track').attr('liked', 'true');
+            // $('#dislike-track').removeAttr('disliked');
+
+        } else {
+            element.addClass('track-disliked').attr('disliked', 'true');
+            $('#like-track').removeAttr('liked');
+
+            element.find('span').html("{{LANG DisLiked}}");
+
+            $('#track_dislikes_count').attr('data-count',parseInt($('#track_dislikes_count').attr('data-count')) + 1);
+            $('#track_dislikes_count').html(parseInt($('#track_dislikes_count').attr('data-count')));
+
+            if( $('#like-track').hasClass('track-liked') ){
+                $('#like-track').removeClass('track-liked');
+                $('#like-track-text').html("{{LANG Like}}");
+                $('#like-track svg path').attr('fill','currentColor');
+
+                $('#track_likes_count').attr('data-count',parseInt($('#track_likes_count').attr('data-count')) - 1);
+                $('#track_likes_count').html(parseInt($('#track_likes_count').attr('data-count')));
+            }
+
+        }
+    }
+    $.get('{{CONFIG ajax_url}}/dislike-track', {id: id, type: type});
+}
+
+function loadMore(type, get_data) {
+	element = $("#load-more-button");
+	$default_text = element.html();
+	$track_id = 0;
+	if (type == 'songs') {
+		$last_id = $('.feed_post:last-child').attr('data-id');
+		$append_div = '#user-feed-data';
+	} else if (type == 'recently_played') {
+		$last_id = $('.track_list:last').attr('data-time');
+		$append_div = '#recently_played';
+	} else if (type == 'comments') {
+		$last_id = $('.comment_item:last').attr('comment-id');
+		$append_div = '.comment_list';
+		$track_id = $('.comment_item:last').attr('comment-song-id')
+	} else if (type == 'latest_music' || type == 'top_music') {
+		$last_id = $('#new-music .track_list:last').attr('data-id');
+		$append_div = '#new-music';
+	} else if (type == 'categories') {
+		$last_id = $('.list-recommended:last').attr('data-id');
+		$append_div = 'ul.s_list_songs';
+	} else if (type == 'followers') {
+        $last_id = $('.follower_list:last-child').attr('data-id');
+        $append_div = '#followers';
+    } else if (type == 'followings') {
+        $last_id = $('.following_list:last-child').attr('data-id');
+        $append_div = '#followings';
+    } else if (type == 'songs_search') {
+        $last_id = $('.song_search_list:last-child').attr('data-id');
+        $append_div = '#songs_search_result';
+    } else if (type == 'artists_search') {
+        $last_id = $('.artist_list:last-child').attr('data-id');
+        $append_div = '#artists_search_result';
+    } else if (type == 'albums_search') {
+        $last_id = $('.track_list:last-child').attr('data-id');
+        $append_div = '#albums_search_result';
+    } else if (type == 'playlists_search') {
+        $last_id = $('.playlist-p-list:last-child').attr('data-id');
+        $append_div = '#playlists_search_result';
+    } else if (type == 'store_albums') {
+        $last_id = $('.track_list:last-child').attr('data-id');
+        $append_div = '.store_albums';
+    } else if (type == 'store_songs') {
+        $last_id = $('.song_list:last-child').attr('data-id');
+        $append_div = '.store_songs';
+    }
+
+
+	if (get_data == 'all' || get_data == 'liked' || get_data == 'spotlight') {
+		$last_id = $('.feed_post:last-child').attr('data-a-id');
+		type = 'activities';
+	}
+	if (get_data == 'playlists') {
+		$last_id = $('.playlist-p-list:last-child').attr('data-id');
+		type = 'playlists';
+	}
+	if (get_data == 'albums') {
+		$last_id = $('.album-p-list:last-child').attr('data-id');
+		type = 'albums';
+	}
+	element.text("{{LANG Please wait..}}");
+
+    let geners = [];
+    let price = [];
+    let filter_type = null;
+    if($('#filter_type').length > 0){
+        filter_type = $('#filter_type').val();
+    }
+    if($('.song_category').length > 0){
+        $('.song_category').each(function(i, obj) {
+            if(this.checked){
+                geners.push($(obj).attr('data-category'));
+            }
+        });
+    }
+    if($( "#slider-range" ).length > 0){
+        price = $("#slider-range").slider("option").values;
+    }
+    let params = {'geners': geners, 'filter_type': filter_type, 'price': price};
+
+	$.get(ajaxUrl() + '/load-more/' + type, {id: $last_id, userID: $('#user-id').val(), track_id: $track_id, get_data: get_data,params: params}, function(data) {
+		if (data.status == 200 && data.html.length > 0) {
+			$($append_div).append(data.html);
+		} else {
+			$default_text = "{{LANG No more tracks found}}";
+			if (type == 'comments') {
+				$default_text = "{{LANG No more comments found}}";
+			} 
+			if (type == 'all') {
+				$default_text = "{{LANG No more activities found}}";
+			} 
+			if (type == 'playlists' || type == 'playlists_search') {
+				$default_text = "{{LANG No more playlists found}}";
+			}
+            if (type == 'followers') {
+                $default_text = "{{LANG No more followers found}}";
+            }
+            if (type == 'followings') {
+                $default_text = "{{LANG No more following found}}";
+            }
+            if (type == 'artists_search') {
+                $default_text = "{{LANG No more artists found}}";
+            }
+            if (type == 'albums_search' || type == 'store_albums') {
+                $default_text = "{{LANG No more albums found}}";
+            }
+        }
+		element.html($default_text);
+	});
+}
+
+$(document).on('click', '.amplitude-next', function(event) {
+	console.log($('#current-track').val());
+	
+});
+
+$(function () {
+	var songsObject = [{
+        "name": "",
+        "artist": "",
+        "album": "",
+        "url": "",
+        "cover_art_url": ""
+	}];
+	<?php 
+	if (!empty($_SESSION['songs'])) { 
+	?>
+	var songsObject = <?php echo html_entity_decode($_SESSION['songs']) ?> ;
+	<?php } ?>
+	Amplitude.init({
+	"songs": songsObject,
+    "callbacks": {
+		 'after_play': function(){
+		 	setTimeout(function () {
+		 		var song_seconds = Amplitude.getSongDuration();
+		 		if (song_seconds) {
+		 			$('body').attr('song-duration', song_seconds);
+		 		}
+			 	$('body').addClass('audio_playing');
+			 	$('body').addClass('player_running');
+			 	$('#play-pause').addClass('amplitude-playing');
+		 	}, 100);
+		 },
+		 'after_pause': function(){
+		 	$('body').removeClass('audio_playing');
+		 	$('#play-pause').removeClass('amplitude-playing');
+		 	$('body').removeClass('player_running');
+		 },
+		 'after_stop': function(){
+		 	$('body').removeClass('audio_playing');
+		 	$('#play-pause').removeClass('amplitude-playing');
+		 	$('body').removeClass('player_running');
+		 	$('#light-wave').width('0px');
+		 }
+	 }
+});
+
+});
+
+var songIndex = [];
+function playSong(id) {
+	if (typeof setPlayerInterval != 'undefined') {
+		clearInterval(setPlayerInterval);
+	}
+	if (!$('body').attr('first-play')) {
+		Amplitude.removeSong(0);
+		$('body').attr('first-play', "true");
+		<?php if (!empty($music->path['options'][2])) { ?>
+			if ($('#page').attr('data-page') == 'track') {
+				return false;
+			}
+		<?php } ?>
+		
+	}
+
+	if (Amplitude.getActiveSongMetadata().id) {
+		if (Amplitude.getActiveSongMetadata().id == id) {
+			Amplitude.play();
+			if ($('#page').attr('data-page') != 'track') {
+				goToAjaxLink('track/' + Amplitude.getActiveSongMetadata().id);
+			}
+			// $('#container_content').append('<a href="#" id="redirect-user" data-load="track/' + Amplitude.getActiveSongMetadata().id + '"></a>');
+			// $('#redirect-user').trigger('click');
+			if ($('body').attr('first-play')) {
+				return false;
+			}
+			
+		}
+	}
+
+	$('#bar_loading').show().animate({width:20 + 80 * Math.random() + "%"}, 200);
+	$.get('{{CONFIG ajax_url}}/get-song-info', {id: id}, function(data) {
+		if (data.age == true) {
+			$('#age-restricted').modal('show');
+			$('#bar_loading').animate({width:"100%"}, 200).fadeOut(300, function() {
+	           $(this).width("0");
+	        });
+			return false;
+		}
+		$("#light-wave").stop(true);
+		$('.waveform-small').html("");
+		$('.ssong_comments.small-waves').addClass('hidden');
+		$('.post-actions').addClass('hidden');
+		if (data.status == 200) {
+			$('body').attr('song-duration', data.duration);
+			if ($('.feed_post[data-id="' + data.songID + '"]:first').length > 0) {
+				if (data.songWaves.length > 0) {
+					$('.feed_post[data-id="' + data.songID + '"]:first').find('.waveform-small').html(data.songWaves);
+					$('#light-wave img').width($('#dark-wave').width() + 'px');
+				}
+				$('.feed_post[data-id="' + data.songID + '"]:first').find('.art-info').removeClass('hidden');
+				$('.feed_post[data-id="' + data.songID + '"]:first').find('.post-actions').removeClass('hidden');
+				$('.feed_post[data-id="' + data.songID + '"]:first').find('.ssong_comments').removeClass('hidden');
+			    $('.feed_post[data-id="' + data.songID + '"]:first').find('.comment_list').html(data.comments);
+			    $('.feed_post[data-id="' + data.songID + '"]:first').find('.comment-waves').html(data.waves);
+				$('html,body').animate({
+			        scrollTop: $('.feed_post[data-id="' + data.songID + '"]:first').offset().top
+			    }, 'slow');
+			}
+			
+			$('body').addClass('player_running');
+		    if ($('#queue-' + id).length == 0) {
+				var songObject = {
+			        "name": data.songTitle,
+			        "artist": data.artistName,
+			        "album": data.albumName,
+			        "url": data.songURL,
+			        "cover_art_url": data.coverURL,
+			        "id": id,
+			        "u_id": data.songID,
+			        "data_load": 'track/' + id,
+			        "href": data.songPageURL,
+			        "duration": data.songDuration,
+			        "purchase": data.purchase,
+			        'price': data.price,
+			        "is_favoriated": data.is_favoriated,
+			        "showDemo": data.showDemo
+				};
+		    	var songIndex = Amplitude.addSong(songObject);
+				data.qID = songIndex;
+				songObject.qID = songIndex;
+				addToQueue(data, songObject, false);
+				Amplitude.play();
+				addView(data.songID);
+				$('.amplitude-song-container').removeClass('amplitude-playing');
+				$('.amplitude-song-container[amplitude-song-index="' + songIndex + '"]').addClass('amplitude-playing');
+		    } else { 
+		    	songIndex = $('#queue-' + id).attr('amplitude-song-index');
+		    	Amplitude.playSongAtIndex(songIndex);
+		    }
+		    $('.player-song-url').attr('href', data.songPageURL);
+			$('.player-song-url').attr('data-load', 'track/' + id);
+			$('#song-fav-button').html(data.favorite_button);
+			$('.ma_player').removeClass('closed');
+		} else {
+			alert("Can't load the song, please try again later.")
+		}
+		$('#bar_loading').animate({width:"100%"}, 200).fadeOut(300, function() {
+           $(this).width("0");
+        });
+	});
+}
+
+function addToQueue(data, object, fetch) {
+	if (fetch == false) {
+		html = '<div class="song amplitude-song-container amplitude-play-pause" id="queue-' + data.songAudioID + '" onclick="playSong(\'' + data.songAudioID + '\')" amplitude-song-index="' + data.qID + '"><div class="song_icon_container"><img class="now-playing" src="'+ data.coverURL+'"/></div><span class="song_duration">' + data.songDuration + '</span><div class="song_meta_data"><span class="song_title">' + data.songTitle + '</span><span class="song_artist">' + data.artistName + '</span></div></div>';
+		$('#queue-list').append(html);
+	}
+	// setTimeout(function () {
+	// 	$.post('{{CONFIG ajax_url}}/add-queue', {qdata: object});
+	// }, 2000);
+}
+
+function registerComment(value, id, event, element) {
+	if (!value || !id) {
+		return false;
+	}
+	if(event.which == 13) {
+		element.attr('disabled', "true");
+		time = "";
+		timeSeconds = "";
+		if (Amplitude.getActiveSongMetadata().id == id) {
+			time = Amplitude.audio().currentTime;
+		    timeSeconds = $('.amplitude-song-played-progress').val();
+		}
+		wave = 0;
+		if ($('#light-wave').val()) {
+			wave = $('#light-wave').val();
+		}
+        $.post('{{CONFIG ajax_url}}/register-comment', {id: id, value: value, timePercentage: timeSeconds, time: time, wave: wave}, function(data) {
+        	if (data.status == 300) {
+                $('#login_box').modal('show');
+            }
+        	if (data.status == 200) {
+        		$('.no-comments-found').remove();
+        		$('.no-track-found').remove();
+        		element.val("");
+        		$('.comment-waves').append(data.comment_wave);
+        		$('.comment-list-' + id).prepend(data.html);
+        	}
+        	element.removeAttr('disabled');
+        });
+    }
+	
+} 
+
+$(document).on('mouseover', '.comment-on-wave', function(event) {
+	$(this).find('.comment-on-wave-data').css({
+		display: 'block',
+	});
+});
+$(document).on('mouseleave', '.comment-on-wave', function(event) {
+	$(this).find('.comment-on-wave-data').css({
+		display: 'none',
+	});
+});
+
+$('.comment-on-wave-data').on('hover', function(event) {
+	
+});
+
+function goToWave(secnods) {
+	setTimeout(function () {
+		Amplitude.skipTo(secnods, Amplitude.getActiveSongMetadata().qID);
+	}, 200);
+}
+
+function goTo(element) {
+	mainElement = element.parents('li');
+
+	if (Amplitude.getActiveSongMetadata().id != mainElement.attr('comment-song-id')) {
+		playSong(mainElement.attr('song-id'));
+	} 
+
+	setTimeout(function () {
+		Amplitude.skipTo(mainElement.attr('comment-seconds'), Amplitude.getActiveSongMetadata().qID);
+	}, 200);
+}
+
+function deleteComment(element) {
+	mainElement = $('#delete-comment');
+	comment_id = mainElement.attr('data-id');
+	if (!comment_id) {
+		return false;
+	}
+	$('#delete-comment').modal('hide');
+	$('.comment-' + comment_id).slideUp('200', function () {
+		$(this).remove();
+	});
+	$.get('{{CONFIG ajax_url}}/delete-comment', {id: comment_id});
+}
+
+function likeComment(comment_id) {
+    if (!comment_id) {
+        return false;
+    }
+    var clickval = $('.comment_like[data-comment-id="'+comment_id+'"]').attr("onclick");
+    $('.comment_like[data-comment-id="'+comment_id+'"]').attr('onclick',clickval.replace('likeComment', 'UnlikeComment') );
+    $('.comment_like[data-comment-id="'+comment_id+'"] path').attr('fill','#e62117');
+    $.get('{{CONFIG ajax_url}}/like-comment', {id: comment_id});
+    let c = parseInt($('#comment_like_'+comment_id).html());
+    $('#comment_like_'+comment_id).html( c + 1);
+}
+
+function UnlikeComment(comment_id) {
+    if (!comment_id) {
+        return false;
+    }
+    var clickval = $('.comment_like[data-comment-id="'+comment_id+'"]').attr("onclick");
+    $('.comment_like[data-comment-id="'+comment_id+'"]').attr('onclick',clickval.replace('UnlikeComment', 'likeComment') );
+    $('.comment_like[data-comment-id="'+comment_id+'"] path').attr('fill','currentColor');
+    $.get('{{CONFIG ajax_url}}/unlike-comment', {id: comment_id});
+
+    let c = parseInt($('#comment_like_'+comment_id).html());
+    $('#comment_like_'+comment_id).html( c - 1);
+
+}
+
+function UnReportComment(comment_id,user_id) {
+    if (!comment_id) {
+        return false;
+    }
+    $('.comment_report[data-comment-id="'+comment_id+'"]').show();
+    $('.comment_report[data-comment-id="'+comment_id+'"]').css({'visibility':'inherit'});
+    $('.comment_unreport[data-comment-id="'+comment_id+'"]').hide();
+
+    $.get(ajaxUrl() + '/unreport-comment', {id: comment_id,uid: user_id}, function (data) {
+        if (data.status == 200) {
+            $('#comment_unreported').modal('show');
+            setTimeout(function () {
+                $('#comment_unreported').modal('hide');
+            }, 3000);
+        }
+    });
+
+}
+
+function UnReportTrack(track_id,user_id) {
+    if (!track_id) {
+        return false;
+    }
+    $('.track_report[data-track-id="'+track_id+'"]').show();
+    $('.track_report[data-track-id="'+track_id+'"]').css({'visibility':'inherit'});
+    $('.track_unreport[data-track-id="'+track_id+'"]').hide();
+
+    $.get(ajaxUrl() + '/unreport-track', {'id': track_id,'uid': user_id}, function (data) {
+        if (data.status == 200) {
+            $('#track_unreported').modal('show');
+            setTimeout(function () {
+                $('#track_unreported').modal('hide');
+            }, 3000);
+        }
+    });
+
+}
+
+function purchaseTrack(id, element) {
+	if (!id) {
+		return false;
+	}
+    var title = element.attr("data-title");
+    var price = element.attr("data-price");
+
+    $('#btn-paypal-payment').attr('data-id',id);
+    $('#btn-stripe-payment').attr('data-id',id);
+    $('#btn-bank-payment').attr('data-id',id);
+
+    $('#btn-paypal-payment').attr('data-title',title);
+    $('#btn-stripe-payment').attr('data-title',title);
+    $('#btn-bank-payment').attr('data-title',title);
+
+    $('#btn-paypal-payment').attr('data-price',price);
+    $('#btn-stripe-payment').attr('data-price',price);
+    $('#btn-bank-payment').attr('data-price',price);
+
+    getText = element.text();
+    element.attr('disabled', 'true');
+    element.text("Please wait..");
+    $.get('{{CONFIG ajax_url}}/get-payment-model', {id: id}, function (data) {
+        if (data.status == 200) {
+            $('#login_box').modal('hide');
+            $('#payment_modal').modal('show');
+            element.text(getText);
+            element.removeAttr('disabled');
+        } else if (data.status == 300) {
+            $('#login_box').modal('show');
+            element.text(getText);
+            element.removeAttr('disabled');
+            $('#purchase-song').modal('hide');
+        } else {
+            element.text(getText);
+            element.removeAttr('disabled');
+            alert('Error found while creating the payment, please try again later.');
+        }
+    });
+}
+
+function purchaseTrackPaypal(element) {
+    var id = element.attr("data-id");
+    if (!id) {
+        return false;
+    }
+    getText = element.text();
+    element.attr('disabled', 'true');
+    element.text("{{LANG Please wait..}}");
+    $.get('{{CONFIG ajax_url}}/purchase', {id: id}, function (data) {
+    	if (data.status == 200) {
+    		location.href = data.url;
+    	} else if (data.status == 300) {
+    		$('#login_box').modal('show');
+    		element.text(getText);
+    		element.removeAttr('disabled');
+    		$('#purchase-song').modal('hide');
+    	} else {
+    		element.text(getText);
+    		element.removeAttr('disabled');
+    		alert('{{LANG Error found while creating the payment, please try again later.}}');
+    	}
+    });
+}
+
+function TrackReadMore() {
+    var dots = document.getElementById("dots");
+    var moreText = document.getElementById("more");
+    var btnText = document.getElementById("btn-track-load-more");
+
+    if (dots.style.display === "none") {
+        dots.style.display = "inline";
+        btnText.innerHTML = "{{LANG Read more}}";
+        moreText.style.display = "none";
+    } else {
+        dots.style.display = "none";
+        btnText.innerHTML = "{{LANG Read less}}";
+        moreText.style.display = "inline";
+    }
+}
+
+function purchaseTrackStripe(element) {
+    var id = element.attr("data-id");
+    if (!id) {
+        return false;
+    }
+    var title = element.attr("data-title");
+    var price = element.attr("data-price");
+
+    getText = element.text();
+    element.attr('disabled', 'true');
+    element.text("{{LANG Please wait..}}");
+
+    let script = document.createElement('script');
+    script.src = 'https://checkout.stripe.com/checkout.js';
+    script.type = 'text/javascript';
+    script.onload = script.onreadystatechange = function() {
+        if ( !this.readyState || this.readyState === "loaded" || this.readyState === "complete" ) {
+            if (typeof StripeCheckout !== 'undefined'){
+                let handler = StripeCheckout.configure({
+                    key: '{{CONFIG stripe_id}}',
+                    image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+                    locale: 'english',
+                    token: function (token) {
+                        $.post('{{CONFIG ajax_url}}/stripe', {
+                            stripeToken: token.id,
+                            description: title,
+                            price: price,
+                            payType: 'track_purchase',
+                            trackID: id
+                        }, function (data) {
+                            if (data.status == 200) {
+                                window.location = data.url;
+                            }else{
+                                alert(data.message);
+                            }
+                        });
+                    }
+                });
+                handler.open({
+                    name: '{{CONFIG name}}',
+                    description: title,
+                    currency: '{{CONFIG currency}}',
+                    amount: price * 100,
+                    opened: function () {
+
+                    },
+                    closed: function () {
+                        element.text("{{LANG Credit Card}}");
+                        element.attr('disabled', 'false');
+                    }
+                });
+            }
+        }
+    };
+    let head  = document.getElementsByTagName('head')[0];
+    head.appendChild(script);
+
+    $(window).on('popstate', function() {
+        handler.close();
+
+    });
+}
+
+function purchaseTrackBank(element) {
+    var id = element.attr("data-id");
+    if (!id) {
+        return false;
+    }
+    var title = element.attr("data-title");
+    var price = element.attr("data-price");
+
+
+    $('#btn-upload-receipt').attr('data-id', id);
+    $('#btn-upload-receipt').attr('data-mode', 'track');
+    $('#btn-upload-receipt').attr('data-title', title);
+    $('#btn-upload-receipt').attr('data-price', price);
+
+   // $('#bank_transfer_price').text('<?php echo $config->currency_symbol;?>' + getPrice());
+    //$('#bank_transfer_description').text(getDescription());
+    $('#receipt_img_path').html('');
+    $('#receipt_img_preview').attr('src', '');
+    $('.bank_transfer_modal').removeClass('up_rec_img_ready, up_rec_active');
+    $('.bank_transfer_modal').modal('show');
+}
+
+
+function purchaseAlbum(id, element) {
+    if (!id) {
+        return false;
+    }
+    getText = element.text();
+    element.attr('disabled', 'true');
+    element.text("{{LANG Please wait..}}");
+    $.get('{{CONFIG ajax_url}}/purchase-album', {id: id}, function (data) {
+        if (data.status == 200) {
+            location.href = data.url;
+        } else if (data.status == 300) {
+            $('#login_box').modal('show');
+            element.text(getText);
+            element.removeAttr('disabled');
+            $('#purchase-song').modal('hide');
+        } else {
+            element.text(getText);
+            element.removeAttr('disabled');
+            alert('{{LANG Error found while creating the payment, please try again later.}}');
+        }
+    });
+}
+
+function getUrl() {
+	var url = window.location.href;
+	return url.replace("<?php echo $music->config->site_url?>", "");
+}
+
+function ajaxRedirect(url) {
+	if (!url) {
+		url = getUrl();
+	}
+	goToAjaxLink(url);
+}
+
+function favorite(id, element) {
+	if (element.hasClass('is_favoriated')) {
+		element.html('<path fill="#fff" d="M12,15.39L8.24,17.66L9.23,13.38L5.91,10.5L10.29,10.13L12,6.09L13.71,10.13L18.09,10.5L14.77,13.38L15.76,17.66M22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27L18.18,21L16.54,13.97L22,9.24Z" />');
+		element.removeClass("is_favoriated");
+		if (Amplitude.getActiveSongMetadata()) {
+			Amplitude.getActiveSongMetadata().is_favoriated = false;
+		}
+	} else {
+		element.addClass("is_favoriated");
+		element.html('<path fill="#ff9900" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />');
+		if (Amplitude.getActiveSongMetadata()) {
+			Amplitude.getActiveSongMetadata().is_favoriated = true;
+		}
+	}
+
+	$.get('{{CONFIG ajax_url}}/favorite-track', {id: id});
+}
+
+function addToLists(id) {
+	getID = $('#playlists').attr('data-id');
+	if (!getID) {
+		return false;
+	}
+	var playlists = "";
+	$(".select-playlist-list").each(function (index, item) {
+		if ($(this).hasClass('active')) {
+			 playlists += $(this).attr('data-id') + ",";
+		}
+	});
+	if (playlists) {
+		$('#playlists').find('.btn-mat').text("{{LANG Please wait..}}");
+		$.get(ajaxUrl() + "/playlist/add-to-playlist", {playlists: playlists, id: getID}, function (data) {
+			if (data.status == 200) {
+				$('#playlists').modal('hide');
+				setTimeout(function () {
+					$('#playlists').remove();
+				}, 200);
+			} else if (data.status == 300) {
+				alert("{{LANG Please select which playlist you want to add this song to.}}")
+			} else {
+				$('#playlists').modal('hide');
+				setTimeout(function () {
+					$('#playlists').remove();
+				}, 200);
+			}
+		});
+	}
+}
+
+function blockUser(id, username, type) {
+	if (!id || !username) {
+		return false;
+	}
+	if (!confirm("{{LANG Are you sure you want to block this user}}")) {
+		return false;
+	}
+	$.get('{{CONFIG ajax_url}}/block-user/' + type, {id: id}, function (data) {
+		goToAjaxLink('user/' + username);
+	});
+}
+
+$(document).on('click', '#night_mode_toggle', function(event) {
+    mode = $(this).attr('data-mode');
+    $.post('{{CONFIG ajax_url}}/?mode=' + mode, {}, function(data, textStatus, xhr) { /* pass */ });
+    if (mode !== 'night') {
+        $('head').append('<link rel="stylesheet" href="{{CONFIG theme_url}}/css/day.style.css<?php echo $music->update_cache; ?>" id="night-mode-css">');
+        $('#night_mode_toggle').attr('data-mode', 'night');
+        $('.switch .txt').text('{{LANG Night mode}}');
+        $('.logo_container img').attr('src', '{{CONFIG theme_url}}/img/logo-white.png');
+        <?php if( $music->config->ffmpeg_system == 'on'){?>
+        $('#dark-wave').attr('src',$('#dark-wave').attr('src').replace('_dark.png','_day.png'));
+        <?php }else{ ?>
+            $('#dark-wave').css({'opacity':'0.5'});
+        <?php }?>
+        $('#light-wave').css({'border-right':'1px solid rgb(191, 191, 191)'});
+    } else {
+        $('#night-mode-css').remove();
+        $('#night_mode_toggle').attr('data-mode', 'day');
+        $('.switch .txt').text('{{LANG Day mode}}');
+        $('.logo_container img').attr('src', '{{CONFIG theme_url}}/img/logo.png');
+        <?php if( $music->config->ffmpeg_system == 'on'){?>
+        $('#dark-wave').attr('src',$('#dark-wave').attr('src').replace('_day.png','_dark.png'));
+        <?php }else{ ?>
+            $('#dark-wave').css({'opacity':'inherit'});
+        <?php }?>
+        $('#light-wave').css({'border-right':'1px solid rgb(71, 71, 71)'});
+    }
+
+
+});
+
+$(document).ready(function() {
+    FastClick.attach(document.body);
+});
+
+function hide_announcement(id){
+    if (!id) { return false; }
+    $("#announcement-"+id).slideUp('fast',function(){
+        $(this).remove();
+        $.post('{{CONFIG ajax_url}}/user/hide-announcement', {id: id}, function(data, textStatus, xhr) { /* pass */ });
+    })
+}
+</script>

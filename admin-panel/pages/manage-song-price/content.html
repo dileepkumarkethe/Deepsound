@@ -1,0 +1,250 @@
+<?php
+$page = (!empty($_GET['page-id'])) ? $_GET['page-id'] : 1;
+$db->pageLimit  = 50;
+$prices = $db->objectbuilder()->orderBy('id', 'ASC')->paginate(T_SONG_PRICE, $page);
+
+if (($page > $db->totalPages) && !empty($_GET['page-id'])) {
+header("Location: " . LoadAdminLinkSettings('manage-song-price'));
+exit();
+}
+?>
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Songs > Manage Song Price</h2>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header"><!--
+                    <h2>Manage & Edit Genders</h2>  -->
+                    <div class="row">
+                        <div class="col-md-12" style="margin-bottom:0;">
+                            <div class=" add_category_form_alert"></div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <button class="btn btn-info add-content" >Add new price</button>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="body">
+                    <div class="clearfix"></div>
+                    <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                                foreach ($prices as $key => $price) {
+                                    echo LoadAdminPage('manage-song-price/list', array('PRICE_DATA' => $price));
+                                }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pull-left">
+                        <?php echo "Showing $page out of " . $db->totalPages; ?>
+                    </div>
+                    <div class="pull-right">
+                        <nav>
+                            <ul class="pagination">
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('manage-song-price?page-id=1'); ?>" class="waves-effect" title='First Page'>
+                                        <i class="material-icons">first_page</i>
+                                    </a>
+                                </li>
+                                <?php if ($page > 1) {  ?>
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('manage-song-price?page-id=' . ($page - 1)); ?>" class="waves-effect" title='Previous Page'>
+                                        <i class="material-icons">chevron_left</i>
+                                    </a>
+                                </li>
+                                <?php  } ?>
+                                <?php
+                                $nums = 0;
+                                $nums_pages = ($page > 4) ? ($page - 4) : $page;
+                                for ($i=$nums_pages; $i <= $db->totalPages; $i++) {
+                                if ($nums < 20) {
+                                ?>
+                                <li class="<?php echo ($page == $i) ? 'active' : ''; ?>"><a href="<?php echo LoadAdminLinkSettings('manage-song-price?page-id=' . ($i)); ?>" class="waves-effect"><?php echo $i ?></a></li>
+                                <?php
+                                	}
+                                	$nums++;
+                                }
+                                ?>
+                                <?php if ($db->totalPages > $page) { ?>
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('manage-song-price?page-id=' . ($page + 1)); ?>" class="waves-effect" title="Next Page">
+                                        <i class="material-icons">chevron_right</i>
+                                    </a>
+                                </li>
+                                <?php } ?>
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('manage-song-price?page-id=' . ($db->totalPages)); ?>" class="waves-effect" title='Last Page'>
+                                        <i class="material-icons">last_page</i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+    <!-- #END# Vertical Layout -->
+    <div id="delete-modal" class="modal fade" role="dialog" data-id="">
+        <div class="modal-dialog">
+            <div class="modal-content modal-col-red">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">DELETE PRICE</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to continue? this action can't be undo</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect delete-button" data-dismiss="modal" data-type="song-price">DELETE</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-modal" class="modal fade" role="dialog" data-id="">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">EDIT PRICE</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-lins">
+                            <label class="form-lasbel">Song Price:</label>
+                            <input type="text" class="form-control" name="song_price" id="song_price" value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" id="edit_price_button" data-dismiss="modal" data-type="song-price">EDIT</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-modal" class="modal fade" role="dialog" data-id="">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">ADD PRICE</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-lins">
+                            <label class="form-lasbel">Song Price:</label>
+                            <input type="text" class="form-control" name="new_song_price" id="new_song_price" value="0.00">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" id="add_price_button">ADD</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            $('.edit-content').on('click', function(event) {
+                event.preventDefault();
+                $('#edit-modal').attr('data-id', $(this).attr('data-id')).modal('show');
+                $('#song_price').val($(this).attr('data-price'));
+                $('#edit-modal').on('shown.bs.modal', function () {
+                    $('#song_price').focus();
+                    $('#song_price').select();
+                })
+            });
+        });
+        $(function () {
+            $('.delete-content').on('click', function(event) {
+                event.preventDefault();
+                $('#delete-modal').attr('data-id', $(this).attr('data-id')).modal('show');
+            });
+
+            $('.add-content').on('click', function(event) {
+                event.preventDefault();
+                $('#add-modal').modal('show');
+                $('#add-modal').on('shown.bs.modal', function () {
+                    $('#new_song_price').focus();
+                    $('#new_song_price').select();
+                });
+            });
+
+
+            $('#edit_price_button').on('click', function(event) {
+                event.preventDefault();
+                let id = $('#edit-modal').attr('data-id');
+                let new_value = $('#song_price').val();
+
+                var data = new FormData();
+                    data.append('hash_id','<?php echo createMainSession();?>');
+                    data.append('id',id);
+                    data.append('price',new_value);
+                $.ajax({
+                    url: '{{CONFIG ajax_url}}/ap/update_price',
+                    type : 'POST',
+                    data : data,
+                    contentType:false,
+                    cache: false,
+                    processData:false,
+                    success : function(data) {
+                        if (data.status == 200) {
+                            $('#price_text_'+id).html(new_value);
+                        }
+                    }
+                });
+            });
+
+            $('#add_price_button').on('click', function(event) {
+                event.preventDefault();
+                let new_value = $('#new_song_price').val();
+                if(isNaN(new_value)){
+                    alert('Please enter price in number format');
+                    $('#new_song_price').val('0.00');
+                    $('#new_song_price').focus();
+                    $('#new_song_price').select();
+                }
+                var data = new FormData();
+                    data.append('hash_id','<?php echo createMainSession();?>');
+                    data.append('price',new_value);
+                $.ajax({
+                    url : "{{CONFIG ajax_url}}/ap/add_price",
+                    type : "POST",
+                    data : data,
+                    contentType:false,
+                    cache: false,
+                    processData:false,
+                    success : function(data) {
+                        if (data.status == 200) {
+                            location.reload();
+                        }
+                    }
+                });
+            });
+
+        });
+    </script>

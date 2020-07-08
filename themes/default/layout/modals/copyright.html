@@ -1,0 +1,64 @@
+<div class="modal fade" id="create_copyright_box" tabindex="-1" role="dialog" aria-labelledby="create_copyright_box" aria-hidden="true">
+	<div class="modal-dialog mat_box create_playlist" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">{{LANG Create DMCA take down notice}}</h5>
+			</div>
+			<form method="post" action="" id="copyright-form">
+				<div class="alert alert-danger alert-empty" id="output-copyright-errors"></div>
+				<div class="create_playlist_innr">
+					<div class="play_info">
+						<div class="form-group mat_input" style="text-align: initial;">
+							<textarea name="description" id="description" rows="6" style="width: 100%;"></textarea><br>
+							<small>{{LANG Please describe your request carefully and as much as you can, note that false DMCA requests can lead to account termination.}}</small>
+						</div>
+						<hr>
+						<div class="custom-control custom-radio">
+							<input type="checkbox" id="confirm_1" name="confirm_1" class="custom-control-input">
+							<label class="custom-control-label" for="confirm_1">{{LANG I have a good faith belief that use of the copyrighted work described above is not authorized by the copyright owner, its agent or the law}}</label>
+						</div>
+						<div class="custom-control custom-radio">
+							<input type="checkbox" id="confirm_2" name="confirm_2" class="custom-control-input">
+							<label class="custom-control-label" for="confirm_2">{{LANG I confirm that I am the copyright owner or am authorised to act on behalf of the owner of an exclusive right that is allegedly infringed.}}</label>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" id="song-copyright-id" name="id">
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">{{LANG Cancel}}</button>
+					<button type="submit" class="btn btn-primary btn-mat" id="btn-copyright-submit">{{LANG Submit}}</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+$(document).ready(function() { 
+    var options = { 
+    	url: "{{CONFIG ajax_url}}/copyright-create?hash_id=" + getHashID(),
+        beforeSubmit:  function () {
+        	$('#output-copyright-errors').removeClass('alert-success').addClass('alert-danger');
+        	$('#output-copyright-errors').empty();
+        	$("#btn-copyright-submit").text("{{LANG Please wait..}}");
+        }, 
+        success: function (data) {
+        	$("#btn-copyright-submit").text("{{LANG Submit}}");
+        	if (data.status == 200) {
+        		$('#output-copyright-errors').addClass('alert-success').removeClass('alert-danger');
+        		$('#output-copyright-errors').text("Thanks for your submission, we will review your request shortly.");
+        		setTimeout(function () {
+        			$('#copyright-form')[0].reset();
+	        		$('#create_copyright_box').modal('hide');
+	        		closeModal();
+	        		$('#output-copyright-errors').empty();
+        		}, 3000);
+        	} else if (data.status == 400) {
+        		var errros = data.errors.join("<br>");
+        		$('#output-copyright-errors').html(errros);
+        	}
+        }
+    }; 
+
+    $('#copyright-form').ajaxForm(options); 
+}); 
+</script>

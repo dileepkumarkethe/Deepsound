@@ -1,0 +1,42 @@
+<div class="feed_post" data-id="{{s_id}}" data-a-id="{{a_id}}" id="feed_{{s_id}}">
+	<div class="fp_head">
+		<div class="avatar user-image">
+			<a href="{{USER url}}" data-load="{{USER username}}">
+				<img src="{{USER avatar}}" alt="User Avatar">
+			</a>
+			<?php if ($music->config->go_pro == 'on') { ?>
+			<?php if (userData($music->songData->activity->user_id)->is_pro == 1) { ?>
+			<div class="is-pro-badge-small" title="{{LANG PRO Memeber}}">
+				<?php echo loadPage("user/pro-icon")?>
+			</div>
+			<?php } ?>
+			<?php } ?>
+		</div>
+		<div class="user_info">
+			<a href="{{USER url}}" data-load="{{USER username}}">{{USER name}}</a>
+			<span>{{activity_text}} {{album_text}} <span class="time ajax-time" title="{{activity_time}}" style="display: inline-block;">{{activity_time_formatted}}</span></span>
+		</div>
+		<div class="opts_feed dropdown">
+			<button type="button" class="btn" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,12A2,2 0 0,1 18,10A2,2 0 0,1 20,12A2,2 0 0,1 18,14A2,2 0 0,1 16,12M10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12M4,12A2,2 0 0,1 6,10A2,2 0 0,1 8,12A2,2 0 0,1 6,14A2,2 0 0,1 4,12Z"></path></svg></button>
+			<div class="dropdown-menu dropdown-menu-right mat-dropdown">
+				<ul class="list-unstyled mb-0">
+					<?php if ( IsAdmin() ) { ?>
+						<li><a href="{{LINK edit-track/{{s_audio_id}}}}" data-load="edit-track/{{s_audio_id}}">{{LANG Edit Info}}</a></li>
+					<?php } ?>
+					<?php if ($music->isSongOwner == true ) { ?>
+						<li><a href="javascript:void(0)" onclick="$('#delete-post').attr('data-id', '{{a_id}}')" data-toggle="modal" data-target="#delete-post">{{LANG Delete Post}}</a></li>
+					<?php } else { ?>
+						<?php echo getTrackReportButton(['user_id' => $music->songData->publisher->id,'track_id' => $music->songData->id],'report-track-link'); ?>
+					<?php } ?>
+
+					<?php if( $data['a_type'] === 'shared_track' && $data['a_owner'] === true ) {?>
+						<li><a href="javascript:void(0)" onclick="$('#delete-post').attr('data-id', '{{a_id}}')" data-toggle="modal" data-target="#delete-post">{{LANG Delete Post}}</a></li>
+					<?php }?>
+					<li><a href="javascript:void(0)" onclick="getPlayLists({{s_id}})">{{LANG Add to playlist}}</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<?php echo loadPage('post/post-body'); ?>
+	<?php echo loadPage('post/post-actions');?>
+</div>

@@ -1,0 +1,378 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="single_song">
+			<div class="ssong_header">
+				<div class="container">
+					<div class="ss_sub_head">
+						<span class="published">{{LANG Published}} <span class="ajax-time" title="{{ts_time}}" style="font-size: inherit;">{{t_time}}</span> {{LANG in}} <a href="{{LINK explore-genres/<?php echo $music->songData->category_id;?>}}" data-load="explore-genres/<?php echo $music->songData->category_id;?>" class="main">{{category_name}}</a><?php if (!empty($music->albumData)) { ?>, {{LANG in album:}} <a href="{{LINK album/<?php echo $music->albumData->album_id;?>}}" data-load="album/<?php echo $music->albumData->album_id;?>" class="main"><?php echo $music->albumData->title;?></a><?php } ?></span>
+						<div class="ss_publisher_info">
+							<a class="ss_short_info" href="{{USER url}}" data-load="{{USER username}}">
+								<div class="user-image">
+									<div class="user-avatar-img">
+										<img src="{{USER avatar}}" alt="User Avatar">
+									</div>
+									<?php if ($music->config->go_pro == 'on') { ?>
+									<?php if ($music->songData->publisher->is_pro == 1) { ?>
+									<div class="is-pro-badge-small" title="{{LANG PRO Memeber}}">
+										<?php echo loadPage("user/pro-icon")?>
+									</div>
+									<?php } ?>
+									<?php } ?>
+								</div>
+								
+								<p class="ss_short_info_innr">
+									<span class="aut_nam">{{USER name}}</span>
+									<span class="published">{{t_time}}</span>
+								</p>
+							</a>
+							<span title="{{LANG Followers}}"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z" /></svg> {{COUNT_USER_FOLLOWERS}}</span>
+							<span title="{{LANG Tracks}}"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M21,3V15.5A3.5,3.5 0 0,1 17.5,19A3.5,3.5 0 0,1 14,15.5A3.5,3.5 0 0,1 17.5,12C18.04,12 18.55,12.12 19,12.34V6.47L9,8.6V17.5A3.5,3.5 0 0,1 5.5,21A3.5,3.5 0 0,1 2,17.5A3.5,3.5 0 0,1 5.5,14C6.04,14 6.55,14.12 7,14.34V6L21,3Z" /></svg> {{COUNT_USER_SONGS}}</span>
+							<?php if ($music->songData->owner == false && IS_LOGGED) {?>
+								<?php if (!isFollowing($music->songData->publisher->id)) { ?>
+								<button class="btn btn-primary" id="follow-user" data-user-id="{{USER id}}">{{LANG Follow}}</button>
+								<?php } else { ?>
+							    <button class="btn btn-success" id="unfollow-user" data-user-id="{{USER id}}">{{LANG Following}}</button>
+							    <?php } ?>
+							<?php } ?>
+						</div>
+					</div>
+					<div class="ss_sub_body">
+						<div class="clearfix">
+							<div class="float-left ss_image" style="background-image: url({{t_thumbnail}})"></div>
+							<div class="ss_track_info">
+								<div class="ss_track_play_pause">
+									<div class="play_btn" onclick="<?php if (empty($music->songData->dark_wave) && empty($music->songData->light_wave)) { ?>wavesurfer.play();<?php } else { ?>playSong('{{t_audio_id}}');<?php } ?>"><svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="#f98f1d" d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M10,16.5L16,12L10,7.5V16.5Z" /></svg></div>
+									<div class="pause_btn" onclick="<?php if (empty($music->songData->dark_wave) && empty($music->songData->light_wave)) { ?>wavesurfer.pause();<?php } else { ?>Amplitude.pause();<?php } ?>$('body').removeClass('player_running');"><svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="#f98f1d" d="M13,16V8H15V16H13M9,16V8H11V16H9M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" /></svg></div>
+								</div>
+								<div class="ss_track_info_innr">
+									<h2><a href="{{LINK track/{{t_audio_id}}}}" data-load='track/{{t_audio_id}}' style="color: #fff">{{t_title}}</a></h2>
+									<ul class="ss_stats list-unstyled mb-0">
+										<li class="ss_track_info_innr_play_ico"><svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24"><path fill="#1eee6c" d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z" /></svg> {{COUNT_VIEWS}}</li>
+										<li>
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="red" d="M13.35 20.13c-.76.69-1.93.69-2.69-.01l-.11-.1C5.3 15.27 1.87 12.16 2 8.28c.06-1.7.93-3.33 2.34-4.29 2.64-1.8 5.9-.96 7.66 1.1 1.76-2.06 5.02-2.91 7.66-1.1 1.41.96 2.28 2.59 2.34 4.29.14 3.88-3.3 6.99-8.55 11.76l-.1.09z"></path></svg>
+											<span id="track_likes_count" data-count="{{COUNT_LIKES}}">{{COUNT_LIKES}}</span></li>
+										<li>
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#4e7390" d="M1,4.27L2.28,3L20,20.72L18.73,22L15.18,18.44L13.45,20.03L12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,7.55 2.23,6.67 2.63,5.9L1,4.27M7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,11.07 20.42,13.32 17.79,15.97L5.27,3.45C5.95,3.16 6.7,3 7.5,3Z"></path></svg>
+											<span id="track_dislikes_count" data-count="{{COUNT_DISLIKES}}">{{COUNT_DISLIKES}}</span></li>
+										<li class="ss_track_info_innr_share_ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z" /></svg> {{t_shares}}</li>
+										<li class="ss_track_info_innr_commnt_ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9Z" /></svg> {{comment_count}}</li>
+										<li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ff9900" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" /></svg> {{fav_count}}</li>
+										<?php if( $music->config->artist_sell == 'on' && $music->songData->price > 0){ ?>
+										<li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#019401" d="M21,18H24V20H21V23H19V20H16V18H19V15H21V18M19,8V6H3V8H19M19,12H3V18H14V20H3C1.89,20 1,19.1 1,18V6C1,4.89 1.89,4 3,4H19A2,2 0 0,1 21,6V13H19V12Z"></path></svg> {{purchase_count}}</li>
+										<?php } ?>
+									</ul>
+									<div class="song_border"></div>
+									<p class="ss_description">{{t_description}}</p>
+									<div class="ss_tags">
+										<?php foreach ($music->songData->tagsFiltered as $key => $tag) { ?>
+											<a href="{{LINK search/songs/}}<?php echo $tag?>" data-load='search/songs/<?php echo $tag?>'>#<?php echo $tag?></a>
+										<?php } ?>
+									</div>
+
+									<?php if(!empty($music->songData->lyrics)){?>
+									<div class="song_lyrics">
+									<!--
+										<style>
+											.read-more-state {
+												display: none;
+											}
+											.read-more-target {
+												opacity: 0;
+												max-height: 0;
+												font-size: 0;
+												transition: .25s ease;
+											}
+											.read-more-state:checked ~ .read-more-wrap .read-more-target {
+												opacity: 1;
+												font-size: inherit;
+												max-height: 999em;
+											}
+											.read-more-state ~ .read-more-trigger:before {
+												content: '{{LANG Show more}}';
+											}
+											.read-more-state:checked ~ .read-more-trigger:before {
+												content: '{{LANG Show less}}';
+											}
+											.read-more-trigger {
+												cursor: pointer;
+												display: inline-block;
+												padding: 0 .5em;
+												color: #666;
+												font-size: .9em;
+												line-height: 2;
+												border: 1px solid #ddd;
+												border-radius: .25em;
+											}
+										</style>
+										<div>
+											<input type="checkbox" class="read-more-state" id="post-2" />
+											<ul class="read-more-wrap" style="list-style: none;padding: 0px;">
+												<li><?php echo substr($music->songData->lyrics, 0, 150);?></li>
+												<li class="read-more-target"><?php echo substr($music->songData->lyrics, 150);?></li>
+											</ul>
+											<label for="post-2" class="read-more-trigger"></label>
+										</div>
+									-->
+									<h3><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M19,3A2,2 0 0,1 21,5V13.34C20.36,13.11 19.68,13 19,13C15.68,13 13,15.69 13,19C13,19.68 13.11,20.36 13.34,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H9.18C9.5,2.16 10.14,1.5 11,1.2C12.53,0.64 14.25,1.44 14.82,3H19M12,3A1,1 0 0,0 11,4A1,1 0 0,0 12,5A1,1 0 0,0 13,4A1,1 0 0,0 12,3M11,17V15H7V17H11M13,13V11H7V13H13M17,9V7H7V9H17M17,16L22,19L17,22V16Z" /></svg> {{LANG Lyrics}}</h3>
+									<p id="rmjs-1">
+										<?php echo $music->songData->lyrics;?>
+									</p>
+									</div>
+									<?php } ?>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="waveform-load"></div>
+
+					<?php
+					 	$dark = $music->songData->dark_wave;
+						$light = $music->songData->light_wave;
+						$bar = '#363636';
+						$opacity = '';
+
+						if( $music->config->ffmpeg_system == 'off'){
+							$dark = $music->songData->light_wave;
+							$light = $music->songData->dark_wave;
+
+							if($_COOKIE['mode'] == 'day'){
+								$bar = 'rgb(191, 191, 191)';
+								$opacity = 'opacity: 0.5;';
+								if($music->songData->ffmpeg == 0){
+									$dark = $music->songData->light_wave;
+									$light = $music->songData->dark_wave;
+								}else{
+									$dark = $music->songData->dark_wave;
+									$light = $music->songData->light_wave;
+								}
+
+							}else{
+								$opacity = '';
+								if($music->songData->ffmpeg == 0){
+									$dark = $music->songData->light_wave;
+									$light = $music->songData->dark_wave;
+								}else{
+									$dark = $music->songData->dark_wave;
+									$light = $music->songData->light_wave;
+								}
+
+							}
+						}else{
+							$dark = $music->songData->dark_wave;
+							$light = $music->songData->light_wave;
+
+							if($_COOKIE['mode'] == 'day'){
+								$dark = str_replace('_dark.png','_day.png',$music->songData->dark_wave);
+								if(!file_exists( $dark ) ){
+									$dark = $music->songData->light_wave;
+									$light = $music->songData->dark_wave;
+								}
+								$bar = 'rgb(191, 191, 191)';
+							}else{
+								$dark = str_replace('_day.png','_dark.png',$music->songData->dark_wave);
+
+								if($music->songData->ffmpeg == 0){
+									$dark = $music->songData->light_wave;
+									$light = $music->songData->dark_wave;
+								}else{
+									$dark = $music->songData->dark_wave;
+									$light = $music->songData->light_wave;
+								}
+
+							}
+
+						}
+
+					$rl = 'left: 0;border-left: inherit!important;border-right: 1px solid '.$bar.' !important;';
+					if ( $music->language_type == 'rtl' ){
+						$rl = 'right: 0;border-#delete-songright: inherit!important;border-left: 1px solid '.$bar.' !important;';
+					}
+					?>
+
+					<div id="waveform">
+						<div class="images" style="width: 100%" id="dark-waves">
+							<img src="<?php echo getMedia($dark); ?>" style="width: 100%;<?php echo $opacity;?>" id="dark-wave">
+							<div class="comment-waves">
+								{{comments_on_wave}}
+							</div>
+							<div style="width: 0%; z-index: 111; position: absolute; overflow: hidden; top: 0; <?php echo $rl;?> " id="light-wave">
+								<img src="<?php echo getMedia($light); ?>">
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			
+			<div class="ssong_footer">
+				<div class="container">
+					<div class="ss_actions">
+						<div class="ss_actions_innr">
+							<?php echo getLikeButton($music->songData->id, 'like-default'); ?>
+							<?php echo getDisLikeButton($music->songData->id, 'dislike-default'); ?>
+							<?php if (IS_LOGGED) { ?>
+							<button class="ss_action_item" onclick="rePost('{{t_id}}', $(this));"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-repeat"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg></svg> {{LANG Re Post}}</button>
+							<?php echo getTrackReportButton(['user_id' => $music->user->id,'track_id' => $data['t_id']]); ?>
+							<?php } ?>
+							<button class="ss_action_item" onclick="getShareModal('{{t_id}}', $(this));"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z" /></svg> {{LANG Share}}</button>
+							<span class="dropdown">
+								<div class="ss_action_item" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,12A2,2 0 0,1 18,10A2,2 0 0,1 20,12A2,2 0 0,1 18,14A2,2 0 0,1 16,12M10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12M4,12A2,2 0 0,1 6,10A2,2 0 0,1 8,12A2,2 0 0,1 6,14A2,2 0 0,1 4,12Z" /></svg> {{LANG More}}</div>
+								<div class="dropdown-menu dropdown-menu-right mat-dropdown">
+									<ul class="list-unstyled mb-0">
+
+										<li><a href="javascript:void(0)" onclick="getPlayLists({{t_id}})">{{LANG Add to Playlist}}</a></li>
+										<?php if ($music->songData->owner == true || IsAdmin()) { ?>
+										<li><a href="{{LINK edit-track/{{t_audio_id}}}}" data-load="edit-track/{{t_audio_id}}">{{LANG Edit Info}}</a></li>
+										<li><a href="javascript:void(0)" onclick="$('#delete-song').attr('data-id', '{{t_id}}')" data-toggle="modal" data-target="#delete-song">{{LANG Delete Track}}</a></li>
+										<?php } else if (IS_LOGGED == true) { ?>
+											<li><a href="javascript:void(0)" onclick="$('#song-copyright-id').val('{{t_id}}');"  data-toggle="modal" data-target="#create_copyright_box">{{LANG Report Copyright}}</a></li>
+										<?php } ?>
+										<?php if ($music->songData->owner == true || IsAdmin()) { ?>
+										<li><a href="{{LINK track-statistics/{{t_audio_id}}/today}}" data-load="track-statistics/{{t_audio_id}}/today">{{LANG Statistics}}</a></li>
+										<?php } ?>
+									</ul>
+								</div>
+							</span>
+						</div>
+						<div class="ss_toolkit">
+							<?php if ($music->can_download == true && $music->songData->allow_downloads == 1) { ?>
+							<a class="ss_action_item" href="{{LINK download.php?id={{t_audio_id}}}}" download><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download-cloud"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg> {{LANG Download}}</a>
+							<?php } ?>
+							<?php if($music->config->artist_sell == 'on'){ ?>
+								<?php if ($music->isPurchased == false && $music->songData->owner == false && $music->songData->price > 0 && IS_LOGGED == true) { ?>
+									<button class="ss_action_item" onclick="purchaseTrack('{{t_audio_id}}', $(this))" data-title="{{t_title}}" data-price="{{t_price}}">{{LANG Purchase}} {{CONFIG currency_symbol}}{{t_price}}</button>
+								<?php } else if ($music->songData->price > 0){ ?>
+									<span>{{CONFIG currency_symbol}}{{t_price}}</span>
+								<?php } ?>
+							<?php } ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="hidden" id="current-track" value="{{t_audio_id}}">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8">
+						<div class="ssong_comments ssong_comments_main">
+							<div class="write_comment">
+								<?php if (IS_LOGGED) { ?>
+								<img src="{{ME avatar}}" alt="" class="u_avatar">
+								<?php } else {?>
+								<img src="<?php echo getMedia($music->user_default_avatar)?>" alt="" class="u_avatar">
+								<?php } ?>
+								<!--<input type="text" onkeyup="registerComment(this.value, $('#current-track').val(), event, $(this));" title="{{LANG Write a comment and press enter}}" placeholder="{{LANG Write a comment and press enter}}" value="" class="comment_input" >-->
+								<textarea title="{{LANG Write a comment and press enter}}" data-audio-id="{{t_audio_id}}" placeholder="{{LANG Write a comment and press enter}}" value="" class="comment_input" ></textarea>
+							</div>
+							<h3 class="comm_count"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9Z"></path></svg> {{comment_count}} {{LANG comments}}</h3>
+							<ul class="list-unstyled mb-0 comment_list comment-list-{{t_audio_id}}" >
+								{{comment_list}}
+							</ul>
+							<?php if($music->comment_count > 0){?>
+							<div class="text-center see_all">
+								<a href="javascript:void(0); loadMore('comments', 'comments');" id="load-more-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg> {{LANG Load More}}</a>
+							</div>
+							<?php } ?>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="ss_related">
+							<div class="s_widget_head">
+								<span style="background:#7367f0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M21,3V15.5A3.5,3.5 0 0,1 17.5,19A3.5,3.5 0 0,1 14,15.5A3.5,3.5 0 0,1 17.5,12C18.04,12 18.55,12.12 19,12.34V6.47L9,8.6V17.5A3.5,3.5 0 0,1 5.5,21A3.5,3.5 0 0,1 2,17.5A3.5,3.5 0 0,1 5.5,14C6.04,14 6.55,14.12 7,14.34V6L21,3Z"></path></svg></span> {{LANG More Tracks}}
+							</div>
+							{{related_tracks}}
+                        </div>
+						<?php if($data['recentPlays'] !== ''){?>
+                        <div class="sidebar_widget">
+							<div class="s_widget_head">
+								<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z"></path></svg></span> {{LANG Recently Listened by}}
+							</div>
+							<div class="feed_sidebar_artist" data-simplebar>
+								{{recentPlays}}
+							</div>
+						</div>
+						<?php }?>
+						<?php echo GetAd('side_bar');?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<img src="" alt="" id="de-image">
+
+<script>
+jQuery(document).ready(function($) {
+	<?php if ($music->autoPlay == true) { ?>
+		playSong($('#current-track').val());
+	<?php } ?>
+    $('#light-wave img').width($('#dark-wave').width() + 'px');
+});
+<?php if (empty($music->songData->dark_wave) && empty($music->songData->light_wave)) { ?>
+var wavesurfer = WaveSurfer.create({
+	container: '#waveform',
+	waveColor: '<?php echo $music->config->waves_color;?>',
+	progressColor: '#bfbfbf',
+	height: 150,
+	scrollParent: false,
+	responsive: true,
+});
+
+wavesurfer.on('loading', function (integer) {
+	$('#waveform-load').html("{{LANG Generating waves..}} (" + integer + '%)');
+});
+
+wavesurfer.on('ready', function (percents) {
+	$('body').addClass('waveform_ready');
+	wavesurfer.setVolume(0);
+	setTimeout(function () {
+		$.post('{{CONFIG ajax_url}}/convert-waves', {darkImage: wavesurfer.exportImage(), LightImage: convertCanvasToImage(), id: "{{t_audio_id}}"}, function (data) {
+			if (data.status == 200) {
+				location.reload();
+			}
+		});
+	}, 300);
+	$('#waveform-load').empty();
+});
+wavesurfer.on('play', function (percents) {
+	$('body').addClass('waveform_ready');
+	$('body').addClass('player_running');
+	setTimeout(function () {
+		convertCanvasToImage
+	} , 5000);
+
+	Amplitude.play();
+});
+wavesurfer.on('pause', function (percents) {
+	$('body').removeClass('player_running');
+	Amplitude.pause()
+});
+
+wavesurfer.on('seek', function (seeks) {
+    Amplitude.skipTo( wavesurfer.getCurrentTime(), 0 )
+    wavesurfer.setVolume(0);
+});
+wavesurfer.load('{{t_song}}');
+<?php } ?>
+
+function convertCanvasToImage() {
+	var can = $('canvas').get(0);
+	return can.toDataURL();
+}
+</script>
+
+<script>
+	if( typeof $('#rmjs-1').readmore !== "undefined" ) {
+        $('#rmjs-1').readmore({
+            speed: 75,
+            collapsedHeight: 190,
+            moreLink: '<a href="#" class="hash"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg> {{LANG Read more}}</a>',
+            lessLink: '<a href="#" class="hash"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg> {{LANG Read less}}</a>',
+            afterToggle: function (trigger, element, expanded) {
+                //if(! expanded) {
+                // The "Close" link was clicked
+                $('html, body').animate({scrollTop: element.offset().top}, {duration: 100});
+                //}
+            }
+        });
+    }
+</script>

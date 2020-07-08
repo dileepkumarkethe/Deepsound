@@ -1,0 +1,13 @@
+<div class="ma_tabs">
+	<ul class="list-unstyled mb-0">
+		<li class="<?php echo ($music->page_to_load == 'about') ? 'active' : '';?>">
+			<a href="{{LINK terms/about}}" data-load="terms/about">{{LANG About Us}}</a>
+		</li>
+		<li class="<?php echo ($music->page_to_load == 'terms') ? 'active' : '';?>">
+			<a href="{{LINK terms/terms}}" data-load="terms/terms">{{LANG Terms}}</a>
+		</li>
+		<li class="<?php echo ($music->page_to_load == 'privacy') ? 'active' : '';?>">
+			<a href="{{LINK terms/privacy}}" data-load="terms/privacy">{{LANG Privacy Policy}}</a>
+		</li>
+	</ul>
+</div>

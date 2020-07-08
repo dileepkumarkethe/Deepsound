@@ -1,0 +1,144 @@
+<div class="modal fade" id="bank_transfer_modal_response" tabindex="-1" role="dialog" aria-labelledby="bank_transfer_modal_response" aria-hidden="true" data-id="0">
+    <div class="modal-dialog mat_box" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="no-track-found" style="padding: 30px 10px;">
+                    <span id="bank_transfer_modal_response_txt"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bank_transfer_modal modal fade modal-fixed-footer" tabindex="-1" role="dialog" aria-hidden="true" data-id="0">
+    <div class="modal-dialog mat_box" role="document">
+        <div class="modal-content dt_bank_trans_modal">
+            <div class="modal-header">
+                <h5 class="modal-title">{{LANG Bank Transfer}}</h5>
+            </div>
+            <div class="modal-body">
+                <?php if( $music->config->bank_description !== '' ){?>
+                <div class="bank_info"><?php echo htmlspecialchars_decode($music->config->bank_description);?></div>
+                <?php }?>
+                <?php if( $music->config->bank_transfer_note !== '' ){ ?>
+                <div class="dt_user_profile hide_alert_info_bank_trans">
+                <span class="valign-wrapper">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg> {{LANG Note}}:
+                </span>
+                    <ul class="browser-default dt_prof_vrfy">
+                        <li id="bank_note"><?php echo $music->config->bank_transfer_note;?></li>
+                    </ul>
+                </div>
+                <?php }?>
+                <p class="dt_bank_trans_upl_rec">
+                    <a href="javascript:void(0);" onclick="$('.bank_transfer_modal').addClass('up_rec_active'); return false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M13.5,16V19H10.5V16H8L12,12L16,16H13.5M13,9V3.5L18.5,9H13Z"></path>
+                        </svg> {{LANG Upload Receipt}}
+                    </a>
+                </p>
+                <div class="upload_bank_receipts">
+                    <div onclick="document.getElementById('receipt_img').click(); return false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M13.5,16V19H10.5V16H8L12,12L16,16H13.5M13,9V3.5L18.5,9H13Z"></path></svg>
+                        <p>{{LANG Upload Receipt}}</p>
+                        <img id="receipt_img_preview" src="">
+                    </div>
+                </div>
+                <input type="file" id="receipt_img" class="hide" accept="image/x-png, image/gif, image/jpeg" name="receipt_img">
+            </div>
+            <!--<span style="display: block;text-align: center;" id="receipt_img_path"></span>-->
+            <div class="modal-footer">
+                <div class="bank_transfr_progress hide" id="img_upload_progress">
+                    <div class="progress">
+                        <div id="img_upload_progress_bar" class="determinate progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                    </div>
+                </div>
+                <button class="btn btn-default" data-dismiss="modal">{{LANG Close}}</button>
+                <button class="btn btn-primary btn-mat" disabled id="btn-upload-receipt" data-selected="" data-mode="" data-id="" data-title="" data-price="">{{LANG Confirm}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('receipt_img').addEventListener('change', function(e) {
+        let imgPath = $(this)[0].files[0].name;
+        if (typeof(FileReader) != "undefined") {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                $('#receipt_img_preview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+        $('#receipt_img_path').html(imgPath);
+        $('.bank_transfer_modal').addClass('up_rec_img_ready');
+        $('#btn-upload-receipt').removeAttr('disabled');
+        $('#btn-upload-receipt').removeClass('btn-flat').addClass('btn-success');
+    });
+    document.getElementById('btn-upload-receipt').addEventListener('click', function(e) {
+        e.preventDefault();
+        let bar = $('#img_upload_progress');
+        let percent = $('#img_upload_progress_bar');
+
+        let id = $(this).attr("data-id");
+        if (!id) {
+            return false;
+        }
+        let title = $(this).attr("data-title");
+        let price = $(this).attr("data-price");
+        let mode = $(this).attr("data-mode");
+
+        let formData = new FormData();
+        formData.append("hash_id",'<?php echo createMainSession();?>');
+        formData.append("description",title);
+        formData.append("price", price);
+        formData.append("mode", mode);
+        formData.append("track_id", id);
+        formData.append("receipt_img", $("#receipt_img")[0].files[0], $("#receipt_img")[0].files[0].value);
+        bar.removeClass('hide');
+        $.ajax({
+            xhr: function() {
+                let xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt){
+                    if (evt.lengthComputable) {
+                        let percentComplete = evt.loaded / evt.total;
+                        percentComplete = parseInt(percentComplete * 100);
+                        //status.html( percentComplete + "%");
+                        percent.width(percentComplete + '%');
+                        percent.html(percentComplete + '%');
+                        if (percentComplete === 100) {
+                            bar.addClass('hide');
+                            percent.width('0%');
+                            percent.html('0%');
+                        }
+                    }
+                }, false);
+                return xhr;
+            },
+            url: ajaxUrl() + '/upload-receipt',
+            type: "POST",
+            async: true,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 60000,
+            dataType: false,
+            data: formData,
+            success: function(result) {
+                if( result.status == 200 ){
+                    $('#payment_modal').modal('hide');
+                    $('#paymentpro_modal').modal('hide');
+                    $('.bank_transfer_modal').modal('hide');
+
+                    $('#bank_transfer_modal_response_txt').html('{{LANG Your receipt uploaded successfully.}}');
+                    $('#bank_transfer_modal_response').modal('show');
+
+                    setTimeout(function () {
+                        $('#bank_transfer_modal_response').modal('hide');
+                    },2000);
+                    return false;
+                }
+            }
+        });
+    });
+</script>

@@ -1,0 +1,55 @@
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Languages > Manage Languages</h2>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="header">
+                    <h2>Manage & Edit Languages</h2>
+                </div>
+                <div class="body">
+                   <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">Language Name</th>
+                                    <th style="text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    $langs = db_langs();
+                                    if (count($langs) > 0) {
+                                        foreach ($langs as $key => $lang) {
+                                            echo LoadAdminPage('manage-languages/list',array(
+                                                'LANG_NAME' => ucfirst($lang),
+                                                'LANG'      => $lang
+                                            ));
+                                        }
+                                    }  
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+function pt_delete_lang(id,self) {
+  if (id == '') {
+    return false;
+  }
+  if (!confirm('Are you sure you want to delete this language?')) {
+    return false;
+  }
+  $('#' + id).fadeOut(300, function () {
+      $(this).remove();
+  });
+  $.get('{{CONFIG ajax_url}}/ap/delete_lang', {id:id});
+}
+</script>

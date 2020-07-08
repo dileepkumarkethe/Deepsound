@@ -1,0 +1,316 @@
+<?php 
+
+$paypal_live    = ($music->config->paypal_mode == 'live') ? 'checked' :'';
+$paypal_sb      = ($music->config->paypal_mode == 'sandbox') ? 'checked' :'';
+
+$bank_payment      = ($music->config->bank_payment == 'on') ? 'checked' :'';
+
+$ads_currency_usd = ($music->config->currency == 'USD') ? 'checked' :'';
+$ads_currency_eur = ($music->config->currency == 'EUR') ? 'checked' :'';
+
+
+
+?>
+
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Settings > Payment Settings</h2>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+
+        <div class="col-lg-4 col-md-4 pull-left">
+            <div class="card">
+                <div class="header">
+                    <h2 class="pull-left">Payment Settings</h2>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="body">
+                    <div class="alert alert-success payment-settings-alert"></div>
+                    <form class="payment-settings" method="POST">
+                        <label for="ads_currency-enabled">Withdrawal Currency</label>
+                        <div class="form-group">
+                            <input type="radio" name="currency" id="ads_currency-enabled" value="USD" <?php echo  $ads_currency_usd;?>>
+                            <label for="ads_currency-enabled">USD</label>
+                            <input type="radio" name="currency" id="ads_currency-disabled" value="EUR" <?php echo $ads_currency_eur; ?>>
+                            <label for="ads_currency-disabled" class="m-l-20">EUR</label>
+                        </div>
+                        <label for="currency_symbol">Currency symbol</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="currency_symbol" name="currency_symbol" class="form-control" value="<?php echo $music->config->currency_symbol;?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="commission" name="commission" class="form-control" value="{{CONFIG commission}}">
+                                <label class="form-label">Sales Commission, How much users will earn from each sale? (%)</label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo createMainSession();?>">
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-4 pull-right">
+            <div class="card">
+                <div class="header">
+                    <h2 class="pull-left">Stripe Settings</h2>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="body">
+                    <div class="alert alert-success payment-settings1-alert"></div>
+                    <form class="payment-settings1" method="POST">
+                        <label for="stripe_payment">Stripe Payment Method </label>
+                        <div class="form-group">
+                            <input type="radio" name="stripe_payment" id="stripe_payment-enabled" value="on" <?php echo ($music->config->stripe_payment == 'on') ? 'checked': '';?>>
+                            <label for="stripe_payment-enabled">Enabled</label>
+                            <input type="radio" name="stripe_payment" id="stripe_payment-disabled" value="off" <?php echo ($music->config->stripe_payment == 'off') ? 'checked': '';?>>
+                            <label for="stripe_payment-disabled" class="m-l-20">Disabled</label>
+                        </div>
+
+                        <label for="stripe_currency">Stripe Currency</label>
+                        <select class="form-control show-tick" id="stripe_currency" name="stripe_currency">
+                            <option value="USD" <?php echo ($music->config->stripe_currency == 'USD')  ? ' selected': '';?>>USD</option>
+                            <option value="EUR" <?php echo ($music->config->stripe_currency == 'EUR')  ? ' selected': '';?>>EUR</option>
+                            <option value="AUD" <?php echo ($music->config->stripe_currency == 'AUD')  ? ' selected': '';?>>AUD</option>
+                            <option value="BRL" <?php echo ($music->config->stripe_currency == 'BRL')  ? ' selected': '';?>>BRL</option>
+                            <option value="CAD" <?php echo ($music->config->stripe_currency == 'CAD')  ? ' selected': '';?>>CAD</option>
+                            <option value="CZK" <?php echo ($music->config->stripe_currency == 'CZK')  ? ' selected': '';?>>CZK</option>
+                            <option value="DKK" <?php echo ($music->config->stripe_currency == 'DKK')  ? ' selected': '';?>>DKK</option>
+                            <option value="HKD" <?php echo ($music->config->stripe_currency == 'HKD')  ? ' selected': '';?>>HKD</option>
+                            <option value="HUF" <?php echo ($music->config->stripe_currency == 'HUF')  ? ' selected': '';?>>HUF</option>
+                            <option value="ILS" <?php echo ($music->config->stripe_currency == 'ILS')  ? ' selected': '';?>>ILS</option>
+                            <option value="JPY" <?php echo ($music->config->stripe_currency == 'JPY')  ? ' selected': '';?>>JPY</option>
+                            <option value="MYR" <?php echo ($music->config->stripe_currency == 'MYR')  ? ' selected': '';?>>MYR</option>
+                            <option value="MXN" <?php echo ($music->config->stripe_currency == 'MXN')  ? ' selected': '';?>>MXN</option>
+                            <option value="TWD" <?php echo ($music->config->stripe_currency == 'TWD')  ? ' selected': '';?>>TWD</option>
+                            <option value="NZD" <?php echo ($music->config->stripe_currency == 'NZD')  ? ' selected': '';?>>NZD</option>
+                            <option value="NOK" <?php echo ($music->config->stripe_currency == 'NOK')  ? ' selected': '';?>>NOK</option>
+                            <option value="PHP" <?php echo ($music->config->stripe_currency == 'PHP')  ? ' selected': '';?>>PHP</option>
+                            <option value="PLN" <?php echo ($music->config->stripe_currency == 'PLN')  ? ' selected': '';?>>PLN</option>
+                            <option value="RUB" <?php echo ($music->config->stripe_currency == 'RUB')  ? ' selected': '';?>>RUB</option>
+                            <option value="SGD" <?php echo ($music->config->stripe_currency == 'SGD')  ? ' selected': '';?>>SGD</option>
+                            <option value="SEK" <?php echo ($music->config->stripe_currency == 'SEK')  ? ' selected': '';?>>SEK</option>
+                            <option value="CHF" <?php echo ($music->config->stripe_currency == 'CHF')  ? ' selected': '';?>>CHF</option>
+                            <option value="THB" <?php echo ($music->config->stripe_currency == 'THB')  ? ' selected': '';?>>THB</option>
+                        </select>
+                        <br><br>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="stripe_version" name="stripe_version" class="form-control" value="<?php echo $music->config->stripe_version;?>">
+                                <label class="form-label">Stripe version</label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="stripe_secret" name="stripe_secret" class="form-control" value="<?php echo $music->config->stripe_secret;?>">
+                                <label class="form-label">Stripe API Secret Key <small>Your Stripe secret key that starts with sk_</small></label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="stripe_id" name="stripe_id" class="form-control" value="<?php echo $music->config->stripe_id;?>">
+                                <label class="form-label">Stripe Publishable Key <small>Your Stripe publishable key that starts with pk_</small></label>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="hash_id" value="<?php echo createMainSession();?>">
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-4 pull-right">
+            <div class="card">
+                <div class="header">
+                    <h2 class="pull-left">PayPal Settings</h2>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="body">
+                    <div class="alert alert-success payment-settings2-alert"></div>
+                    <form class="payment-settings2" method="POST">
+                        <label for="paypal_payment">PayPal Payment Method </label>
+                        <div class="form-group">
+                            <input type="radio" name="paypal_payment" id="paypal_payment-enabled" value="on" <?php echo ($music->config->paypal_payment == 'on') ? 'checked': '';?>>
+                            <label for="paypal_payment-enabled">Enabled</label>
+                            <input type="radio" name="paypal_payment" id="paypal_payment-disabled" value="off" <?php echo ($music->config->paypal_payment == 'off') ? 'checked': '';?>>
+                            <label for="paypal_payment-disabled" class="m-l-20">Disabled</label>
+                        </div>
+
+                        <label for="paypal_mode-enabled">PayPal Mode</label>
+                        <div class="form-group">
+                            <input type="radio" name="paypal_mode" id="paypal_mode-enabled" value="live" <?php echo  $paypal_live;?>>
+                            <label for="paypal_mode-enabled">Live</label>
+                            <input type="radio" name="paypal_mode" id="paypal_mode-disabled" value="sandbox" <?php echo $paypal_sb; ?>>
+                            <label for="paypal_mode-disabled" class="m-l-20">SandBox</label>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line focused">
+                                <input type="text" id="paypal_id" name="paypal_id" class="form-control" value="{{CONFIG paypal_id}}">
+                                <label class="form-label">PayPal Clinet ID</label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line focused">
+                                <input type="text" id="paypal_secret" name="paypal_secret" class="form-control" value="{{CONFIG paypal_secret}}">
+                                <label class="form-label">PayPal Secret Key</label>
+                            </div>
+                        </div>
+                        <label for="paypal_currency">PayPal Currency</label>
+                        <select class="form-control show-tick" id="paypal_currency" name="paypal_currency">
+                            <option value="USD" <?php echo ($music->config->paypal_currency == 'USD')  ? ' selected': '';?>>USD</option>
+                            <option value="EUR" <?php echo ($music->config->paypal_currency == 'EUR')  ? ' selected': '';?>>EUR</option>
+                            <option value="AUD" <?php echo ($music->config->paypal_currency == 'AUD')  ? ' selected': '';?>>AUD</option>
+                            <option value="BRL" <?php echo ($music->config->paypal_currency == 'BRL')  ? ' selected': '';?>>BRL</option>
+                            <option value="CAD" <?php echo ($music->config->paypal_currency == 'CAD')  ? ' selected': '';?>>CAD</option>
+                            <option value="CZK" <?php echo ($music->config->paypal_currency == 'CZK')  ? ' selected': '';?>>CZK</option>
+                            <option value="DKK" <?php echo ($music->config->paypal_currency == 'DKK')  ? ' selected': '';?>>DKK</option>
+                            <option value="HKD" <?php echo ($music->config->paypal_currency == 'HKD')  ? ' selected': '';?>>HKD</option>
+                            <option value="HUF" <?php echo ($music->config->paypal_currency == 'HUF')  ? ' selected': '';?>>HUF</option>
+                            <option value="INR" <?php echo ($music->config->paypal_currency == 'INR')  ? ' selected': '';?>>INR</option>
+                            <option value="ILS" <?php echo ($music->config->paypal_currency == 'ILS')  ? ' selected': '';?>>ILS</option>
+                            <option value="JPY" <?php echo ($music->config->paypal_currency == 'JPY')  ? ' selected': '';?>>JPY</option>
+                            <option value="MYR" <?php echo ($music->config->paypal_currency == 'MYR')  ? ' selected': '';?>>MYR</option>
+                            <option value="MXN" <?php echo ($music->config->paypal_currency == 'MXN')  ? ' selected': '';?>>MXN</option>
+                            <option value="TWD" <?php echo ($music->config->paypal_currency == 'TWD')  ? ' selected': '';?>>TWD</option>
+                            <option value="NZD" <?php echo ($music->config->paypal_currency == 'NZD')  ? ' selected': '';?>>NZD</option>
+                            <option value="NOK" <?php echo ($music->config->paypal_currency == 'NOK')  ? ' selected': '';?>>NOK</option>
+                            <option value="PHP" <?php echo ($music->config->paypal_currency == 'PHP')  ? ' selected': '';?>>PHP</option>
+                            <option value="PLN" <?php echo ($music->config->paypal_currency == 'PLN')  ? ' selected': '';?>>PLN</option>
+                            <option value="GBP" <?php echo ($music->config->paypal_currency == 'GBP')  ? ' selected': '';?>>GBP</option>
+                            <option value="RUB" <?php echo ($music->config->paypal_currency == 'RUB')  ? ' selected': '';?>>RUB</option>
+                            <option value="SGD" <?php echo ($music->config->paypal_currency == 'SGD')  ? ' selected': '';?>>SGD</option>
+                            <option value="SEK" <?php echo ($music->config->paypal_currency == 'SEK')  ? ' selected': '';?>>SEK</option>
+                            <option value="CHF" <?php echo ($music->config->paypal_currency == 'CHF')  ? ' selected': '';?>>CHF</option>
+                            <option value="THB" <?php echo ($music->config->paypal_currency == 'THB')  ? ' selected': '';?>>THB</option>
+                        </select>
+
+                        <input type="hidden" name="hash_id" value="<?php echo createMainSession();?>">
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-4 pull-right">
+            <div class="card">
+                <div class="header">
+                    <h2>Local bank payment</h2>
+                </div>
+                <div class="body">
+                    <div class="alert alert-success bank-settings-alert"></div>
+                    <form class="bank-settings" method="POST">
+                        <label for="bank_payment">Bank Payment Method </label>
+                        <div class="form-group">
+                            <input type="radio" name="bank_payment" id="bank_payment-enabled" value="on" <?php echo ($music->config->bank_payment == 'on') ? 'checked': '';?>>
+                            <label for="bank_payment-enabled">Enabled</label>
+                            <input type="radio" name="bank_payment" id="bank_payment-disabled" value="off" <?php echo ($music->config->bank_payment == 'off') ? 'checked': '';?>>
+                            <label for="bank_payment-disabled" class="m-l-20">Disabled</label>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <textarea name="bank_description" id="bank_description" class="form-control" cols="30" rows="5"><?php echo $music->config->bank_description; ?></textarea>
+                                <label class="form-label">Bank Description</label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <textarea name="bank_transfer_note" id="bank_transfer_note" class="form-control" cols="30" rows="5"><?php echo $music->config->bank_transfer_note; ?></textarea>
+                                <label class="form-label">Bank transfer note</label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo createMainSession();?>">
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+    <!-- #END# Vertical Layout -->
+<script>
+
+$(function() {
+    var form_payment_settings = $('form.payment-settings');
+
+    form_payment_settings.ajaxForm({
+        url: '{{CONFIG ajax_url}}/ap/save-settings',
+        beforeSend: function() {
+            form_payment_settings.find('.waves-effect').text("Please wait...");
+        },
+        success: function(data) {
+            if (data.status == 200) {
+            	form_payment_settings.find('.waves-effect').text('Save');
+            	$('.payment-settings-alert').html('<i class="fa fa-check"></i> Settings updated successfully');
+            	setTimeout(function () {
+            		$('.payment-settings-alert').empty();
+            	}, 2000);
+            }
+        }
+    });
+
+    var form_payment_settings1 = $('form.payment-settings1');
+
+    form_payment_settings1.ajaxForm({
+        url: '{{CONFIG ajax_url}}/ap/save-settings',
+        beforeSend: function() {
+            form_payment_settings1.find('.waves-effect').text("Please wait...");
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_payment_settings1.find('.waves-effect').text('Save');
+                $('.payment-settings1-alert').html('<i class="fa fa-check"></i> Settings updated successfully');
+                setTimeout(function () {
+                    $('.payment-settings1-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+
+    var form_payment_settings2 = $('form.payment-settings2');
+
+    form_payment_settings2.ajaxForm({
+        url: '{{CONFIG ajax_url}}/ap/save-settings',
+        beforeSend: function() {
+            form_payment_settings2.find('.waves-effect').text("Please wait...");
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_payment_settings2.find('.waves-effect').text('Save');
+                $('.payment-settings2-alert').html('<i class="fa fa-check"></i> Settings updated successfully');
+                setTimeout(function () {
+                    $('.payment-settings2-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+
+    var form_bankpayment_settings = $('form.bank-settings');
+    form_bankpayment_settings.ajaxForm({
+        url: '{{CONFIG ajax_url}}/ap/save-settings',
+        beforeSend: function() {
+            form_bankpayment_settings.find('.waves-effect').text('Please wait..');
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_bankpayment_settings.find('.waves-effect').text('Save');
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                $('.bank-settings-alert').html('<i class="fa fa-check"></i> Settings updated successfully');
+                setTimeout(function () {
+                    $('.bank-settings-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+
+});
+</script>

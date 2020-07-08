@@ -1,0 +1,27 @@
+<li class="ma_notifs">
+	<?php if( $data['n_type'] == 'admin_notification'){?>
+	<a href="{{uri}}">
+	<?php }else{ ?>
+	<a href="{{n_url}}" data-load="{{n_a_url}}">
+	<?php } ?>
+		<div class="avatar">
+			<?php if( $data['n_type'] == 'decline_artist' || $data['n_type'] == 'approved_artist' || $data['n_type'] == 'admin_notification' || $data['n_type'] == 'approve_receipt' || $data['n_type'] == 'disapprove_receipt' ){?>
+				<img src="{{CONFIG theme_url}}/img/icon.png" alt="site avatar">
+			<?php }else{ ?>
+				<img src="{{USER avatar}}" alt="User's avatar">
+			<?php } ?>
+		</div>
+		<div class="n_detail">
+			<p>
+				<?php if( $data['n_type'] == 'decline_artist' || $data['n_type'] == 'approved_artist' || $data['n_type'] == 'admin_notification'  || $data['n_type'] == 'approve_receipt' || $data['n_type'] == 'disapprove_receipt' ){?>
+
+				<?php }else{ ?>
+				<b>{{USER name}}</b>
+				<?php } ?>
+
+				{{n_text}}
+			</p>
+			<span class="ajax-time" title="{{ns_time}}">{{n_time}}</span>
+		</div>
+	</a>
+</li>

@@ -1,0 +1,50 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="reset_page contact_page">
+			<div class="reset-page">
+				<div class="reset-form">
+					<h4>{{LANG Contact Us}}</h4>
+					<p>{{LANG Let us help you.}}</p>
+					<form action="" method="POST" id="contact-form">
+						<div class="alert alert-danger alert-empty" id="output-errors-contact"></div>
+						<div class="form-group mat_input">
+							<input type="text" class="form-control" placeholder="{{LANG Full Name}}" required autofocus name="name">
+						</div>
+						<div class="form-group mat_input">
+							<input type="email" class="form-control" placeholder="{{LANG Email address}}" required name="email">
+						</div>
+						<div class="form-group mat_input">
+							<textarea rows="3" class="form-control" placeholder="{{LANG Write here your message}}" name="message" required></textarea>
+						</div>
+						<button type="submit" class="btn btn-block btn-primary btn-mat" id="btn-submit-contact">{{LANG Send}}</button>
+					</form>
+				</div>    
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+$(document).ready(function() { 
+    var options = { 
+    	url: "{{CONFIG ajax_url}}/contact?hash_id=" + getHashID(),
+        beforeSubmit:  function () {
+        	$('#output-errors-contact').removeClass("alert-success").addClass('alert-danger');
+        	$('#output-errors-contact').empty();
+        	$("#btn-submit-contact").text("{{LANG Please wait..}}");
+        }, 
+        success: function (data) {
+        	$("#btn-submit-contact").text("{{LANG Send}}");
+        	if (data.status == 200) {
+        		$('#output-errors-contact').removeClass("alert-danger").addClass('alert-success');
+        		$('#output-errors-contact').html(data.message);
+        	} else if (data.status == 400) {
+        		var errros = data.errors.join("<br>");
+        		$('#output-errors-contact').html(errros);
+        	}
+        }
+    }; 
+
+    $('#contact-form').ajaxForm(options); 
+}); 
+</script>

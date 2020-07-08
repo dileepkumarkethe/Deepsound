@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Title -->
+		<title>{{site_title}}</title>
+
+		<!-- Required Meta Tags Always Come First -->
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<meta name="title" content="{{site_title}}">
+		<meta name="description" content="{{site_desc}}">
+		<meta name="keywords" content="<?php echo $music->config->keyword;?>">
+
+
+		<?php echoOGTrackTags();?>
+		<!-- Favicon -->
+		<link rel="shortcut icon" href="{{theme_url}}/img/icon.png" />
+
+		<!-- Google Fonts -->
+		<link href="//fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+		<link href="//fonts.googleapis.com/css?family=Muli:300,400" rel="stylesheet">
+		
+		<script src="{{theme_url}}/js/jquery.min.js"></script>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="{{CONFIG theme_url}}/js/jquery-ui.min.js"></script>
+		<!-- CSS -->
+		<link rel="stylesheet" href="{{theme_url}}/css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{theme_url}}/css/owl.carousel.min.css">
+		<link rel="stylesheet" href="{{theme_url}}/css/style.css">
+		<script src="{{theme_url}}/js/wavesurfer.min.js"></script>
+
+		<script type="text/javascript" src="{{theme_url}}/js/tag-it.min.js"></script>
+		<link rel="stylesheet" href="{{theme_url}}/css/jquery.tagit.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
+
+		<script type="text/javascript" src="{{theme_url}}/js/fastclick.js"></script>
+
+		<!-- <script src="https://unpkg.com/wavesurfer.js"></script> -->
+		<?php if ($music->config->recaptcha == 'on') { ?>
+	    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+	    <?php } ?>
+		<script src="{{theme_url}}/js/emojionearea.min.js"></script>
+		<link rel="stylesheet" href="{{theme_url}}/css/emojionearea.min.css">
+		 <?php if (!empty($music->config->google)) { ?>
+	     <script>
+	      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	      ga('create', '{{CONFIG google}}', 'auto');
+	      ga('send', 'pageview');
+	    </script> 
+	    <?php } ?>
+		<script>
+            $(document).ready(function() {
+                // $(".emoji_comment_btn").emojioneArea({
+                //     standalone: true,
+                //     autocomplete: false,
+                //     pickerPosition: "bottom",
+                //     emojiPlaceholder: "",
+                //     inline: true,
+                //     dir            : "ltr",
+                //     placement : 'absright'
+                // 	// container: "#container",
+                // 	// hideSource: false,
+                // 	// useSprite: false
+                // });
+                window.init_emojioneArea = function() {
+                    $(".comment_input").emojioneArea({
+                        useInternalCDN: true,
+                        events: {
+                            keyup: function (editor, event) {
+                                let emojioneArea = this; //this is instance of EmojioneArea
+                                if (event.which === 13 && !event.shiftKey) {
+                                    // $scope.onPressKeyTextarea(event);
+									var audioid = $( $(this)[0].source[0]).attr('data-audio-id');
+                                    registerComment(emojioneArea.getText(), audioid, event, $(this));
+                                    emojioneArea.setText('');
+                                    emojioneArea.hidePicker();
+                                    emojioneArea.editor.focus();
+                                    event.preventDefault();
+                                }
+                            }
+                        },
+                        search: false,
+                        recentEmojis: false,
+                        filtersPosition: "bottom",
+                        tones: false,
+                        autocomplete: true,
+                        filters: {animals_nature: false, food_drink: false, activity: false, travel_places: false, objects: false, symbols: false, flags: false}
+                    });
+                }
+                window.init_emojioneArea();
+            });
+		</script>
+
+		<script>
+		$(document).ready(function() {
+		  $.ajaxSetup({ 
+		    data: {
+		        hash_id: getHashID()
+		    },
+		    cache: false 
+		  });
+		});
+		$(window).on("popstate", function () {
+			if (history.state.ajax_url) {
+				goToAjaxLink(history.state.ajax_url);
+			}
+		});
+        window.chatfetch = false;
+			$(document).on('click', '[data-load]', function(event) {
+				  //$('.sections li').removeClass('active');
+			      $('#bar_loading').show().animate({width:20 + 80 * Math.random() + "%"}, 200);
+			      event.preventDefault();
+			      var url = $(this).attr('data-load');
+			      $.ajax({
+			        url: siteUrl() + '/ajax-load.php?path=' + url,
+			        type: 'GET',
+			        dataType: 'html'
+			      })
+			      .done(function(data_html, textStatus, request) {
+			      	if (request.status == 201) {
+			      		$('#login_box').modal('show');
+			      	} else {
+			      		data = JSON.parse($(data_html).filter('#json-data').val());
+				        window.history.pushState({state:'new', ajax_url: url},'', data.url);
+
+                        if(data.page_name == 'messages'){
+                            window.chatfetch = true;
+						}else{
+                            window.chatfetch = false;
+						}
+
+				        if(data.page_name !== 'search'){
+				            $('#search_keyword').val('');
+						}
+
+				        $('#container_content').html(data_html);
+				        $('meta[name=title]').attr('content', data.site_title);
+				        $('#page').attr('data-page', data.page_name);
+				        $('meta[name=description]').attr('content', data.description);
+				        $('meta[name=keywords]').attr('content', data.keyword);
+				        $('title').html(data.site_title);
+				        if (data.page_name) {
+				        	setTimeout(function () {
+				        		updateWaves = false;
+				        		if ($('#current-track').val()) {
+				        			if (Amplitude.getActiveSongMetadata().id == $('#current-track').val()) {
+					        			updateWaves = true;
+					        		} else {
+					        			$('body').removeClass('player_running');
+					        		}
+				        		} else {
+				        			updateWaves = true;
+				        		}
+				        		if (updateWaves == true) {
+				        			var getCurrentPlaying = Number($('.amplitude-song-played-progress').attr('value')) * 100;
+					        		$('#light-wave').width(getCurrentPlaying + '%');
+					        		updateWaveForm();
+				        		}
+				        	}, 100);
+				        }
+				        if (Amplitude.getActiveSongMetadata().id && $('#page').attr('data-page') == 'track') {
+				        	if (Amplitude.getActiveSongMetadata().id == $('#current-track').val()) {
+				        		$('body').addClass('player_running');
+				        	}
+				        }
+				        if (Amplitude.getActiveSongMetadata().u_id && $('#page').attr('data-page') != 'track') {
+				        	$('.playlist-list-song[data-id=' + Amplitude.getActiveSongMetadata().u_id + ']').addClass('playing');
+				        	$('.list-recommended[data-id=' + Amplitude.getActiveSongMetadata().u_id + ']').addClass('playlist-list-song playing');
+				        	if ($('.feed_post[data-id="' + Amplitude.getActiveSongMetadata().u_id + '"]').length > 0) {
+				        		$.get('{{CONFIG ajax_url}}/get-song-info', {id: Amplitude.getActiveSongMetadata().id}, function(data) {
+				        			if (data.status == 200) {
+				        				$('body').attr('song-duration', data.duration);
+				        				if (data.songWaves.length > 0) {
+											$('.feed_post[data-id="' + data.songID + '"]:first').find('.waveform-small').html(data.songWaves);
+											$('#light-wave img').width($('#dark-wave').width() + 'px');
+											$('.feed_post[data-id="' + data.songID + '"]:first').find('.post-actions').removeClass('hidden');
+											$('.feed_post[data-id="' + data.songID + '"]:first').find('.ssong_comments').removeClass('hidden');
+											$('.feed_post[data-id="' + data.songID + '"]:first').find('.art-info').removeClass('hidden');
+				    						$('.feed_post[data-id="' + data.songID + '"]:first').find('.comment_list').html(data.comments);
+				    						$('.feed_post[data-id="' + data.songID + '"]:first').find('.comment-waves').html(data.waves);
+				    						var getCurrentPlaying = Number($('.amplitude-song-played-progress').attr('value')) * 100;
+					        		        $('#light-wave').width(getCurrentPlaying + '%');
+				    						updateWaveForm();
+										}
+				        			}
+				        		});
+				        	}
+				        }
+			      	}
+			        
+			      })
+			      .fail(function() {
+			         window.location.href = siteUrl()+'/404';
+			      })
+			      .always(function() {
+			      	if (typeof data !== 'undefined') {
+			      		if (data.page_name == 'user' && data.scroll == true) {
+				        	$('html,body').animate({
+						        scrollTop: $('#myTab').offset().top - 350
+						    });
+				        } else {
+				        	$('html,body').animate({
+						        scrollTop: $('body').offset().top
+						    });
+				        }
+                        window.init_emojioneArea();
+			      	}
+			        $('#bar_loading').animate({width:"100%"}, 200).fadeOut(300, function() {
+			           $(this).width("0");
+			        });
+			      });
+			  });
+			window.artist_sell = '<?php echo $music->config->artist_sell;?>';
+		</script>
+
+		<script src="{{theme_url}}/js/header.js<?php echo ($music->update_cache !== '') ?$music->update_cache:'?'.rand(1111,4444); ?>"></script>
+
+		<?php if ($_COOKIE['mode'] !== 'night') { ?>
+		<link rel="stylesheet" href="{{CONFIG theme_url}}/css/day.style.css<?php echo $music->update_cache; ?>" id="night-mode-css">
+		<?php } ?>
+
+		<link rel="stylesheet" href="{{CONFIG theme_url}}/css/custom.style.css<?php echo ($music->update_cache !== '') ?$music->update_cache:'?'.rand(1111,4444); ?>" id="custom.style.css">
+		<?php if ($music->language_type == 'rtl'){?>
+		<link rel="stylesheet" href="{{CONFIG theme_url}}/css/rtl.style.css">
+		<?php }?>
+	</head>
+	
+	<body class="{{classes}}" data-lang="<?php if ($music->language_type == 'rtl'){?>rtl<?php } else {?>ltr<?php } ?>">		
+		<div class="music_app">
+			<div class="ma_container" id="page" data-page="<?php echo $music->site_pagename?>">
+				<!-- Start Sidebar  -->	
+				{{site_sidebar}}
+				<!-- End Sidebar  -->	
+
+				<!-- Header  -->
+				<div id="main-header">
+					{{site_header}}
+				</div>
+				<div id="bar_loading"></div>
+				<!-- End Header  -->
+
+				<!-- Content  -->
+				<div id="container_content">
+					{{site_content}}
+				</div>
+				<!-- End Content  -->
+			</div>
+			<!-- Player  -->
+			{{site_player}}
+			<!-- End Player  -->
+		</div>
+		
+		<!-- Login Modal  -->
+		{{site_loginForm}}
+		<!-- End Login Modal  -->
+		
+		<!-- Signup Modal  -->
+		{{site_signupForm}}
+		<!-- End Signup Modal  -->
+
+		<!-- Modals -->
+		<?php echo loadPage('modals/delete-song')?>
+		<?php echo loadPage('modals/delete-comment')?>
+		<?php echo loadPage('modals/delete-post')?>
+		<?php echo loadPage('modals/reposted')?>
+		<?php echo loadPage('modals/purchase-song')?>
+		<?php echo loadPage('modals/age-restrcited')?>
+		<?php echo loadPage('modals/copyright')?>
+		<?php echo loadPage('modals/comment-report')?>
+		<?php echo loadPage('modals/track-report')?>
+		<?php echo loadPage('modals/payment-modal')?>
+		<?php echo loadPage('modals/paymentpro-modal')?>
+		<?php echo loadPage('modals/bank-payment')?>
+
+		<div class="queue_overlay" onclick="javascript:$('body').removeClass('data-queue-open');"></div>
+		<div class="sidenav_overlay" onclick="javascript:$('body').removeClass('side_open');"></div>
+		
+		<!--  Scripts-->
+		<script>
+			function ajaxUrl() {
+				return '{{CONFIG ajax_url}}';
+			}
+			function siteUrl() {
+				return '{{LINK }}';
+			}
+		</script>
+		<?php echo loadPage('extrajs/content');?>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/fingerprintjs2/2.0.3/fingerprint2.min.js"></script>
+		<script src="{{theme_url}}/js/jquery.form.min.js"></script>
+		<script src="{{theme_url}}/js/popper.min.js"></script>
+		<script src="{{theme_url}}/js/bootstrap.min.js"></script>
+		<script src="{{theme_url}}/js/owl.carousel.min.js"></script>
+		<script src="{{theme_url}}/js/simplebar.min.js"></script>
+		<script src="{{theme_url}}/js/amplitude.min.js"></script>
+		<script src="{{theme_url}}/js/script.js"></script>
+		<script src="{{theme_url}}/js/Chart.min.js"></script>
+		<script src="{{CONFIG theme_url}}/js/highcharts/highcharts.js"></script>
+		<script src="{{CONFIG theme_url}}/js/footer.js"></script>
+		<input type="hidden" class="main_session" value="<?php echo createMainSession();?>">
+        <?php echo LoadPage('timeago/content');?>
+		<script>
+            $('#rmjs-1').readmore({
+                speed: 75,
+                collapsedHeight: 190,
+                moreLink: '<a href="#" class="hash"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg> {{LANG Read more}}</a>',
+				lessLink: '<a href="#" class="hash"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg> {{LANG Read less}}</a>',
+                afterToggle: function(trigger, element, expanded) {
+                    //if(! expanded) {
+                        // The "Close" link was clicked
+                        $('html, body').animate({scrollTop: element.offset().top}, {duration: 100});
+                    //}
+                }
+            });
+		</script>
+		<script src="{{CONFIG theme_url}}/js/footer.js<?php echo ($music->update_cache !== '') ?$music->update_cache:'?'.rand(1111,4444); ?>"></script>
+	</body>
+</html>

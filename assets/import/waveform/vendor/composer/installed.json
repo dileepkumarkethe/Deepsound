@@ -1,0 +1,89 @@
+[
+    {
+        "name": "boyhagemann/wave",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "BoyHagemann/Wave",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/boyhagemann/Wave.git",
+            "reference": "953143a8827a0af9c0ffe69c0962ef92440874b4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/boyhagemann/Wave/zipball/953143a8827a0af9c0ffe69c0962ef92440874b4",
+            "reference": "953143a8827a0af9c0ffe69c0962ef92440874b4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2013-10-29T21:50:19+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.1-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "BoyHagemann\\Wave\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "description": "A php package to read WAV data",
+        "keywords": [
+            "audio",
+            "chunk",
+            "php",
+            "riff",
+            "wave",
+            "waveform"
+        ]
+    },
+    {
+        "name": "boyhagemann/waveform",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "BoyHagemann/Waveform",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/boyhagemann/Waveform.git",
+            "reference": "3208da4529f7b6cf9244edeefda16c0b11409806"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/boyhagemann/Waveform/zipball/3208da4529f7b6cf9244edeefda16c0b11409806",
+            "reference": "3208da4529f7b6cf9244edeefda16c0b11409806",
+            "shasum": ""
+        },
+        "require": {
+            "boyhagemann/wave": "dev-master",
+            "php": ">=5.3.3"
+        },
+        "time": "2016-11-23T12:09:37+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "0.1-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "BoyHagemann\\Waveform\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "description": "A php package that can generate waveforms based on a WAV file",
+        "keywords": [
+            "audio",
+            "chunk",
+            "php",
+            "riff",
+            "wave",
+            "waveform"
+        ]
+    }
+]

@@ -1,0 +1,92 @@
+<!-- Modal -->
+<div class="modal fade" id="signup_box" tabindex="-1" role="dialog" aria-labelledby="signup_box" aria-hidden="true">
+	<div class="modal-dialog auth_box" role="document">
+		<div class="modal-content">
+			<div class="left_combo" style="background-image: url({{CONFIG theme_url}}/img/music.svg);">
+				<h2>{{LANG Signup}}</h2>
+				<p>{{LANG Get access to your Music, Playlists and Account}}</p>
+			</div>
+			<div class="right_combo">
+				<div class="alert alert-danger alert-empty" id="output-singup-errors"></div>
+				<form method="post" action="POST" id="signup-form">
+					<div class="form-group mat_input">
+						<input type="text" name="name" class="form-control" placeholder="{{LANG Full Name}}" autofocus>
+					</div>
+					<div class="form-group mat_input">
+						<input type="text" name="username" class="form-control" placeholder="{{LANG Username}}">
+					</div>
+					<div class="form-group mat_input">
+						<input type="email" name="email" class="form-control" placeholder="{{LANG Email address}}">
+					</div>
+					<div class="form-group mat_input">
+						<input type="password" name="password" class="form-control" placeholder="{{LANG Password}}">
+					</div>
+					<div class="form-group mat_input">
+						<input type="password" name="c_password" class="form-control" placeholder="{{LANG Confirm Password}}">
+					</div>
+					<div class="recaptcha">
+						<?php if ($music->config->recaptcha == 'on') { ?>
+						<div class="g-recaptcha" data-sitekey="{{CONFIG recaptcha_key}}"></div><br>
+						<?php } ?>
+					</div>
+					<button type="submit" class="btn btn-primary btn-mat" id="btn-singup-submit">{{LANG Signup}}</button>
+				</form>
+				<div class="signup_">
+					<span>{{LANG Already have an account?}}</span>
+					<a href="#" data-dismiss="modal" data-toggle="modal" data-target="#login_box">{{LANG Login}}</a>
+				</div>
+				<div class="terms_check">
+					<span>{{LANG By signing up, you agree to our}}</span>
+					<a href="{{LINK terms/terms}}">{{LANG Terms}}</a>
+					<span>{{LANG and}}</span>
+					<a href="{{LINK terms/privacy}}">{{LANG Privacy Policy}}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+<?php if ($music->config->recaptcha == 'on') { ?>
+.auth_box .modal-content {
+	min-height: 560px;
+}
+<?php } ?>
+</style>
+<script>
+$(document).ready(function() { 
+    var options = { 
+    	url: "{{CONFIG ajax_url}}/auth/signup?hash_id=" + getHashID(),
+        beforeSubmit:  function () {
+        	$('#output-singup-errors').removeClass("alert-success").addClass('alert-danger');
+        	$('#output-singup-errors').empty();
+        	$("#btn-singup-submit").text("{{LANG Please wait..}}");
+        }, 
+        success: function (data) {
+        	$("#btn-singup-submit").text("{{LANG Signup}}");
+        	if (data.status == 200) {
+        		if ($('#page').attr('data-page') != 'home' && $('#page').attr('data-page') != 'forgot' && $('#page').attr('data-page') != 'reset') {
+        			$('#main-header').html(data.header);
+        			$('#signup_box').modal('hide');
+
+        			if (Amplitude.getActiveSongMetadata().price > 0) {
+        				location.href = '{{CONFIG site_url}}/interest';//window.location.href;
+        			} else {
+        				ajaxRedirect('interest');
+        			}
+        		} else {
+        			location.href = '{{CONFIG site_url}}/interest';//window.location.href;
+        		}
+        	} else if (data.status == 400) {
+        		var errros = data.errors.join("<br>");
+        		$('#output-singup-errors').html(errros);
+        	} else if (data.status == 403) {
+        		$('#output-singup-errors').removeClass("alert-danger").addClass('alert-success');
+        		$('#output-singup-errors').html(data.message);
+        	}
+        }
+    }; 
+
+    $('#signup-form').ajaxForm(options); 
+}); 
+</script>

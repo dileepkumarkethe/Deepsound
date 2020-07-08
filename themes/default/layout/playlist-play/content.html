@@ -1,0 +1,54 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="page_padding">
+			<!-- Album Blurred Cover -->
+				<div class="album_bg_cover">
+					<div class="pro_white"></div>
+				</div>
+			<!-- End Album Blurred Cover -->
+
+			<!-- Album Songs -->
+				<div class="row mb-60">
+					<div class="col-md-4">
+						<div class="album_songs">
+							<div class="album_poster_info">
+								<div class="al_art">
+									<div class="al_art_img" style="background-image: url({{t_thumbnail}});"></div>
+								</div>
+								<div>
+									<h2 class="al_name"><a href="{{LINK playlist/{{t_uid}}}}" data-load="playlist/{{t_uid}}">{{t_title}}</a></h2>
+									<span class="al_artist"><a href="{{USER url}}" data-load="{{USER username}}">{{USER name}}</a></span>
+									<div class="play_btn">
+										<button class="btn btn-success" onclick="playPlayListSongs({{t_id}})">{{LANG Play}}</button>
+										<button class="btn btn-default" onclick="getPlayListShareForm({{t_id}})">{{LANG Share}}</button>
+										<?php if (IS_LOGGED) { ?>
+										<?php if ($music->playlist->user_id == $music->user->id) { ?>
+										<a class="btn btn-info" href="{{LINK my_playlists}}" data-load="my_playlists">{{LANG Edit}}</a>
+										<?php } ?>
+										<?php } ?>
+									</div>
+								</div>
+							</div>
+							<p class="text-center al_add_info">{{t_songs}} {{LANG Songs}} • {{t_date}}</p>
+						</div>
+					</div>
+					<div class="short_list_cont col-md-8">
+						<div class="short_list_card wide_page_songs album_play_song_lists">
+							<ul class="s_list_songs">
+								{{html_list}}
+							</ul>
+						</div>
+					</div>
+                </div>
+				<!-- End Album Songs  -->
+				<!-- Related Albums -->
+					<!-- <?php include('single-album/related.php') ?> -->
+				<!-- End Related Albums -->
+		</div>
+		<style>
+		.album_bg_cover:before {
+			background-image: url({{t_thumbnail}});
+		}
+		</style>
+	</div>
+</div>

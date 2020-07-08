@@ -1,0 +1,92 @@
+<div class="modal fade" id="share_music_modal" tabindex="-1" role="dialog" aria-labelledby="share_music_modal" aria-hidden="true">
+	<div class="modal-dialog mat_box" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">{{LANG Share this Song}}</h5>
+			</div>
+			<div class="modal-body">
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" id="share-tab" data-toggle="tab" href="#share" role="tab" aria-controls="share" aria-selected="true">{{LANG Share}}</a>
+					</li>
+					<?php if($data['songData']->display_embed == 1){?>
+					<li class="nav-item">
+						<a class="nav-link" id="embed-tab" data-toggle="tab" href="#embed" role="tab" aria-controls="embed" aria-selected="false">{{LANG Embed}}</a>
+					</li>
+					<?php } ?>
+				</ul>
+				<div class="tab-content" id="myTabContent">
+					<div class="tab-pane fade show active" id="share" role="tabpanel" aria-labelledby="share-tab">
+						<div class="music_share_box">
+							<div class="row">
+								<div class="col-md-4">
+									<img class="thmb_img" src="{{t_thumbnail}}" alt="song thumb" >
+								</div>
+								<div class="col-md-8">
+									<h4 class="thmb_title">{{t_title}}</h4>
+									<p class="thmb_albm">{{s_artist}}</p>
+									<ul class="list-unstyled mb0">
+										<li class="thmb_slinks">
+											<a class="social-btn" href="https://www.facebook.com/sharer.php?u={{t_url}}" target="_blank">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#4267b2"><path d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M18,5H15.5A3.5,3.5 0 0,0 12,8.5V11H10V14H12V21H15V14H18V11H15V9A1,1 0 0,1 16,8H18V5Z"></path></svg>
+											</a>
+											<a class="social-btn" href="http://twitter.com/intent/tweet?text={{t_title}}&url={{t_url}}" target="_blank">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#1da1f2"><path d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M17.71,9.33C18.19,8.93 18.75,8.45 19,7.92C18.59,8.13 18.1,8.26 17.56,8.33C18.06,7.97 18.47,7.5 18.68,6.86C18.16,7.14 17.63,7.38 16.97,7.5C15.42,5.63 11.71,7.15 12.37,9.95C9.76,9.79 8.17,8.61 6.85,7.16C6.1,8.38 6.75,10.23 7.64,10.74C7.18,10.71 6.83,10.57 6.5,10.41C6.54,11.95 7.39,12.69 8.58,13.09C8.22,13.16 7.82,13.18 7.44,13.12C7.81,14.19 8.58,14.86 9.9,15C9,15.76 7.34,16.29 6,16.08C7.15,16.81 8.46,17.39 10.28,17.31C14.69,17.11 17.64,13.95 17.71,9.33Z"></path></svg>
+											</a>
+											<a class="social-btn" href="https://plus.google.com/share?url={{t_url}}" target="_blank">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#dc4938"><path d="M5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3M19.5,12H18V10.5H17V12H15.5V13H17V14.5H18V13H19.5V12M9.65,11.36V12.9H12.22C12.09,13.54 11.45,14.83 9.65,14.83C8.11,14.83 6.89,13.54 6.89,12C6.89,10.46 8.11,9.17 9.65,9.17C10.55,9.17 11.13,9.56 11.45,9.88L12.67,8.72C11.9,7.95 10.87,7.5 9.65,7.5C7.14,7.5 5.15,9.5 5.15,12C5.15,14.5 7.14,16.5 9.65,16.5C12.22,16.5 13.96,14.7 13.96,12.13C13.96,11.81 13.96,11.61 13.89,11.36H9.65Z"></path></svg>
+											</a>
+											<?php if($music->config->wowonder_login == 'on'){?>
+											<a class="social-btn" href="<?php echo $music->config->wowonder_domain_uri; ?>/sharer?url={{t_url}}" onclick="window.open('<?php echo $music->config->wowonder_domain_uri; ?>/sharer?url={{t_url}}', 
+                         'newwindow', 
+                         'width=800,height=600'); 
+              return false;">
+												<img src="<?php echo $music->config->wowonder_img;?>" style="width: 20px;">
+											</a>
+					                        <?php } ?>
+										</li>
+									</ul>
+									<input class="thmb_url" type="text" value="{{t_url_original}}" onclick="select()" readonly>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php if($data['songData']->display_embed == 1){?>
+					<div class="tab-pane fade" id="embed" role="tabpanel" aria-labelledby="embed-tab">
+						<div class="embed-form">
+							<iframe src="{{LINK embed/{{t_audio_id}}}}" frameborder="0" width="100%" height="136px"></iframe>
+							<div class="copy_embed">
+								<input type="text" id="iframe-element" class="form-control" onclick="select()" value='<iframe src="{{LINK embed/{{t_audio_id}}}}" frameborder="0" width="100%" height="136px"></iframe>'>
+								<div class="colorpickerf input-group colorpicker-component">
+									<input id="demo" type="text" class="form-control" value="#f98f1d" />
+									<span class="input-group-addon"><i></i></span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php }?>
+				</div>
+            </div>    
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">{{LANG Close}}</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+$(function () {
+  // Basic instantiation:
+  $('.colorpickerf').colorpicker({
+  	horizontal: true,
+  	fallbackColor: '#f98f1d'
+  });
+  // Example using an event, to change the color of the .jumbotron background:
+  $('#demo').on('change', function(event) {
+  	color = $(this).val();
+  	color = color.replace("#", "");
+  	$('#iframe-element').val('<iframe src="{{LINK embed/{{t_audio_id}}}}?color=' +color + '" frameborder="0" width="100%" height="136px"></iframe>');
+  	$('#share_music_modal').find('iframe').attr('src', "{{LINK embed/{{t_audio_id}}}}?color=" +color);
+  });
+});
+</script>

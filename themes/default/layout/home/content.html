@@ -1,0 +1,126 @@
+<div class="ma_home_nav">
+	<nav class="navbar">
+		<div class="container">
+			<a class="navbar-brand" href="">
+				<img src="{{CONFIG theme_url}}/img/home-logo.png" alt="">
+			</a>
+			<div class="navbar-right">
+				<a href="#" data-toggle="modal" data-target="#login_box" class="btn btn-outline-light">{{LANG Login}}</a>
+				<?php if($music->config->user_registration == 'on'){?>
+				<a href="#" data-toggle="modal" data-target="#signup_box" class="btn btn-light">{{LANG Register}}</a>
+				<?php }?>
+			</div>
+		</div>
+	</nav>
+</div>
+<div class="ma_home_head">
+	<div class="container">
+		<h1 class="heading">{{LANG Listen to Songs}}</h1>
+		<p class="sub_heading">{{LANG Discover, stream, and share a constantly expanding mix of music from emerging and major artists around the world.}}</p>
+		<div class="link_holder">
+			<?php if($music->config->user_registration == 'on'){?>
+			<button data-toggle="modal" data-target="#signup_box" class="btn btn-light">
+				{{LANG Signup Now}}
+				<svg viewBox="0 0 19 14" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
+					<path fill="currentColor" d="M18.6 6.9v-.5l-6-6c-.3-.3-.9-.3-1.2 0-.3.3-.3.9 0 1.2l5 5H1c-.5 0-.9.4-.9.9s.4.8.9.8h14.4l-4 4.1c-.3.3-.3.9 0 1.2.2.2.4.2.6.2.2 0 .4-.1.6-.2l5.2-5.2h.2c.5 0 .8-.4.8-.8 0-.3 0-.5-.2-.7z"></path>
+				</svg>
+			</button>
+			<?php }?>
+			<a class="link" href="{{LINK discover}}">{{LANG Explore}}</a>
+		</div>
+		<div class="ma_home_search">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3"></div>
+					<div class="col-md-6">
+						<form onSubmit="event.preventDefault();window.location = '{{LINK search/songs/}}' + $('#search_keyword').val();">
+							<input class="form-control" placeholder="{{LANG Search for artists, tracks}}" type="search" autocomplete="off" name="search_keyword" id="search_keyword" />
+							<button class="btn" type="submit">{{LANG Search}}</button>
+						</form>
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<ul class="bg_bubbles">
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+</div>
+
+<div class="jumbotron ma_home_features">
+	<div class="container">
+		<div class="feature_list">
+			<img src="{{CONFIG theme_url}}/img/music.svg">
+			<div class="feature_info">
+				<h2>{{LANG Listen Music Everywhere, Anytime}}</h2>
+				<p>{{LANG Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.}}</p>
+			</div>
+		</div>
+		<div class="feature_list">
+			<div class="feature_info">
+				<h2>{{LANG Create Playlists with any song, On-The-Go}}</h2>
+				<p>{{LANG Second Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, 2}}</p>
+			</div>
+			<img src="{{CONFIG theme_url}}/img/playlist.svg">
+		</div>
+	</div>
+</div>
+<div class="jumbotron ma_home_jumbo_w">
+	<div class="container ma_home_artist">
+		<h2 class="light main text-center">{{LANG Top Trending Artists}}</h2>
+		<div class="artist_section">
+			<?php echo $music->artists_html;?>
+		</div>
+	</div>
+</div>
+<div class="jumbotron ma_home_creator">
+	<div class="container">
+		<div class="creator_content">
+			<h2>{{LANG Calling all creators}}</h2>
+			<p><?php echo str_replace('{0}',$music->config->name, lang('Get on {0} to connect with fans, share your sounds, and grow your audience.'));?></p>
+			<ul class="icon_features list-unstyled">
+				<li>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-reactid="1231">
+						<polyline points="16 16 12 12 8 16"></polyline>
+						<line x1="12" y1="12" x2="12" y2="21"></line>
+						<path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+						<polyline points="16 16 12 12 8 16"></polyline>
+					</svg>
+					<h5>{{LANG Upload Songs}}</h5>
+				</li>
+				<li>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+						<path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+					</svg>
+					<h5>{{LANG Check Stats}}</h5>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="jumbotron ma_home_jumbo_w">
+	<div class="container text-center final_step_info">
+		<h1 class="light">{{LANG Ready to rock your world.}}</h1>
+		<div class="final_step">
+			<?php if($music->config->user_registration == 'on'){?>
+			<a href="#" data-toggle="modal" data-target="#signup_box" class="btn btn-primary btn-mat">{{LANG Register}}</a>
+			<?php }?>
+			<span>{{LANG or}}</span>
+			<a href="#" data-toggle="modal" data-target="#login_box" class="btn btn-outline-primary">{{LANG Login}}</a>
+		</div>
+	</div>
+</div>
+<?php echo loadPage('home/footer'); ?>

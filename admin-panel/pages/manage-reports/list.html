@@ -1,0 +1,17 @@
+<tr id="list-{{REPORT id}}">
+    <td>{{REPORT id}}</td>
+    <td>
+        <a href="{{LINK track}}/{{SONG audio_id}}" target="_blank">
+            <img src="{{SONG thumbnail}}" style="width: 30px;float: left;"> &nbsp;{{SONG title}}
+        </a>
+    </td>
+    <td><a href="{{USER url}}"><img src="{{USER avatar}}" class="td-avatar" alt="user avatar"> {{USER username}}</a></td>
+    <td>{{REPORT description}}</td>
+    <td><?php echo Time_Elapsed_String($data['REPORT_DATA']->time);?></td>
+    <td>
+        <a class="btn bg-cyan waves-effect waves-light" href="{{REPORT link}}" target="_blank">VIEW</a>
+        <a class="btn btn-success waves-effect waves-light ignore-report" href="#"  data-id="{{REPORT id}}">IGNORE</a>
+        <button class="btn btn-danger waves-effect waves-light delete-content" data-id="{{REPORT id}}">DELETE REPORT</button>
+        <button class="btn btn-danger waves-effect waves-light delete-song-content" data-id="{{REPORT track_id}}">DELETE SONG</button>
+    </td>
+</tr>

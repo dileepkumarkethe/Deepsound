@@ -1,0 +1,36 @@
+<div class="ma_page_content">
+    <div class="ma_pc_inner">
+        <div class="page_padding">
+            <div class="ma_tabs search_tabs">
+                <ul class="list-unstyled mb-0">
+                    <li class="<?php echo ($music->search_page == 'songs') ? 'active' : ''?>">
+                        <a href="{{LINK search/songs/}}{{SEARCH_KEYWORD}}" data-load="search/songs/{{SEARCH_KEYWORD}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-reactid="826"><path d="M9 17H5a2 2 0 0 0-2 2 2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm12-2h-4a2 2 0 0 0-2 2 2 2 0 0 0 2 2h2a2 2 0 0 0 2-2z"></path><polyline points="9 17 9 5 21 3 21 15"></polyline></svg> {{LANG Songs}}</a>
+                    </li>
+                    <li class="<?php echo ($music->search_page == 'artists') ? 'active' : ''?>">
+                        <a href="{{LINK search/artists/}}{{SEARCH_KEYWORD}}" data-load="search/artists/{{SEARCH_KEYWORD}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> {{LANG Artists}}</a>
+                    </li>
+                    <li class="<?php echo ($music->search_page == 'albums') ? 'active' : ''?>">
+                        <a href="{{LINK search/albums/}}{{SEARCH_KEYWORD}}" data-load="search/albums/{{SEARCH_KEYWORD}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg> {{LANG Albums}}</a>
+                    </li>
+                    <li class="<?php echo ($music->search_page == 'playlist') ? 'active' : ''?>">
+                        <a href="{{LINK search/playlist/}}{{SEARCH_KEYWORD}}" data-load="search/playlist/{{SEARCH_KEYWORD}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg> {{LANG Playlists}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <?php if($music->search_page == 'artists' || $music->search_page == 'playlist'){?>
+                    <div class="col-md-12" id="search_results">
+                        {{RESULT}}
+                    </div>
+                <?php } else { ?>
+                    <div class="col-md-3">
+                        {{FILTERS}}
+                    </div>
+                    <div class="col-md-9" id="search_results">
+                        {{RESULT}}
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+</div>

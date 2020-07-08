@@ -1,0 +1,72 @@
+<?php //var_dump($data);
+$color = (isset($data['color']) )? secure($data['color']) : '#333';
+$img = (isset($data['background_thumb'])) ? secure(getMedia($data['background_thumb'])) : LoadAdminLink('images/placeholder.jpg');
+if($img == ''){
+$img =LoadAdminLink('images/placeholder.jpg');
+}
+?>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group" style="margin-bottom: 0px;">
+                <div class="form-lins">
+                    <label class="form-lasbel">Category color.</label>
+                    <input type="color" name="favcolor" value="<?php echo $color;?>">
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 0px;">
+                <div class="form-lins">
+                    <div style="margin: 0 auto;" onclick="document.getElementById('bg_img<?php if(!empty($data)){ echo '_update';}?>').click(); return false">
+                        <div style="display: flex;align-items: center;">
+                            <p style="line-height: 20px;flex: 1;text-align: center;position: relative;">
+                                <label style="display: flex;flex-direction: column;align-items: center;cursor: pointer;border: 2px solid #f98f1d;border-radius: 5px;width: 100%;margin: 20px 0px;padding: 10px;background-color: #e9eef1;">
+                                    <span class="title" style="background: -webkit-linear-gradient(45deg, #f98f1d, #f98f1d);-webkit-background-clip: text;font-weight: 700;letter-spacing: -0.5px;-webkit-text-fill-color: transparent;font-size: 17px;">Upload Background.</span>
+                                    <img id="bg_img_preview<?php if(!empty($data)){ echo '_update';}?>" src="<?php echo $img; ?>" style="object-fit: contain;object-position: center;width: 130px;height: 173px;margin: 6px auto 3px;user-select: none;pointer-events: none;">
+                                </label>
+                            </p>
+                        </div>
+                    </div>
+                    <input type="file" id="bg_img<?php if(!empty($data)){ echo '_update';}?>" class="hide" accept="image/x-png, image/gif, image/jpeg" name="bg_img">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <?php foreach (db_langs() as $wo['key_']) { ?>
+            <div class="form-group" style="    margin-bottom: 2px;">
+                <div class="form-lins">
+                    <label class="form-lasbel"><?php echo ucfirst($wo['key_']); ?></label>
+                    <textarea style="resize: none;border: 1px solid #eaeaea;padding: 5px;" name="<?php echo $wo['key_']; ?>" id="<?php echo $wo['key_']; ?>" class="form-control" cols="20" rows="1"><?php if( isset($data['lang'][$wo['key_']]) ){ echo $data['lang'][$wo['key_']]; }?></textarea>
+                </div>
+            </div>
+            <?php } ?>
+        </div>
+    </div>
+
+
+
+<script>
+    <?php if(empty($data)){?>
+    document.getElementById('bg_img').addEventListener('change', function(e) {
+        let imgPath = $(this)[0].files[0].name;
+        if (typeof(FileReader) != "undefined") {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                $('#bg_img_preview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+    <?php }?>
+    <?php if(!empty($data)){?>
+    document.getElementById('bg_img_update').addEventListener('change', function(e) {
+        let imgPath = $(this)[0].files[0].name;
+        if (typeof(FileReader) != "undefined") {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                $('#bg_img_preview_update').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+    <?php }?>
+</script>

@@ -1,0 +1,185 @@
+<?php 
+$page = (!empty($_GET['page-id'])) ? $_GET['page-id'] : 1;
+$filter_keyword = (!empty($_GET['query'])) ? Secure($_GET['query']) : '';
+$filter_type    = '';
+$db->pageLimit  = 50;
+
+
+$users = $db->objectbuilder()->orderBy('id', 'DESC')->paginate(T_ARTIST_R, $page);
+
+if (($page > $db->totalPages) && !empty($_GET['page-id'])) {
+header("Location: " . LoadAdminLinkSettings('manage-artists'));
+exit();
+}
+?>
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Users > Manage Artists</h2>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Manage & Edit Artists</h2>
+                </div>
+                <div class="body">
+                    <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Full name</th>
+                                <th>Genre</th>
+                                <th>Website</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                                if(count($users) > 0){
+                                    foreach ($users as $key => $user) {
+                                        $user_data = UserData($user->user_id);
+                                        //
+                                        $cat = getCategoryInfo($user->category_id);
+
+                                        $cateogry_name = $cat->cateogry_name;// ($user->active == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-danger">Pending</span>';
+                                        echo LoadAdminPage('manage-artists/list', array('REQUEST_DATA' => $user,'USER_DATA' => $user_data, 'SETTINGS_LINK' => UrlLink('settings/general/' . $user_data->username), 'CATEGORYNAME' => $cateogry_name));
+                                    }
+                                }else{?>
+                                    <tr>
+                                        <td colspan="6">No requests found.</td>
+                                    </tr>
+                               <?php }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pull-left">
+                        <?php echo "Showing $page out of " . $db->totalPages; ?>
+                    </div>
+                    <div class="pull-right">
+                        <nav>
+                            <ul class="pagination">
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('manage-artists?page-id=1'); ?>" class="waves-effect" title='First Page'>
+                                        <i class="material-icons">first_page</i>
+                                    </a>
+                                </li>
+                                <?php if ($page > 1) {  ?>
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('manage-artists?page-id=' . ($page - 1)); ?>" class="waves-effect" title='Previous Page'>
+                                        <i class="material-icons">chevron_left</i>
+                                    </a>
+                                </li>
+                                <?php  } ?>
+                                <?php 
+                                $nums = 0;
+                                $nums_pages = ($page > 4) ? ($page - 4) : $page;
+                                for ($i=$nums_pages; $i <= $db->totalPages; $i++) {
+                                if ($nums < 20) {
+                                ?>
+                                <li class="<?php echo ($page == $i) ? 'active' : ''; ?>"><a href="<?php echo LoadAdminLinkSettings('manage-artists?page-id=' . ($i)); ?>" class="waves-effect"><?php echo $i ?></a></li>
+                                <?php
+                                	}
+                                	$nums++;
+                                }
+                                ?>
+                                <?php if ($db->totalPages > $page) { ?>
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('manage-artists?page-id=' . ($page + 1)); ?>" class="waves-effect" title="Next Page">
+                                        <i class="material-icons">chevron_right</i>
+                                    </a>
+                                </li>
+                                <?php } ?>
+                                <li>
+                                    <a href="<?php echo LoadAdminLinkSettings('manage-artists?page-id=' . ($db->totalPages)); ?>" class="waves-effect" title='Last Page'>
+                                        <i class="material-icons">last_page</i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <script>
+
+        jQuery(document).ready(function($) {
+            $(document).on('click', '.toggle-verification-request', function(event) {
+                event.preventDefault();
+                $(this).find('i').toggleClass('rotate-90d');
+                $("#review-verif-request-info-"+$(this).attr('data-userid')).slideToggle();
+            });
+        });
+
+        function DeleteVerification(id,verification_id,username) {
+            var delete_icon = $('.setting-verification-container').find('#list-' + verification_id).find('.delete-verification');
+
+            $.ajax({
+                method: "POST",
+                url: "{{LINK endpoints/ap/delete_verification}}",
+                data: { id:id,verification_id:verification_id,username:username}
+            })
+            .done(function( data ) {
+                $('#review-verif-request-info-'+verification_id).slideUp(function(){
+                    $(this).remove();
+                    $('#list-' + verification_id).fadeOut(300, function() {
+                        $(this).remove();
+                    });
+                })
+            });
+        }
+
+        function Verify(uid,verification_id,username) {
+            var verify_icon = $('.setting-verification-container').find('#VerificationID_' + verification_id).find('.verify');
+            $('#review-verif-request-info-'+verification_id).slideUp(function(){
+                $(this).remove();
+            });
+
+
+            $.ajax({
+                method: "POST",
+                url: "{{LINK endpoints/ap/verify_user}}",
+                data: { id:uid, verification_id:verification_id,username:username}
+            })
+            .done(function( data ) {
+                $('#list-' + verification_id).fadeOut(300, function() {
+                    $(this).remove();
+                });
+            });
+        }
+
+    </script>
+
+    <style>
+        .rotate-90d{transform:rotate(-180deg)}
+        .review-verif-request-cont{
+            width: 100%;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+        .review-verif-request-cont div{
+            width: 200px;
+            height: 150px;
+            float: left;
+            cursor: pointer;
+            margin: 0 5px 5px 0;
+        }
+
+        .review-verif-request-cont h4{
+            width: 100%;
+            color: #666;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .toggle-verification-request{
+            padding: 3px 5px;
+        }
+    </style>

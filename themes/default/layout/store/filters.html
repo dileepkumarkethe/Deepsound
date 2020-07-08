@@ -1,0 +1,66 @@
+<div class="store_filters">
+
+	<div class="store_widget" style="<?php if( $music->config->artist_sell !== 'on' ) { echo "display: none;";} ?>">
+		<div class="s_widget_head">
+			<span style="background:#7367f0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M3,6H21V18H3V6M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M7,8A2,2 0 0,1 5,10V14A2,2 0 0,1 7,16H17A2,2 0 0,1 19,14V10A2,2 0 0,1 17,8H7Z"></path></svg></span> {{LANG Price}}
+		</div>
+		<div class="store_pric_range">
+			<p>
+				<label for="amount">{{LANG Price range}}:</label>
+				<input type="text" id="amount" readonly>
+			</p>
+			<div id="slider-range"></div>
+		</div>
+	</div>
+
+	<div class="store_widget">
+		<div class="s_widget_head">
+			<span style="background:#4caf50"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12,18.54L19.37,12.8L21,14.07L12,21.07L3,14.07L4.62,12.81L12,18.54M12,16L3,9L12,2L21,9L12,16M12,4.53L6.26,9L12,13.47L17.74,9L12,4.53Z"></path></svg></span> {{LANG Genres}}
+		</div>
+		<div class="store_categories">
+			<?php foreach($music->categories as $key => $category){?>
+			<span class="check_box">
+					<input type="checkbox" name="<?php echo $category;?>" id="<?php echo $category;?>" value="<?php echo $key;?>" class="song_category" data-category="<?php echo $key;?>">
+					<label for="<?php echo $category;?>"><?php echo $category;?></label>
+				</span>
+			<?php } ?>
+		</div>
+	</div>
+</div>
+<script>
+  $( function() {
+    $( "#slider-range" ).slider({
+      range: true,
+      min: <?php echo $music->min_song_price;?>,
+      max: <?php echo $music->max_song_price;?>,
+      values: [ <?php echo $music->min_song_price;?>, <?php echo $music->max_song_price;?> ],
+      slide: function( event, ui ) {
+          filter_search_results(ui.values[ 0 ],ui.values[ 1 ]);
+		  $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+      }
+    });
+    $( "#amount" ).val( "{{CONFIG currency_symbol}}" + $( "#slider-range" ).slider( "values", 0 ) + " - {{CONFIG currency_symbol}}" + $( "#slider-range" ).slider( "values", 1 ) );
+  } );
+
+  function filter_search_results(from=0.99,to=40){
+      let geners = [];
+      let filter_type = $('#filter_type').val();
+      $('.song_category').each(function(i, obj) {
+          if(this.checked){
+              geners.push($(obj).attr('data-category'));
+          }
+      });
+      $.get(ajaxUrl() + "/store-filter", {price_from: from, price_to: to, geners: geners, filter_type: filter_type}, function (data) {
+          if(data.status == 200){
+              $('#store_result').html(data.html);
+              $('#load-more-button').html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg> {{LANG Load More}}');
+          }
+      });
+  }
+  $(document).on('click','.song_category',function(e){
+	  var from = $( "#slider-range" ).slider( "values", 0 );
+	  var to = $( "#slider-range" ).slider( "values", 1 );
+      filter_search_results(from,to);
+  });
+
+</script>

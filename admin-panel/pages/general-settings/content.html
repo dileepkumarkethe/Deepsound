@@ -1,0 +1,185 @@
+<?php
+$music->config->ffmpeg  = is_executable($music->config->ffmpeg_binary_file);
+function isEnabled($func) {
+return is_callable($func) && false === stripos(ini_get('disable_functions'), $func);
+}
+$enabled = true;
+if (!isEnabled('shell_exec')) {
+$enabled = false;
+}
+?>
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Settings > General Settings</h2>
+    </div>
+    <!-- Vertical Layout -->
+        <div class="col-lg-6 col-md-6 ">
+            <div class="card">
+                <div class="header">
+                    <h2>User Settings</h2>
+                </div>
+                <div class="body">
+                    <div class="alert alert-success user-settings-alert"></div>
+                    <form class="user-settings" method="POST">
+                        <label for="maintenance_mode">Maintenance Mode <span class="black" data-toggle="popover" data-trigger="hover" data-content="Turn the whole site under Maintenance. You can get the site back by visiting <?php echo $music->config->site_url.'/?access=admin'; ?>"><i class="fa fa-question-circle fa-fw"></i></span></label>
+                        <div class="form-group">
+                            <input type="radio" name="maintenance_mode" id="maintenance_mode-enabled" value="on" <?php echo ($music->config->maintenance_mode == 'on') ? 'checked': '';?>>
+                            <label for="maintenance_mode-enabled">Enabled</label>
+                            <input type="radio" name="maintenance_mode" id="maintenance_mode-disabled" value="off" <?php echo ($music->config->maintenance_mode == 'off') ? 'checked': '';?>>
+                            <label for="maintenance_mode-disabled" class="m-l-20">Disabled</label>
+                        </div>
+                        <label for="user_registration">User Registration</label>
+                        <div class="form-group">
+                            <input type="radio" name="user_registration" id="user_registration-enabled" value="on" <?php echo ($music->config->user_registration == 'on') ? 'checked': '';?>>
+                            <label for="user_registration-enabled">Enabled</label>
+                            <input type="radio" name="user_registration" id="user_registration-disabled" value="off" <?php echo ($music->config->user_registration == 'off') ? 'checked': '';?>>
+                            <label for="user_registration-disabled" class="m-l-20">Disabled</label>
+                        </div>
+                        <label for="artist_sell">Can artist sell songs?</label>
+                        <div class="form-group">
+                            <input type="radio" name="artist_sell" id="artist_sell-enabled" value="on" <?php echo ($music->config->artist_sell == 'on') ? 'checked': '';?>>
+                            <label for="artist_sell-enabled">Enabled</label>
+                            <input type="radio" name="artist_sell" id="artist_sell-disabled" value="off" <?php echo ($music->config->artist_sell == 'off') ? 'checked': '';?>>
+                            <label for="artist_sell-disabled" class="m-l-20">Disabled</label>
+                        </div>
+                        <label for="who_can_download">Who can download songs?</label>
+                        <div class="form-group">
+                            <input type="radio" name="who_can_download" id="who_can_download-enabled" value="pro" <?php echo ($music->config->who_can_download == 'pro') ? 'checked': '';?>>
+                            <label for="who_can_download-enabled">Pro users</label>
+                            <input type="radio" name="who_can_download" id="who_can_download-disabled" value="free" <?php echo ($music->config->who_can_download == 'free') ? 'checked': '';?>>
+                            <label for="who_can_download-disabled" class="m-l-20">Free users</label>
+                        </div>
+                        <label for="validation">User E-mail Verification</label>
+                        <div class="form-group">
+                            <input type="radio" name="validation" id="validation-enabled" value="on" <?php echo ($music->config->validation == 'on') ? 'checked': '';?>>
+                            <label for="validation-enabled">Enabled</label>
+                            <input type="radio" name="validation" id="validation-disabled" value="off" <?php echo ($music->config->validation == 'off') ? 'checked': '';?>>
+                            <label for="validation-disabled" class="m-l-20">Disabled</label>
+                        </div>
+                        <label for="delete_account">Delete User Account</label>
+                        <div class="form-group">
+                            <input type="radio" name="delete_account" id="delete_account-enabled" value="on" <?php echo ($music->config->delete_account == 'on') ? 'checked': '';?>>
+                            <label for="delete_account-enabled">Enabled</label>
+                            <input type="radio" name="delete_account" id="delete_account-disabled" value="off" <?php echo ($music->config->delete_account == 'off') ? 'checked': '';?>>
+                            <label for="delete_account-disabled" class="m-l-20">Disabled</label>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo createMainSession();?>">
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 pull-left">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        FFMPEG system settings
+                    </h2>
+                </div>
+                <div class="body">
+                    <div class="alert alert-success ffmpeg-settings-alert"></div>
+                    <form class="ffmpeg-settings" method="POST">
+                        <p>This system will compress, convert, and optimzise videos to mp4. This system require "ffmpeg" to be installed in your server. </p><br>
+                        <label for="upload_system">FFMPEG System </label>
+                        <div class="form-group">
+                            <input type="radio" name="ffmpeg_system" id="ffmpeg_system-enabled" value="on" <?php echo ($music->config->ffmpeg_system == 'on') ? 'checked': '';?>>
+                            <label for="ffmpeg_system-enabled">Enabled</label>
+                            <input type="radio" name="ffmpeg_system" id="ffmpeg_system-disabled" value="off" <?php echo ($music->config->ffmpeg_system == 'off') ? 'checked': '';?>>
+                            <label for="ffmpeg_system-disabled" class="m-l-20">Disabled</label>
+                        </div>
+                        How to install FFMPEG?<br>
+                        <a href="https://www.vultr.com/docs/how-to-install-ffmpeg-on-centos" target="_blank">Install FFMPEG on Linux Centos</a><br>
+                        <a href="https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg" target="_blank">Install FFMPEG on Linux Ubuntu | Windows</a><br>If you still can't install FFMPEG, please contact your hosting provider, and they shall install it. <br><br>
+                        <?php if ($enabled == false): ?>
+                        <p style="color: red">shell_exec() has been disabled for security reasons, please contact your host provider to enable it. shell_exec is required to enable this system.</p><br>
+                        <?php endif; ?>
+                        <div class="form-group  form-float">
+                            <br><div class="form-line">
+                            <input type="text" id="ffmpeg_binary_file" name="ffmpeg_binary_file" class="form-control" value="{{CONFIG ffmpeg_binary_file}}">
+                            <?php if (!$music->config->ffmpeg): ?>
+                            <label class="form-label" style="color: red;">
+                                FFmpeg binary does not exist on path: {{CONFIG ffmpeg_binary_file}}
+                            </label>
+                            <?php else: ?>
+                            <label class="form-label">
+                                FFmpeg binary file path: on Linux(/usr/bin/ffmpeg) or Windows(C:\\ffmpeg\bin\ffmpeg.exe)
+                            </label>
+                            <?php endif; ?>
+                        </div>
+                        </div>
+                        <?php if ($music->config->ffmpeg_system == 'on' && $enabled == true): ?>
+                        <label for="comments_default_num">Convert video speed</label>
+                        <select class="form-control show-tick" id="convert_speed" name="convert_speed">
+                            <option value="ultrafast" <?php echo ($music->config->convert_speed == 'ultrafast') ? 'selected': '';?>>Ultrafast</option>
+                            <option value="superfast" <?php echo ($music->config->convert_speed == 'superfast') ? 'selected': '';?>>Superfast</option>
+                            <option value="veryfast" <?php echo ($music->config->convert_speed == 'veryfast') ? 'selected': '';?>>Veryfast</option>
+                            <option value="faster" <?php echo ($music->config->convert_speed == 'faster') ? 'selected': '';?>>Faster</option>
+                            <option value="fast" <?php echo ($music->config->convert_speed == 'fast') ? 'selected': '';?>>Fast</option>
+                            <option value="medium" <?php echo ($music->config->convert_speed == 'medium') ? 'selected': '';?>>Medium</option>
+                            <option value="slow" <?php echo ($music->config->convert_speed == 'slow') ? 'selected': '';?>>Slow</option>
+                            <option value="slower" <?php echo ($music->config->convert_speed == 'slower') ? 'selected': '';?>>Slower</option>
+                            <option value="veryslow" <?php echo ($music->config->convert_speed == 'veryslow') ? 'selected': '';?>>Veryslow</option>
+                        </select>
+                        <br><br><p>"Convert video speed" affect the encoding speed. Using a slower preset gives you better compression, or quality per filesize, whereas faster presets give you worse compression and higher filesize.</p><br><?php endif; ?>
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                        <input type="hidden" name="hash_id" value="<?php echo createMainSession();?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+    
+
+$(function() {
+    $('#upload_system_type').change(function(event) {
+        if ($(this).val() == 1) {
+            $('#p_f_users_').removeClass('hidden');
+            $('#all_users_').addClass('hidden');
+        }
+        else{
+            $('#all_users_').removeClass('hidden');
+            $('#p_f_users_').addClass('hidden');
+        }
+    });
+
+    var form_user_settings = $('form.user-settings');
+
+    form_user_settings.ajaxForm({
+        url: '{{CONFIG ajax_url}}/ap/save-settings',
+        beforeSend: function() {
+            form_user_settings.find('button').text("Please wait");
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_user_settings.find('button').text('Save');
+                $('.user-settings-alert').html('<i class="fa fa-check"></i> Settings updated successfully');
+                setTimeout(function () {
+                    $('.user-settings-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+
+    var ffmpeg_settings = $('form.ffmpeg-settings');
+    ffmpeg_settings.ajaxForm({
+        url: '{{CONFIG ajax_url}}/ap/save-settings',
+        beforeSend: function() {
+            ffmpeg_settings.find('.waves-effect').text("Please wait");
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                ffmpeg_settings.find('.waves-effect').text('Save');
+                $('.ffmpeg-settings-alert').html('<i class="fa fa-check"></i> Settings updated successfully');
+                setTimeout(function () {
+                    $('.ffmpeg-settings-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+
+});
+</script>

@@ -1,0 +1,29 @@
+<li class="list-recommended" data-id='{{id}}'>
+	<ul class="s_lsongs_child">
+		<li class="first">
+			<span class="numbers">{{key}}</span>
+			<span class="fav_song">{{fav_button}}</span>
+		</li>
+		<li class="second">
+			<a href="{{url}}" data-load="track/{{audio_id}}">
+				<div class="art_song"><img src="{{thumbnail}}"></div>
+				<div class="art_details">
+					<h4>{{title}}</h4>
+					<p>{{USER name}}</p>
+				</div>
+			</a>
+		</li>
+		<li class="third">
+			<span class="duration">{{duration}}</span>
+			<span class="opts_song dropdown">
+				<svg data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,12A2,2 0 0,1 18,10A2,2 0 0,1 20,12A2,2 0 0,1 18,14A2,2 0 0,1 16,12M10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12M4,12A2,2 0 0,1 6,10A2,2 0 0,1 8,12A2,2 0 0,1 6,14A2,2 0 0,1 4,12Z"></path></svg>
+				<div class="dropdown-menu dropdown-menu-right mat-dropdown">
+					<ul class="list-unstyled mb-0">
+						<li><a href="javascript:void(0)" onclick="getPlayLists({{id}})">{{LANG Add to Playlist}}</a></li>
+						<li><a onclick="getShareModal('{{id}}', $(this));">{{LANG Share}}</a></li>
+					</ul>
+				</div>
+			</span>
+		</li>
+	</ul>
+</li>

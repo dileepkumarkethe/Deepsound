@@ -1,0 +1,46 @@
+<div class="ma_page_content">
+	<div class="ma_pc_inner">
+		<div class="page_padding">
+			<!-- Top Albums -->
+			<div class="sq_music_tracks">
+				<h2 class="home_widget_title">
+					{{LANG Latest Songs In}} {{CATEGORY_NAME}}
+				</h2>
+				<div class="short_list_cont row top_dic_son_listz">
+					<div class="col-md-4">
+						<div class="top_m_filters">
+							<?php foreach ($music->categories as $key => $category) {?>
+								<div class="filter_list">
+									<div class="filters <?php echo ($music->category_id == $key) ? 'active' : ''?>" style="background: <?php echo getCategoryInfo($key)->color?> !important">
+										<a href="{{LINK explore-genres/<?php echo $key?>}}" data-load="explore-genres/<?php echo $key?>">
+											<div class="filters_innr">
+												<div class="f_sec_name"></div>
+												<div class="f_name"><?php echo $category?></div>
+											</div>
+										</a>
+									</div>
+								</div>
+							<?php } ?>
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="short_list_card">
+							<ul class="s_list_songs">
+								{{TOP_SONGS}}
+							</ul>
+							<?php if ($music->songs == 0) { ?>
+								<div class="no-track-found bg_light"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,9H2V11H19V9M19,5H2V7H19V5M2,15H15V13H2V15M17,13V19L22,16L17,13Z"></path></svg> {{LANG no_tracks_found}}</div>
+							<?php } ?>
+							<?php if ($music->songs > 29) { ?>
+							<div class="text-center see_all">
+								<br>
+								<a href="javascript:void(0); loadMore('categories', '{{category_id}}');" id="load-more-button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg> {{LANG Load More}}</a>
+							</div>
+							<?php } ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
